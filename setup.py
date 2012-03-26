@@ -10,6 +10,6 @@ setup(name='thesis',
       url='http://www.jsyoung.us/code/',
       packages=['thesis','thesis.rass',
 	'thesis.ceil','thesis.dem','thesis.rwp',
-	'thesis.isfs','thesis.sonde'],
+	'thesis.isfs','thesis.sonde','thesis.lidar'],
      )
 

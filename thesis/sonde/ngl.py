@@ -7,7 +7,7 @@ import Ngl
 import numpy as np
 
 
-def skewt(fname, p, tc, tdc, z, wspd, wdir, saveas='png', barbstride=20):
+def skewt(fname, p, tc, tdc, z, wspd, wdir, saveas='pdf', barbstride=20):
 	wks = Ngl.open_wks(saveas,fname)
 
 	dataOpts                               = Ngl.Resources()  # Options describing 
