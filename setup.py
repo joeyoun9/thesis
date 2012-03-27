@@ -8,7 +8,7 @@ setup(name='thesis',
       author='Joe Young',
       author_email='joe.young@utah.edu',
       url='http://www.jsyoung.us/code/',
-      packages=['thesis','thesis.rass',
+      packages=['thesis','thesis.rass','thesis.tools',
 	'thesis.ceil','thesis.dem','thesis.rwp',
 	'thesis.isfs','thesis.sonde','thesis.lidar'],
      )
