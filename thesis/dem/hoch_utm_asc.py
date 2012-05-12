@@ -7,14 +7,17 @@
 """
 
 import numpy as np
-
+from thesis.tools.pytables import *
 def run(self):
 	"""
 		This is the standard module, however this package is currently intended to be imported and run on it's own
 	"""
 	print "Sorry, this package is not currently designed for running via uudewey, please import it and call it's methos individually"
 
-def read(src):
+def read(src,save=True):
+	"""
+		this function can now create an hdf5 archive of this data
+	"""
 	print "Reading",src
 	f = open(src,'r')
 
@@ -41,6 +44,11 @@ def read(src):
 			x = np.arange(stats['xllcorner'],stats['ncols']*stats['cellsize']+stats['xllcorner'],stats['cellsize'])
 			y = np.arange(stats['nrows']*stats['cellsize']+stats['yllcorner'],stats['yllcorner'],-1*stats['cellsize'])
 			d = np.zeros((stats['nrows'],stats['ncols']),dtype=np.float)
+			if save:
+				print x
+				# make the hdf5 document - scary huge at first, but it will be ok.
+				h5create(save,x=int(stats['ncols']),y=int(stats['nrows']),topo=[stats['nrows'],stats['ncols']])
+
 		curr_x = 0
 		#y.append(curr_y)# append the current y index, since we will only go through it once
 		# well, this is a data line, each box is def
@@ -64,8 +72,10 @@ def read(src):
 		# well, x should have been set at this point
 		curr_y += 1
 		x_set = True
-	
-	return x,y,d
+	if save:
+		h5append(save,0,x=x,y=y,topo=d) #and that is that!
+	else:
+		return x,y,d
 
 def gridsub(x1,y1,d1,x2,y2,d2):
 	"""

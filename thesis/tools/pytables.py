@@ -14,7 +14,7 @@ def h5create(f,close=True,**variables):
 		**variables  - dict of {'name':[length(integer),]} values to tell the variables
 	"""
 	#FIXME  - only one category available.
-	f = openw(f)
+	f = h5openw(f)
 	filters =  tables.Filters(complevel=6, complib='zlib')#blosc
 	for k in variables:
 		# create the variable called k, with length variables[k]
@@ -53,19 +53,21 @@ def h5slice(file,variables,begin,end=False,indices=False):
 		end = f.root.meta[0]['max_time'] # then the max of the file is the end
 	index = f.root.time.readWhere('(time >= '+str(begin)+')&(time <= '+str(end)+')')
 	# and then sort the values
-	timekeys = zip(index['time'],index['key'])
-	timekeys.sort()#sort by time
-	times,keys = zip(*timekeys)
-	x = max(keys)+1
-	n = min(keys)
 	out = {}# return a dict keyed like the input
-	# slice the data from the file, and then sort it
-	out['time'] = np.array(times) # return times with the data
-	for v in variables:
-		out[v] = np.array(f.root[v][n:x])[keys - n]
+	if len(index) > 0:
+		timekeys = zip(index['time'],index['key'])
+		timekeys.sort()#sort by time
+		times,keys = zip(*timekeys)
+		x = max(keys)+1
+		n = min(keys)
+		# slice the data from the file, and then sort it
+		out['time'] = np.array(times) # return times with the data
+		for v in variables:
+			out[v] = np.array(f.getNode('/',name=v)[n:x])[keys - n]
 	# now read out indices
 	for i in indices:
-		out[i] = np.array(f.root[i][0]) # I only grab the first value for such a value
+		out[i] = np.array(f.getNode('/',name=i)[0]) # I only grab the first value for such a value
+		#FIXME - converting to a numpy array can take a lot of time - give it a flavor?
 		# note, it is your job to keep track of which variable is an index.
 	
 	f.close()
@@ -75,7 +77,7 @@ def h5slice(file,variables,begin,end=False,indices=False):
 
 
 
-def h5append(f, time, persistent=False, **data)
+def h5append(f, time, persist=False, **data):
 	# add the specified dictionary of data to the file
 	# appends only a single row to the elastic arrays! Plus the metadata arrays
 	"""
@@ -90,17 +92,17 @@ def h5append(f, time, persistent=False, **data)
 		-- this does mean you can contain variables which are not actually functios of time
 			like height, x, y, etc. you must specify these as indices for readout purposes
 	"""
-	if not persistent:
-		f = opena(f)
+	if type(f) == str:
+		f5 = h5opena(f)# open for appending
 	# presumably f is a tables object now
 	# determine high key
 	try:
- 		i = f.root.meta[0]['high_key'] # get the current maximum key
+ 		i = f5.root.meta[0]['high_key'] # get the current maximum key
 	except:
 		i = 0 # empty array
-	f.root.time.append([(time,i)])
+	f5.root.time.append([(time,i)])
 	i+=1 # yes, we do this before appending max keys
-	m = f.root.meta
+	m = f5.root.meta
 	for row in m: #there is only one
 		row['high_key'] = i
 		if time > row['max_time']:
@@ -108,10 +110,11 @@ def h5append(f, time, persistent=False, **data)
 		row.update()
 	# now loop through the given variables
 	for v in data:
-		memory.root[v].append(data[v])
+		print 'writing',v
+		f5.getNode('/',name=v).append([data[v]])#dang, i have to put it in brackets, make it a list of some sort.
 	# ok, the deed is done
-	if not persistent:
-		f.close()
+	#if not persistent:
+	f5.close()
 
 
 
