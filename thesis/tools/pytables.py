@@ -11,14 +11,22 @@ def h5create(f,close=True,**variables):
 	"""
 		Inputs:
 		close        - boolean to tell if the file should be returned or closed
-		**variables  - dict of {'name':length(integer)} values to tell the variables
+		**variables  - dict of {'name':[length(integer),]} values to tell the variables
 	"""
 	#FIXME  - only one category available.
 	f = openw(f)
 	filters =  tables.Filters(complevel=6, complib='zlib')#blosc
 	for k in variables:
 		# create the variable called k, with length variables[k]
-		f.createEArray('/',k,tables.Float32Atom(),(0,variables[k]),filters=filters.copy())	
+		# allow for multi-dimensional data
+		dims = (0,)
+		if type(variables[k]) == list:
+			# then this is multidimensional
+			for i in variables[k]: #it had better be a list
+				dims = dims + (i,)
+		else:
+			dims = (0,variables[k])#hmm
+		f.createEArray('/',k,tables.Float32Atom(),dims,filters=filters.copy())	
 	# the time table is a permenant feature
 	time_desc = {'time': tables.FloatCol(pos=1),
 		'key':tables.IntCol(8,pos=2),
@@ -34,10 +42,11 @@ def h5create(f,close=True,**variables):
 		return f
 	
 
-def h5slice(file,variables,begin,end=False):
+def h5slice(file,variables,begin,end=False,indices=False):
 	# open the file for reading
 	"""
 		variables is a simple string list of the variables wished
+		indices are same-shape time indipendent data, of which only one 'ob' is pulled
 	"""
 	f = h5openr(file)
 	if not end:
@@ -47,13 +56,18 @@ def h5slice(file,variables,begin,end=False):
 	timekeys = zip(index['time'],index['key'])
 	timekeys.sort()#sort by time
 	times,keys = zip(*timekeys)
-	times = np.array(times)
 	x = max(keys)+1
 	n = min(keys)
 	out = {}# return a dict keyed like the input
 	# slice the data from the file, and then sort it
+	out['time'] = np.array(times) # return times with the data
 	for v in variables:
 		out[v] = np.array(f.root[v][n:x])[keys - n]
+	# now read out indices
+	for i in indices:
+		out[i] = np.array(f.root[i][0]) # I only grab the first value for such a value
+		# note, it is your job to keep track of which variable is an index.
+	
 	f.close()
 	return out
 
@@ -73,6 +87,8 @@ def h5append(f, time, persistent=False, **data)
 
 		note, i do not check that you are appending to every array, so
 		if you dont, your indices will get all mucked up, be warned
+		-- this does mean you can contain variables which are not actually functios of time
+			like height, x, y, etc. you must specify these as indices for readout purposes
 	"""
 	if not persistent:
 		f = opena(f)
