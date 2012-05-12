@@ -5,11 +5,16 @@ import tables
 import numpy as np
 
 
-def createhdf(file,**variables):
+def h5create(f,close=True,**variables):
 	# create an hdf5 table for use with datasets, ideally of known size...
 	# variables specifies what variables will be filled in this archive
+	"""
+		Inputs:
+		close        - boolean to tell if the file should be returned or closed
+		**variables  - dict of {'name':length(integer)} values to tell the variables
+	"""
 	#FIXME  - only one category available.
-	f = tables.openFile(file,mode='w', title='ms')
+	f = openw(f)
 	filters =  tables.Filters(complevel=6, complib='zlib')#blosc
 	for k in variables:
 		# create the variable called k, with length variables[k]
@@ -22,8 +27,97 @@ def createhdf(file,**variables):
 	meta = f.createTable('/','meta',{'high_key': tables.IntCol(8),'max_time':tables.FloatCol()},filters=filters.copy())
 	meta.append([(0,0)]) # give an initial value
 
-	return f # and produce the file
+	if close:
+		f.close() # and close the file, we do not exchange open handles here
+		return True
+	else:
+		return f
+	
+
+def h5slice(file,variables,begin,end=False):
+	# open the file for reading
+	"""
+		variables is a simple string list of the variables wished
+	"""
+	f = h5openr(file)
+	if not end:
+		end = f.root.meta[0]['max_time'] # then the max of the file is the end
+	index = f.root.time.readWhere('(time >= '+str(begin)+')&(time <= '+str(end)+')')
+	# and then sort the values
+	timekeys = zip(index['time'],index['key'])
+	timekeys.sort()#sort by time
+	times,keys = zip(*timekeys)
+	times = np.array(times)
+	x = max(keys)+1
+	n = min(keys)
+	out = {}# return a dict keyed like the input
+	# slice the data from the file, and then sort it
+	for v in variables:
+		out[v] = np.array(f.root[v][n:x])[keys - n]
+	f.close()
+	return out
 
 
 
 
+
+def h5append(f, time, persistent=False, **data)
+	# add the specified dictionary of data to the file
+	# appends only a single row to the elastic arrays! Plus the metadata arrays
+	"""
+		inputs
+		f = file name of hdf file to write to
+		time = unix timestamp of observation
+		persistent = should file be treated as already open tables object
+		**data = a dict of name:numpyarray s of data
+
+		note, i do not check that you are appending to every array, so
+		if you dont, your indices will get all mucked up, be warned
+	"""
+	if not persistent:
+		f = opena(f)
+	# presumably f is a tables object now
+	# determine high key
+	try:
+ 		i = f.root.meta[0]['high_key'] # get the current maximum key
+	except:
+		i = 0 # empty array
+	f.root.time.append([(time,i)])
+	i+=1 # yes, we do this before appending max keys
+	m = f.root.meta
+	for row in m: #there is only one
+		row['high_key'] = i
+		if time > row['max_time']:
+			row['max_time'] = time
+		row.update()
+	# now loop through the given variables
+	for v in data:
+		memory.root[v].append(data[v])
+	# ok, the deed is done
+	if not persistent:
+		f.close()
+
+
+
+
+
+
+
+
+"These functions can have the lockout functionality applied to them later"
+def h5openr(f):
+	# open the file f for reading, but check if it is open.. nevermind, forget safety
+	#DANGEROUS
+	f = tables.openFile(f,mode='r')
+	return f
+
+def h5opena(f):
+	# open the file f for appending
+	#DANGEROUS
+	f = tables.openFile(f,mode='a')
+	return f
+
+def h5openw(f):
+	#this will destroy whatever file it is opening, note
+	f = tables.openFile(f,mode='w', title='ms') # have to give it a title
+	return f
