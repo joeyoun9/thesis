@@ -4,16 +4,24 @@ Joe Young March 2012
 
 import sys,time,datetime,calendar,array,os
 from thesis.tools import *
+from thesis.tools.pytables import *
 from numpy import absolute,append,nanmax,nanmin,nan,zeros
 
 from scipy.io.netcdf import netcdf_file as ncf
 
 
-def rwp (files,variable='wspd',nanvalue=nan):
+def rwp (files,variable='wspd',nanvalue=nan,save=True):
 	"""
-		ingest 915MhZ RASS
+		ingest RWP Data from the NCAR NetCDFs
 
 	"""
+	if save:
+		# then create the new file unless save is a file handle, in which case just save to that
+		doc = h5(save) # establish the hdf5 object.
+		#REMOVE :s doc.create(wspd:38,wdir:38,height:38)# create the h5 object #FIXME - need more variables!
+		# Height can be an index, but it does not have to be...
+		
+
 	files = sorted(files) # a last resort effort to sort these turkies
 	# initialize output lists
 	X = zeros(len(files),dtype=int)
