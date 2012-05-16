@@ -26,7 +26,7 @@ def read(ob):
 	status = np.array(status,dtype=np.float32)
 	
 	prof = data[2:17]#.strip().replace("\n",'').replace("\r","")
-	values = np.zeros(250,dtype=np.float32)
+	values = np.zeros(240,dtype=np.float32)
 	index = 0
 	for l in prof:
 		# the line is HHHD0D1D2D3D4...
@@ -40,7 +40,9 @@ def read(ob):
 				values[index] = int(val,16)
 			index += 1
 	values = values/SCALING_FACTOR # remove the scaling factor...
-	out = {'height':np.arange(0,7500,30),'bs':np.log10(values),'status':status} # yes, 30 m resolution! how terrible!
+	if 0 in values:
+		print values
+	out = {'height':np.arange(0,7200,30),'bs':np.log10(values),'status':status} # yes, 30 m resolution! how terrible!
 	return out
 
 

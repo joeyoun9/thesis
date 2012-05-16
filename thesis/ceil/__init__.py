@@ -53,7 +53,7 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			tkey = -1
 
 	elif ceilometer == 'ct25':
-		doc.create(status=11,bs=250,height=250) 
+		doc.create(status=11,bs=240,height=240) 
 		if creator == 'vaisala' or creator == 'uunet':
 			split = C
 			tsplit = A # times are before
