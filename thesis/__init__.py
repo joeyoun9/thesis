@@ -1,3 +1,3 @@
-all = ['ceil','sonde','rass','rwp','isfs','dem','hobo']
+all = ['formats','tools']
 
 
