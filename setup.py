@@ -8,9 +8,9 @@ setup(name='thesis',
       author='Joe Young',
       author_email='joe.young@utah.edu',
       url='http://www.jsyoung.us/code/',
-      packages=['thesis','thesis.formats','thesis.formats.rass','thesis.tools',
-	'thesis.formats.ceil','thesis.formats.dem','thesis.rwp',
-	'thesis.formats.isfs','thesis.formats.sonde','thesis.formats.lidar',
-	'thesis.formats.hobo','thesis.formats.sodar'],
+      packages=['thesis','thesis.compress','thesis.compress.rass','thesis.tools',
+	'thesis.compress.ceil','thesis.compress.dem','thesis.rwp',
+	'thesis.compress.isfs','thesis.compress.sonde','thesis.compress.lidar',
+	'thesis.compress.hobo','thesis.compress.sodar'],
      )
 

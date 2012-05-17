@@ -1,3 +1,3 @@
-all = ['formats','tools']
+all = ['compress','tools']
 
 
