@@ -8,6 +8,7 @@ class h5(object):
 	def __init__(self,fname):
 		# it does have to be initialized, sadly, but otherwise it is good to go
 		self.filename = fname # this is mandatory!!!
+		self.doc = False
 	def create(self, close=True,**variables):
 		# create an hdf5 table for use with datasets, ideally of known size...
 		# variables specifies what variables will be filled in this archive
@@ -54,7 +55,7 @@ class h5(object):
 			variables is a simple string list of the variables wished
 			indices are same-shape time indipendent data, of which only one 'ob' is pulled
 		"""
-		if not self.doc.isopen:
+		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
 		if not end:
 			end = self.doc.root.meta[0]['max_time'] # then the max of the file is the end
@@ -99,7 +100,7 @@ class h5(object):
 			-- this does mean you can contain variables which are not actually functios of time
 				like height, x, y, etc. you must specify these as indices for readout purposes
 		"""
-		if not self.doc.isopen:
+		if not self.doc or not self.doc.isopen:
 			self.doc = h5opena(self.filename)# open for appending
 		# presumably f is a tables object now
 		# determine high key
@@ -122,6 +123,17 @@ class h5(object):
 		# ok, the deed is done
 		if not persist:
 			self.doc.close()
+
+
+	def dump(self,variable):
+		"""
+			simply output the entire contents of a specific variable, for all times
+		"""
+		if not self.doc or not self.doc.isopen:
+			self.doc = h5openr(self.filename)
+		out = self.doc.getNode('/',name=variable)[:]
+		self.close()
+		return out
 
 	def close(self):
 		if self.doc.isopen:

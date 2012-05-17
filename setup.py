@@ -11,6 +11,6 @@ setup(name='thesis',
       packages=['thesis','thesis.rass','thesis.tools',
 	'thesis.ceil','thesis.dem','thesis.rwp',
 	'thesis.isfs','thesis.sonde','thesis.lidar',
-	'thesis.hobo'],
+	'thesis.hobo','thesis.sodar'],
      )
 
