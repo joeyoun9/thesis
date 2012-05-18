@@ -10,7 +10,7 @@ import numpy as np
 from thesis.tools.pytables import *
 
 
-def read(src,save=False):
+def read(src,save, group='/'):
 	"""
 		this function can now create an hdf5 archive of this data
 	"""
@@ -35,22 +35,23 @@ def read(src,save=False):
 			# record the information
 			stats[p[0]] = float(p[1])
 			continue
-		if type(d) == bool:
-			# then it is time to set d
-			x = np.arange(stats['xllcorner'],stats['ncols']*stats['cellsize']+stats['xllcorner'],stats['cellsize'])
-			y = np.arange(stats['nrows']*stats['cellsize']+stats['yllcorner'],stats['yllcorner'],-1*stats['cellsize'])
-			d = np.zeros((stats['nrows'],stats['ncols']),dtype=np.float)
-			if save:
-				print x
-				doc = h5(save)
-				# make the hdf5 document - scary huge at first, but it will be ok.
-				doc.create(x=int(stats['ncols']),y=int(stats['nrows']),topo=[stats['nrows'],stats['ncols']])
+		break # once the line is too long, that's the end!
 
-		curr_x = 0
+	f.close()
+	
+	x = np.arange(stats['xllcorner'],stats['ncols']*stats['cellsize']+stats['xllcorner'],stats['cellsize'])
+	y = np.arange(stats['nrows']*stats['cellsize']+stats['yllcorner'],stats['yllcorner'],-1*stats['cellsize'])
+	doc = h5(save)
+	doc.create(group=group,indices={'x':int(stats['ncols']),'y':int(stats['nrows']),'topo':(stats['nrows'],stats['ncols'])})
+	# there are no variables here, per se
+
+	d = np.loadtxt(src,skiprows=6)
+	doc.loadIndices(group=group,x=x,y=y,topo=d)
+	"""
 		#y.append(curr_y)# append the current y index, since we will only go through it once
 		# well, this is a data line, each box is def
 		d[curr_y] = np.fromstring(line.replace(str(stats['nodata_value'])+"0",'nan'),sep=" ") #FIXME - '0' is bad
-		"""
+		
 		for k in line.split():
 			
 			curr_x += 1
@@ -64,13 +65,14 @@ def read(src,save=False):
 	
 			# well, save the value,
 			d[curr_y,curr_x-1] = float(k)
-		"""
+		
 		# now we need to 
 		# well, x should have been set at this point
 		curr_y += 1
 		x_set = True
-	if save:
-		doc.append(0,x=x,y=y,topo=d) #and that is that!
-		return True
-	return x,y,d
+	"""
+	
+	#doc.append(0,group=group,x=x,y=y,topo=d) #and that is that!
+
+	return True
 
