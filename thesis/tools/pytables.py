@@ -92,6 +92,7 @@ class h5(object):
 			variables is a simple string list of the variables wished
 			indices are same-shape time indipendent data, of which only one 'ob' is pulled
 			
+			There are various methods for specifying times, of which at least one must be given
 		"""
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
@@ -150,10 +151,8 @@ class h5(object):
 			self.doc = h5opena(self.filename)# open for appending
 		# presumably f is a tables object now
 		# determine high key
-		try:
- 			i = self.doc.getNodeAttr(group,'maxkey')+1#root.meta[0]['high_key'] # get the current maximum key
-		except:
-			i = 0 # empty array, though above should always work...
+ 		i = self.doc.getNodeAttr(group,'maxkey') + 1
+
 		# Add this information to the keys table
 		self.doc.getNode(group,name='time').append([(time,i)])
 		
@@ -175,13 +174,13 @@ class h5(object):
 		return True
 
 
-	def dump(self,variable):
+	def dump(self,variable,group='/'):
 		"""
 			simply output the entire contents of a specific variable, for all times
 		"""
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
-		out = self.doc.getNode('/',name=variable)[:]
+		out = self.doc.getNode(group,name=variable)[:]
 		self.close()
 		return out
 
