@@ -11,6 +11,6 @@ setup(name='thesis',
       packages=['thesis','thesis.compress','thesis.compress.rass','thesis.tools',
 	'thesis.compress.ceil','thesis.compress.dem','thesis.compress.rwp',
 	'thesis.compress.isfs','thesis.compress.sonde','thesis.compress.lidar',
-	'thesis.compress.hobo','thesis.compress.sodar'],
+	'thesis.compress.hobo','thesis.compress.sodar','thesis.pcaps'],
      )
 

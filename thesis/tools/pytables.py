@@ -91,13 +91,29 @@ class h5(object):
 		"""
 			variables is a simple string list of the variables wished
 			indices are same-shape time indipendent data, of which only one 'ob' is pulled
+			duration in seconds
 			
 			There are various methods for specifying times, of which at least one must be given
 		"""
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
-		if not end:
-			end = self.doc.getNode(group).meta[0]['max_time'] # then the max of the file is the end
+		# ok, well, now figure out what time period they wanted
+		if timetup:
+			begin = timetup[0]
+			end = timetup[1]
+		elif duration and not end and not begin:
+			# then 
+			end = self.doc.getNodeAttr(group,'maxtime')
+			begin = end - duration # duration is in seconds?
+		elif duration and begin:
+			end = begin + duration
+		elif duration and end:
+			begin = end - duration
+		# if it is begin and end, then those are just set nicely
+		elif not duration and not begin and not end:
+			# you gave me nothing
+			raise Exception('You must specify a begin/end, a duration or a time tuple in order to slice. Use dump() so see an entire dataset') 
+
 		index = self.doc.getNode(group).time.readWhere('(time >= '+str(begin)+')&(time <= '+str(end)+')')
 		# and then sort the values
 		out = {}# return a dict keyed like the input
@@ -111,12 +127,13 @@ class h5(object):
 			# slice the data from the file, and then sort it
 			out['time'] = np.array(times) # return times with the data
 			for v in variables:
-				out[v] = self.doc.getNode(group,name=v)[n:x][keys - n]
+				out[v] = self.doc.getNode(group,name=v)[n:x][keys - n] #FIXME!!! DO YOU WORK>!>!>!>!>!>!
 		# now read out indices
-		for i in indices:
-			out[i] = self.doc.getNode(group,name=i) # indices should only have one value in time dimension
-			#FIXME - converting to a numpy array can take a lot of time - give it a flavor?
-			# note, it is your job to keep track of which variable is an index.
+		if indices:
+			for i in indices:
+				out[i] = self.doc.getNode(group,name=i) # indices should only have one value in time dimension
+				#FIXME - converting to a numpy array can take a lot of time - give it a flavor?
+				# note, it is your job to keep track of which variable is an index.
 		
 		self.doc.close()
 		return out
