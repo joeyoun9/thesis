@@ -28,4 +28,10 @@ def iop(num):
 		return (s2t('2011012612UTC','%Y%m%d%H%Z'),s2t('2011013106UTC','%Y%m%d%H%Z'))
 	elif num == 10:
 		return (s2t('2011020218UTC','%Y%m%d%H%Z'),s2t('2011020518UTC','%Y%m%d%H%Z'))
-	
+
+
+# make a simple dir available for other events
+events = {
+	'pcaps':(s2t('2010120100UTC','%Y%m%d%H%Z'),s2t('2012021800UTC','%Y%m%d%H%Z')),
+
+}	

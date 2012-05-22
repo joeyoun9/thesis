@@ -131,7 +131,7 @@ class h5(object):
 		# now read out indices
 		if indices:
 			for i in indices:
-				out[i] = self.doc.getNode(group,name=i) # indices should only have one value in time dimension
+				out[i] = self.doc.getNode(group,name=i)[:] # indices should only have one value in time dimension
 				#FIXME - converting to a numpy array can take a lot of time - give it a flavor?
 				# note, it is your job to keep track of which variable is an index.
 		
