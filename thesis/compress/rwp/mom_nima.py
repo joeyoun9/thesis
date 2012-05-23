@@ -63,7 +63,8 @@ def read (files,save):
 			iverr = nc.variables['errorVel'][t]
 			clutter = nc.variables['clutter'][t]
 			os = nc.variables['othersig'][t] #non-atmospheric signals
-			
+		
+			# for all variables the value -9999 signals nan data!!!	
 			#print "Appending",obtime
 			doc.append(obtime,persist=True,height=height,beamnum=[beamnum],elevation=[elevation],az=[az],vel=vel,sw=sw,snr=snr,noise=noise,mom1Conf=m1c,
 				mom2Conf=m2c,power=power,poptemp=poptemp,qc=qc,interpv=interpv,iverr=iverr,clutter=clutter,othersig=os)

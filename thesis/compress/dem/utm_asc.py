@@ -46,6 +46,7 @@ def read(src,save, group='/'):
 	# there are no variables here, per se
 
 	d = np.loadtxt(src,skiprows=6)
+	d[d<-9990]=np.nan # filter and insert nans
 	doc.loadIndices(group=group,x=x,y=y,topo=d)
 	"""
 		#y.append(curr_y)# append the current y index, since we will only go through it once

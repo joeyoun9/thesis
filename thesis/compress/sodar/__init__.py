@@ -33,6 +33,7 @@ def read(files,save):
 			info = np.array([x.split() for x in dat[i+4:i+23]]).T # not the fastest...
 			topbar = fluff[0].split()
 			time = s2t(topbar[1]+topbar[2]+"UTC",'%m/%d/%Y%H:%M:%S%Z')
+			# values to be nanned - 9999 for directions, 99.99 for everything else!
 			if i == 0:
 				# append height index information
 				doc.append(time,persist=True,height=info[0],wspd=info[1],wdir=info[2],w=info[3],sdw=info[4],iw=info[5],
