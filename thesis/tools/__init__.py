@@ -9,7 +9,7 @@ def s2t(string,time_format):
 	return calendar.timegm(time.strptime(string,time_format))
 	# better specify UTC if you want to make sure it makes the right choice!!!
 
-def matlabtime(t):
+def m2t(t):
 	"""
 		create a unix time from a matlab ordinal time
 	"""
