@@ -41,18 +41,15 @@ def mean2d(dat,binsize):
 	# we could convolve as well, but that is just not as nice! (and not much faster either)
 	return out
 
-"""
-#CONVOLUTION MEAN COMPUTATION
-# use convolution to make a running mean!
-w = 20.
-weights = np.zeros(w)+1#np.repeat(0,w)/w
-dat2 = np.zeros(dat[:,:-(w-1)].shape)
-print dat2.shape,dat.shape
-for i in range(len(dat)):
-        # have to loop through rows to average, not too terrible
-        print 'row',i
-        dat2[i] = np.convolve(dat[i],weights)[w-1:-(w-1)]
-"""
+def runmean(dat,binsize):
+	#CONVOLUTION MEAN COMPUTATION
+	# use convolution to make a running mean!
+	weights = np.repeat(0,binsize)/binsize
+	dat2 = np.zeros(dat[:,:-(binsize-1)].shape)
+	for i in range(len(dat)):
+		# have to loop through rows to average, not too terrible
+		print 'row',i
+		dat2[i] = np.convolve(dat[i],weights)[binsize-1:-(binsize-1)]
 
 
 def stdev2d(dat,binsize):
