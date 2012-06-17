@@ -34,6 +34,7 @@ def mean2d(dat,binsize):
 		try:
 			out[i] = np.mean(chunk,axis=0)
 			i+=1
+			#take a chunk of 'profiles' in 'time' ( ||| ||| ||| = 3 chunks)
 			chunk = dat[i*binsize:(i+1)*binsize]
 		except:
 			break
@@ -50,6 +51,7 @@ def runmean(dat,binsize):
 		# have to loop through rows to average, not too terrible
 		print 'row',i
 		dat2[i] = np.convolve(dat[i],weights)[binsize-1:-(binsize-1)]
+	return dat2
 
 
 def stdev2d(dat,binsize):

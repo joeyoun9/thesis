@@ -5,7 +5,17 @@ import tables
 import numpy as np
 
 class h5(object):
+	'''
+	Initialize the object which is used to interact with an HDF5 archive created for my thesis
+	'''
 	def __init__(self,fname):
+		"""
+		Create the object for interaction by simply providing the location of the 
+		HDF5 document
+		
+		Inputs:
+			fname = source file (.h5,hdf5,etc...)
+		"""
 		# it does have to be initialized, sadly, but otherwise it is good to go
 		self.filename = fname # this is mandatory!!!
 		self.doc = False
@@ -94,6 +104,8 @@ class h5(object):
 			duration in seconds
 			
 			There are various methods for specifying times, of which at least one must be given
+			
+			time tuples are ideal right now...
 		"""
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
@@ -126,14 +138,25 @@ class h5(object):
 			# create an numpy slice object.
 			# slice the data from the file, and then sort it
 			out['time'] = np.array(times) # return times with the data
+			"""
+			enable variables to be a string or list
+			"""
+			if not type(variables) == list:
+				variables = [variables]
 			for v in variables:
 				out[v] = self.doc.getNode(group,name=v)[n:x][keys - n] #FIXME!!! DO YOU WORK>!>!>!>!>!>!
+		else:
+			"""
+			the timestring requested was out of the time domain of the dataset, so no data was recovered
+			"""
+			self.doc.close()
+			raise Exception('This dateset does not have any data within the times specified')
 		# now read out indices
 		if indices:
 			for i in indices:
 				out[i] = self.doc.getNode(group,name=i)[:] # indices should only have one value in time dimension
 				#FIXME - converting to a numpy array can take a lot of time - give it a flavor?
-				# note, it is your job to keep track of which variable is an index.
+				# note, it is [currently] your job to keep track of which variable is an index.
 		
 		self.doc.close()
 		return out
