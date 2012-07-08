@@ -18,10 +18,10 @@ rc('font', **{'family':'sans-serif', 'sans-serif':
 '''
 Method for outlining available fonts...
 '''
-'''
-for font in fm.OSXInstalledFonts():
-    print font
-'''
+if False:
+    for font in fm.OSXInstalledFonts():
+        print font
+
 
 rcParams['xtick.direction'] = 'out'
 rcParams['ytick.direction'] = 'out'
@@ -36,3 +36,13 @@ def bottomcolorbar(data=None):
         'aspect':40,
         'drawedges':False
     })
+def equalaxis():
+    '''
+    Set the dimensions of the plot to be equal
+    
+    Equivalent To
+    -------------
+    >>> plt.axis('equal')
+    
+    '''
+    plt.axis('equal')
