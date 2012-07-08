@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='thesis',
-      version='0.01',
+      version='0.1',
       description="Joe Young\'s Thesis code",
       author='Joe Young',
       author_email='joe.young@utah.edu',
