@@ -48,6 +48,8 @@ def gradient(data,cloud=-5,limit=1500,binsize=20):
     
     lowest 1500 m only
     '''
+    ''' start by evaluating a .7 std dev threshold '''
+    std = stdev(.6,data,binsize=binsize)[0]
     height = data['height']
     time = mean1d(data['time'],binsize)
     data = np.gradient(mean2d(data['bs'],binsize))[0]
@@ -60,6 +62,9 @@ def gradient(data,cloud=-5,limit=1500,binsize=20):
             "loop through heights, but only for keys less than 1500m"
             if data[x,y] < max_grad:
                 mh = height[y]
+                max_grad = data[x,y]
+            if height[y]>=std[x]:
+                break
         depth[x]=mh
     return (depth,time)
 
