@@ -2,7 +2,7 @@
 	Methods and data for the PCAPS projects
 """
 
-all = ['compress','tools']
+all = ['ceilometer','summarize']
 
 from thesis.tools import s2t
 
