@@ -96,14 +96,15 @@ def runmean(dat,binsize):
 		
 		
 	'''
-	global thesisverbose
-	weights = np.repeat(0,binsize)/binsize
+	#global thesisverbose
+	weights = np.repeat(1.0,binsize)/binsize
 	dat2 = np.zeros(dat[:,:-(binsize-1)].shape)
 	for i in range(len(dat)):
 		# average row by row, to maintain data shape, as convolve is 1 dimensional
-		if thesisverbose:
-			print 'row',i
+	#	if thesisverbose:
 		dat2[i] = np.convolve(dat[i],weights)[binsize-1:-(binsize-1)]
+		#print 'row',i,dat2[i],weights
+
 	return dat2
 
 

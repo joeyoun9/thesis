@@ -48,23 +48,25 @@ def gradient(data,cloud=-5,limit=1500,binsize=20):
     
     lowest 1500 m only
     '''
+    from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
-    std = stdev(.6,data,binsize=binsize)[0]
+    #std = stdev(.6,data,binsize=binsize)[0]
     height = data['height']
     time = mean1d(data['time'],binsize)
-    data = np.gradient(mean2d(data['bs'],binsize))[0]
+    data = runmean(data['bs'],20)#200 m running vertical mean
+    data = np.gradient(mean2d(data,binsize),20)[1]
     depth = [0 for x in range(len(data))]
     for x in range(len(data)):
         "each time bin."
         max_grad = 0 #"we seek the minimum gradient..."
         mh = 0 #"the height of the current winner"
-        for y in np.arange(len(height))[height<=limit]:
+        for y in np.arange(len(height))[(height>50)&(height<=limit)]:
             "loop through heights, but only for keys less than 1500m"
             if data[x,y] < max_grad:
                 mh = height[y]
                 max_grad = data[x,y]
-            if height[y]>=std[x]:
-                break
+            #if height[y]>=std[x]:
+            #    break
         depth[x]=mh
     return (depth,time)
 
