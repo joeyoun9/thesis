@@ -12,7 +12,7 @@ from matplotlib import rc,rcParams,font_manager as fm,pyplot as plt
 print fm.FontProperties().get_family() 
 # make the font helvetica (thin, appaerntly)
 rcParams['font.sans-serif']='Geneva, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
-rcParams['font.weight']='light'
+rcParams['font.weight']='bold'
 try:
     'wrapped for safety'
     rcParams['axes.labelweight']='light'
