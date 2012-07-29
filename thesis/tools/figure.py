@@ -13,7 +13,9 @@ print fm.FontProperties().get_family()
 # make the font helvetica (thin, appaerntly)
 rcParams['font.sans-serif']='Geneva, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
 rcParams['font.weight']='light'
-#rcParams['axes.labelweight']='light'
+try:
+    'wrapped for safety'
+    rcParams['axes.labelweight']='light'
 
 #rc('font', **{'family':'sans-serif', 'sans-serif':
 #     'Helvetica','weight':'bold'})
