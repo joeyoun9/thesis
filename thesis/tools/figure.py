@@ -16,6 +16,8 @@ rcParams['font.weight']='light'
 try:
     'wrapped for safety'
     rcParams['axes.labelweight']='light'
+except:
+    pass
 
 #rc('font', **{'family':'sans-serif', 'sans-serif':
 #     'Helvetica','weight':'bold'})
