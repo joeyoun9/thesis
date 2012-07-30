@@ -40,7 +40,8 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 		save : str
 			the location for the HDF5 document to be created
 	"""
-	#FIXME - this is going to account for the settings on the ceilometers in pcaps and uunet ct12s(which do not vary)
+	#FIXME - this is going to account for the settings on
+	# the ceilometers in pcaps and uunet ct12s(which do not vary)
 	
 	if not save:
 		raise Exception('Yeah, we needed you to specify an output file')
@@ -75,7 +76,8 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			tsplit = C
 			tkey = -1
 	elif ceilometer == 'cl31':
-		doc.create(indices={'height':770},status=13,bs=770) # this can vary!!! but, you might just have to know that in advance
+		doc.create(indices={'height':770},status=13,bs=770) 
+		# this can vary!!! but, you might just have to know that in advance
 		if creator == 'vaisala' or creator == 'uunet':
 			split = D
 			tsplit = A # times are before
@@ -88,7 +90,8 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 		raise ValueError('Your input for ceilometer type was not valid')
 	print "File Initialized"
 	# now read the file, and get the times as per the formatting
-	# always split by one thing, to get ob plus time, and then split by the other to isolate the time
+	# always split by one thing, to get ob plus time, 
+	#and then split by the other to isolate the time
 	if type(files) == str:
 		files = [files]
 	f_prev = '' # keep track to prevent doubling up
@@ -113,22 +116,27 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 				elif creator == 'uunet':
 					t = float(tt) # my favorite format...
 				elif creator == 'horel':
-					t = s2t(tt.replace('"','').strip()+"UTC","%m/%d/%Y %H:%M:%S%Z") # might be an error in that...
+					t = s2t(tt.replace('"','').strip()+"UTC","%m/%d/%Y %H:%M:%S%Z") 
+					# might be an error in that...
 					#FIXME - he may be saving data in local time...
 			except ValueError:
 				continue #a sign that this is not a proper ob
 			# then read the ob
 
 			ob = o.split(tsplit)[tkey+1].strip() 
-			if ceilometer == 'ct12':
-				out = ct12.read(ob)
-			elif ceilometer == 'cl31':
-				out = cl31.read(ob)
-			else:
-				out = ct25.read(ob)
-			if not out:
+			try:
+				if ceilometer == 'ct12':
+					out = ct12.read(ob)
+				elif ceilometer == 'cl31':
+					out = cl31.read(ob)
+				else:
+					out = ct25.read(ob)
+				if not out:
+					continue
+			except:
+				'well, something failed... move along'
+				print 'Something wasnt right with that ob'	
 				continue
-
 			if f_prev == '':
 				doc.loadIndices(height=out['height'])
 				f_prev = f
