@@ -60,7 +60,7 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			split = C
 			tsplit = B # times are before
 			tkey = 0
-		if creator == 'horel':
+		if creator == 'horel' or creator == 'stephan':
 			split = B
 			tsplit = C
 			tkey = -1
@@ -71,7 +71,7 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			split = C
 			tsplit = A # times are before
 			tkey = 0
-		if creator == 'horel':
+		if creator == 'horel' or creator == 'stephan':
 			split = A
 			tsplit = C
 			tkey = -1
@@ -82,7 +82,7 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			split = D
 			tsplit = A # times are before
 			tkey = 0
-		if creator == 'horel':
+		if creator == 'horel' or creator == 'stephan':
 			split = A
 			tsplit = D
 			tkey = -1
@@ -119,6 +119,9 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 					t = s2t(tt.replace('"','').strip()+"UTC","%m/%d/%Y %H:%M:%S%Z") 
 					# might be an error in that...
 					#FIXME - he may be saving data in local time...
+				elif creator == 'stephan':
+					t=s2t(tt[:-4]+'UTC','%m/%d/0%y %H:%M:%S%Z')
+					'WILL FAIL IN 2100, assumes 012 == 2012'
 			except ValueError:
 				continue #a sign that this is not a proper ob
 			# then read the ob
