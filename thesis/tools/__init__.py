@@ -36,7 +36,12 @@ def m2t(t):
 	# well, that's close...
 	return calendar.timegm(dt.timetuple()) #woohoo?
 
-
+def strz(n,z=2):
+    '''
+    convert a number to a string with the proper number of leading zeros
+    '''
+    return str(n).zfill(z)
+    
 
 def mean2d(dat,binsize):
 	# this will compute a ceilometer style mean along the first axis -- WARNING - USES A FOR LOOP	
