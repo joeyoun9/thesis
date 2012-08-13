@@ -21,6 +21,28 @@ def skewz (temp, z, rate=.005):
 def c2t (t,v,var,conversions=default_time_conversions,z=False,offset=False,colorbar_degrees=10,skew_distance=15):
     '''
     Convert a profile of temperatures in celcius   
+    
+    Parameters
+    ----------
+    t: int
+        the time of the sounding
+    v: list
+        the values of the profile, either T,TD or RH (not recommended)
+    var: str
+        the type of the provided variable, as a valid key of conversions
+    conversions: dict, optional
+        Tell how many seconds correspond to one unit change for various variables
+    z: list, optional
+        elevation information
+    offset: float/list, optional
+        provide a baseline value so that both temp/dewp lines are not right on top of eachother.
+        Example
+        -------
+        >>> temp = c2t(t,tempdata,var)
+        >>> dewpoint = c2t(t,dewpointdata,var,offset=tempdata)
+    Other parameters deprecated.
+    
+    
     '''
     if z:
         skewz= lambda x,y: x+.005*y
