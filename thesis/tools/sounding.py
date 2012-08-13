@@ -10,6 +10,13 @@ default_time_conversions = {
     'tf' : 800,
     'rh' : 900,
 }
+def skew (temp,pres, rate=.005):
+    #return temp + (1000-pres)*.05
+    dz = 5740.*np.log(1000/pres)
+    return temp + rate*dz 
+
+def skewz (temp, z, rate=.005):
+    return temp + rate*z
 
 def c2t (t,v,var,conversions=default_time_conversions,z=False,offset=False,colorbar_degrees=10,skew_distance=15):
     '''
@@ -135,13 +142,6 @@ def dry_adiabat (temp,pres,kc):
 
 
 
-def skew (temp,pres, rate=.005):
-    #return temp + (1000-pres)*.05
-    dz = 5740.*np.log(1000/pres)
-    return temp + rate*dz 
-
-def skewz (temp, z, rate=.005):
-    return temp + rate*z
 
 def virt (t,RH,p):
     # sadly this has to be calculated from td, because i have no real good way of calculating td from RH
