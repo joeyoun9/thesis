@@ -11,7 +11,7 @@ default_time_conversions = {
     'rh' : 900,
 }
 
-def c2t (self,t,v,var,conversions=default_time_conversions,z=False,offset=False,colorbar_degrees=10,skew_distance=15):
+def c2t (t,v,var,conversions=default_time_conversions,z=False,offset=False,colorbar_degrees=10,skew_distance=15):
     '''
     Convert a profile of temperatures in celcius   
     '''
@@ -38,7 +38,7 @@ def c2t (self,t,v,var,conversions=default_time_conversions,z=False,offset=False,
     return prof
 
 # prof_height is a function which will take a profile, and will return the point above and/or below a certian elevation
-def prof_height (self,v,z,length=99999.,bottom=0.):
+def prof_height (v,z,length=99999.,bottom=0.):
     # self is the request obj, v is the variable profile, and z are the corresponding heights AMSL
     prof = []
     prof_z = []
