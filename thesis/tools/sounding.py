@@ -44,11 +44,12 @@ def c2t (t,v,var,conversions=default_time_conversions,z=False,offset=False,color
     
     
     '''
-    if z:
-        skewz= lambda x,y: x+.005*y
-    else:
+    if not z:
         skewz = lambda x,y: x # create skewz as a meaningless function
         z = [0 for x in range(len(v))] # create a dummy Z
+    else:
+        skewz= lambda x,y: x+.005*y
+
     if offset:
         # the offset will be an amount in the unit of v, and shows how much we should adjust time
         # OR offset can be a list, in which case, the offset value will be the distance between the point[0] on that list
