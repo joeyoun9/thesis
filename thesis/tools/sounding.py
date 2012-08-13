@@ -15,7 +15,9 @@ def c2t (t,v,var,conversions=default_time_conversions,z=False,offset=False,color
     '''
     Convert a profile of temperatures in celcius   
     '''
-    if not z:
+    if z:
+        from . import skewz
+    else z:
         skewz = lambda x,y: x # create skewz as a meaningless function
         z = [0 for x in range(len(v))] # create a dummy Z
     if offset:
