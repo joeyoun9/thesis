@@ -13,7 +13,7 @@ def read(files,save):
 	# create the HDF5 document
 	doc = h5(save)
 	size = 5500 # this hopefully exceeds the size of the arrays
-	doc.create(time2=size,pres=size,temp=size,dewpt=size,rh=size,u=size,v=size,dz=size,Z=size,lat=size,lon=size,gpsz=size)
+	doc.create(time2=size,pres=size,temp=size,dewpt=size,rh=size,wdir=size,wspd=size,dz=size,Z=size,lat=size,lon=size,gpsz=size)
 	#Z=geopotenital height
 	
 	# now read the files!
@@ -25,23 +25,45 @@ def read(files,save):
 			t0 = s2t(fname[1:15]+"UTC","%Y%m%d_%H%M%S%Z")
 		except:
 			#well, you do not meet our high standards for naming
+			print 'bad file name'
 			continue
-		ts,hh,mm,ss,p,tc,tdc,rh,u,v,ws,wd,dz,Z,ln,lt,gpsZ = np.loadtxt(f,skiprows=14,unpack=True)
-		# and append this data! I will trust the time seconds, instead of recomputing the time
-		ts += t0
-		# but, before that, we have to make them all the same size - size long
-		nl = np.zeros(size - ts.shape[0])-999.00 # -999 array to fluff the end
-		ts = np.concatenate((ts,nl))
-		p  = np.concatenate((p,nl))
-		tc = np.concatenate((tc,nl))
-		tdc = np.concatenate((tdc,nl))
-		rh = np.concatenate((rh,nl))
-		u = np.concatenate((u,nl))
-		v = np.concatenate((v,nl))
-		dz = np.concatenate((dz,nl))
-		ln = np.concatenate((ln,nl))
-		lt = np.concatenate((lt,nl))
-		Z = np.concatenate((Z,nl))
-		gpsZ = np.concatenate((gpsZ,nl))
+		'''
+		For the raw files, we have to go line by line... sad I know
+		'''
+		ts = np.empty(size)
+		p  = np.empty(size)
+		tc = np.empty(size)
+		tdc = np.empty(size)
+		rh = np.empty(size)
+		wdir = np.empty(size)
+		wspd = np.empty(size)
+		dz = np.empty(size)
+		ln = np.empty(size)
+		lt = np.empty(size)
+		Z = np.empty(size)
+		gpsZ = np.empty(size)
+		l=0 #keeps track of the current line
+		f = open(f)
+		for line in f:
+			if not line[10]=='S': continue #dont record pre-launch
+			line  = line.split()
+			if not line[1] == 'S00': continue #not satisfactory
+			#NOTE TIMES ARE NOT INCLUDED HERE!!!
+			p[l]=line[5]
+			tc[l]=line[6]
+			#tdc[l]=line[7]
+			rh[l]=line[7]
+			wdir[l]=line[8]
+			wspd[l]=line[9]
+			dz[l]=line[10]
+			ln[l]=line[11]
+			lt[l]=line[12]
+			Z[l]=line[13]
+			gpsZ[l]=line[19]
+			
+			l+=1
+			
+		f.close()
+		
 		doc.append(t0,persist=True,time2=ts,pres=p,temp=tc,dewpt=tdc,rh=rh,u=u,v=v,dz=dz,Z=Z,lat=lt,lon=ln,gpsz=gpsZ)
 	doc.close()
