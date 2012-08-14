@@ -65,5 +65,5 @@ def read(files,save):
 			
 		f.close()
 		
-		doc.append(t0,persist=True,time2=ts,pres=p,temp=tc,dewpt=tdc,rh=rh,u=u,v=v,dz=dz,Z=Z,lat=lt,lon=ln,gpsz=gpsZ)
+		doc.append(t0,persist=True,time2=ts,pres=p,temp=tc,dewpt=tdc,rh=rh,wspd=wspd,wdir=wdir,dz=dz,Z=Z,lat=lt,lon=ln,gpsz=gpsZ)
 	doc.close()
