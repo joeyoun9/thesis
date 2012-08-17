@@ -12,7 +12,7 @@ from matplotlib import rc,rcParams,font_manager as fm,pyplot as plt
 print fm.FontProperties().get_family() 
 # make the font helvetica (thin, appaerntly)
 rcParams['font.sans-serif']='Geneva, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
-rcParams['font.weight']='light,lighter,bold,normal',
+rcParams['font.weight']='light,lighter,bold,normal'
 try:
     'wrapped for safety'
     rcParams['axes.labelweight']='light'
@@ -24,7 +24,7 @@ except:
 # print font information
 
 '''
-Method for outlining available fonts...
+Method for outlining available fonts on macs
 '''
 if False:
     for font in fm.OSXInstalledFonts():

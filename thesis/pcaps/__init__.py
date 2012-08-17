@@ -19,7 +19,9 @@ def iop(num,buffer=False):
 		length in days to extend the tuple.
 	'''
 	# organize events, and return proper interpretable time tuples
-	if num == 1:
+	if num == 0:
+		out= (s2t('2010120112UTC','%Y%m%d%H%Z'),s2t('2011021800UTC','%Y%m%d%H%Z'))
+	elif num == 1:
 		out= (s2t('2010120112UTC','%Y%m%d%H%Z'),s2t('2010120702UTC','%Y%m%d%H%Z'))
 	elif num == 2:
 		out= (s2t('2010120712UTC','%Y%m%d%H%Z'),s2t('2010121015UTC','%Y%m%d%H%Z'))
