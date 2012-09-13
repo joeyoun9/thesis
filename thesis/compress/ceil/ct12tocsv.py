@@ -155,7 +155,7 @@ while True:
 		tmstring = ob.split(C)[-1].strip()
 		'now translate the time, and wrap in a try statement, to catch bad times = bad obs'
 		try:
-			tm = s2t(tmstring[:-4]+'UTC','%m/%d/0%y %H:%M:%S%Z')
+			tm = s2t(tmstring[:2]+tmstring[4:-4]+'UTC','%m/%d/%Y %H:%M:%S%Z')
 			'Note, this will fail in 2100, assumes 012 == 2012 (only uses 2 digit year)'
 		except:
 			'the time was not in the right format, so it was probably garbage, next ob please.'
