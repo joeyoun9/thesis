@@ -15,6 +15,7 @@ def skew (temp,pres, rate=.005):
     dz = 5740.*np.log(1000/pres)
     return temp + rate*dz 
 
+
 def skewz (temp, z, rate=.005):
     return temp + rate*z
 
@@ -198,7 +199,7 @@ def z(p):
     'z as a function of p (NOT T) in hPa'
     return (287./9.81)*273.15*np.log(1000/p)
 
-def plot_skewt(plt,t,td,p):
+def plot_skewt(plt,t,td,p,skew=.006):
     """
     Create the contours for a skew-T plot, and plot them
     """
