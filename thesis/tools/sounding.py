@@ -194,6 +194,10 @@ def thetae(t,p):
     cp = 1004
     return theta(t,p)*np.exp((l*rc)/(cp*t))
 
+def z(p):
+    'z as a function of p (NOT T) in hPa'
+    return (287./9.81)*273.15*np.log(1000/p)
+
 def plot_skewt(plt,t,td,p):
     """
     Create the contours for a skew-T plot, and plot them
