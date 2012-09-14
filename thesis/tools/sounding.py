@@ -236,6 +236,7 @@ def plot_skewt(plt,t,td,p,skew=.006):
     cst = plt.contour(ts,ps,thet,levels=range(-100,100,5),colors='r',linewidths=0.5,linestyles='solid')
     
     #plt.clabel(te,fontsize=5,inline=True)
+    ax=plt.gca()
     ax.set_yscale('log')
     plt.plot(td,p,'g',linewidth=2)
     plt.plot(t,p,'r',linewidth=2)
