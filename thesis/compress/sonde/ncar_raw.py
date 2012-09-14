@@ -60,6 +60,7 @@ def read(files,save):
 			lt[l]=line[12]
 			Z[l]=line[13]
 			gpsZ[l]=line[19]
+			print 'ob',len(tc)
 			
 			l+=1
 			
