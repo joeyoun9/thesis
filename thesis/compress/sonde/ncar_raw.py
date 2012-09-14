@@ -45,8 +45,8 @@ def read(files,save):
 		l=0 #keeps track of the current line
 		f = open(f)
 		for line in f:
-			print line[10]
-			if not line[10]=='S': continue #dont record pre-launch
+			print line[9]
+			if not line[9]=='S': continue #dont record pre-launch
 			line  = line.split()
 			if not line[1] == 'S00': continue #not satisfactory
 			#NOTE TIMES ARE NOT INCLUDED HERE!!!
