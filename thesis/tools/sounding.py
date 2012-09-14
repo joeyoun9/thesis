@@ -171,3 +171,77 @@ def virt (t,RH,p):
     # sadly this has to be calculated from td, because i have no real good way of calculating td from RH
     tv = t / ( 1 - ( ( RH * es(t) ) / ( 100 * p )  ) * (1 - 0.622) )
     return tv
+
+def e(t):
+    '''
+        compute vapor pressure using a multidimensional t
+    '''
+    A = 2.53e11 #pa
+    B = 5420 #K
+    
+    return A*np.exp(-B/t) #T IN K!!!
+
+def theta(t,p):
+    't in K, p in hPa, returns in K'
+    return t*(1000/p)**(.286)
+
+
+def thetae(t,p):
+    't in K, p in hPa, returns K'
+    ev = e(t)
+    rc = 0.622*ev/(p*100 - ev)
+    l = 2.5e6
+    cp = 1004
+    return theta(t,p)*np.exp((l*rc)/(cp*t))
+
+def plot_skewt(plt,t,td,p):
+    """
+    Create the contours for a skew-T plot, and plot them
+    """
+    "initialize the contouring background variables, not too inefficient"
+    ts = np.arange(-100,200,1.5)#temps (200)
+    ps = np.arange(1100,0,-1) #pressures[1100]
+    dp = np.zeros((1100,200))
+    "Compute initial value matrices"
+    pss = (dp.T+ps).T # full gridded pressure information
+    tss = dp+ts # get temperature on the pressure grid
+    zss = z(pss)
+    "Compute special variables"
+    thet = theta(tss+273.15,pss)-273.15#((tss+273.15)*(1000/pss)**(.286)) - 273.15
+    thte = thetae(tss+273.15,pss)-273.15 #(theta+273.15)*np.exp((l*rc)/(cp*(tss+273.15))) - 273.15
+    "Compute theta e contouring levels to align with indexes"
+    televels =[]
+    for tr in range(-100,100,5):
+        'tr is the temperature at 1000mb, so calculate @e there to determine plotting level'
+        val=thetae(tr+273.15,1000) - 273.15
+        televels.append(val)
+    "Perform skewing of the computed arrays"
+    thet = thet - skew*zss
+    thte = thte - skew*zss
+    tss = tss-skew*zss 
+    
+    t = t+skew*(287./9.81)*273.15*np.log(1000/p)
+    td = td+skew*(287./9.81)*273.15*np.log(1000/p)
+    
+    #write the function using the 0c calculation for height, and then skew the data!!
+    
+    cs = plt.contour(ts,ps,tss,levels=range(-100,100,5),colors='b',linewidths=0.5,linestyles='solid')
+    csp = plt.contour(ts,ps,pss,levels=range(1000,100,-100),colors='k',linewidths=0.5,linestyles='solid')
+    te = plt.contour(ts,ps,thte,levels=televels,colors='g',linewidths=0.5,linestyles='solid')
+    cst = plt.contour(ts,ps,thet,levels=range(-100,100,5),colors='r',linewidths=0.5,linestyles='solid')
+    
+    #plt.clabel(te,fontsize=5,inline=True)
+    ax.set_yscale('log')
+    plt.plot(td,p,'g',linewidth=2)
+    plt.plot(t,p,'r',linewidth=2)
+    plt.ylim(p[0],p[-1])
+    
+    plt.yticks(range(1000,100,10),range(1000,100,10))
+    
+    "adjust the tempreature ticks to account for the 'lifted' surface in the sounding"
+    cf.customTick(ax, 'x',  np.arange(-100,100,10)+skew*z(p[0]), range(-100,100,10),)
+    #plt.ylim(1000,10)
+    plt.xlim(min(td)-1,max(t)+6)
+    #plt.xlim(-50,110)
+    "and that should do it."
+    
