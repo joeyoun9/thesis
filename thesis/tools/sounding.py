@@ -3,6 +3,8 @@ Joe Young August 2012
 '''
 import numpy as np
 import math
+import cleanfig as cf
+
 
 # default conversions dictionary, seconds per whole unit of whatever we are talking about, user modifyable if re-passed to the function
 default_time_conversions = {
