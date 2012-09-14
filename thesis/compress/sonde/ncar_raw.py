@@ -30,10 +30,10 @@ def read(files,save):
 		'''
 		For the raw files, we have to go line by line... sad I know
 		'''
-		ts = np.empty(size)
-		p  = np.empty(size)
+		ts = np.zeros(size)
+		p  = np.zeros(size)
 		tc = np.empty(size)
-		tdc = np.empty(size)
+		tdc = np.zeros(size)
 		rh = np.empty(size)
 		wdir = np.empty(size)
 		wspd = np.empty(size)
@@ -45,7 +45,6 @@ def read(files,save):
 		l=0 #keeps track of the current line
 		f = open(f)
 		for line in f:
-			print line[9]
 			if not line[9]=='S': continue #dont record pre-launch
 			line  = line.split()
 			if not line[1] == 'S00': continue #not satisfactory
@@ -61,7 +60,6 @@ def read(files,save):
 			lt[l]=line[12]
 			Z[l]=line[13]
 			gpsZ[l]=line[19]
-			print 'ob',len(tc)
 			
 			l+=1
 			
