@@ -172,8 +172,27 @@ while True:
 		try:
 			print tmstring
 			'THIS IS THE PART THAT NEEDS FIXING, THE TIME STRINGS ARE NOT IN A HAPPY FORMAT'
-			tm = s2t(tmstring+'CST','%m/%d/%Y %H:%M:%S %p%Z')
-			'Note, this assumes 2-digit time values, which are not used'
+			#tm = s2t(tmstring+'CST','%m/%d/%Y %H:%M:%S %p%Z')
+			'start by breaking up the tieme string to date and time pieces'
+			timepieces = tmstring.replace('"','').split(' ',1)
+			'then split the date into its individual components'
+			date = timepieces[0].split('/')
+			'same for time'
+			times  = timepieces[1].split(':') # gotta account for the PM later.
+			'now, use a similar technique to remove the AM/PM from the time stamp'
+			times[-1] = times[-1].split(' ')[0]
+			'then use the full tmstring to account for the presence of a PM'
+			if 'PM' in tmstring:
+				'if the time is PM, then add 12 to the hour, to make a 24 hour clock.'
+				times[0] = int(times[0])+12
+			'create a python time tuple with this information'
+			tm = (int(date[2]),int(date[0]),int(date[1]),int(times[0]),int(times[1]),int(times[2]))
+			'''pass this to the timegm function from the calendar library. This is used to give 
+			a predictable result irrespective of the time zone of the server doing the processing.'''
+			tm = calendar.timegm(tm) 
+			'Since we have assumed the day/month/hour/minute/second are in UTC, we can simply add the seconds'
+			'to make the time correct. Doing this with time objects is far more painful.'
+			tm = tm+6*3600 # if it is CST, then the actual time is 6 hours later.
 		except:
 			'the time was not in the right format, so it was probably garbage, next ob please.'
 			print 'bad ob',tmstring
@@ -188,7 +207,7 @@ while True:
 		if not out:
 			continue
 		'if we made it to this point, the ob has been read successfully! So, now just save it'
-		print 'ob:',time.ctime(tm)
+		print 'ob:',time.ctime(tm),'CST'
 		
 		'Now we will write this to the file, using join and map to convert values to strings'
 		bs = ','.join(map(str,out[0]))
