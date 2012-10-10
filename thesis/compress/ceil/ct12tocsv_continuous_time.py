@@ -4,7 +4,7 @@ An all in one package for reading and producing two CSV files from CT12 data
 
 DeWekker formatted timestamps.
 
-This is coded to read whatever file is passed to it in the form of ./ct12tocsv.py [raw_file_path]
+This is coded to read whatever file is passed to it in the form of ./ct12tocsv_continuous_time.py [raw_file_path]
 and will save raw_file_path.backscatter.csv and raw_file_path.status.csv 
 
 """
@@ -151,24 +151,32 @@ while True:
 		break
 	data = data.split(B)
 	for ob in data:
-		'Format for every line is "m/d/Y h:mm:ss",DATA...'
+		'Format for every line is "m/d/Y h:mm:ss A/P",DATA...'
 		'the time is now simply the first line up to the comma, so we must reconstruct the message'
 		lines = ob.split("\n")
-		tmstring = lines[0].split(',')[0]
+		if len(lines)<10:
+			"there aren\'t enough lines in this ob!"
+			continue
+		tmstring = lines[3].split(',')[0]
 		for l in range(len(lines)):
 			'now remove the string'
+			if len(lines[l])<30:
+				lines[l]=''
+				continue #robustly removes the command characters, since we already used them.
+			#print lines[l]
 			lines[l] = lines[l].split(',')[1]
 		ob = '\n'.join(lines)
 		'slow but effective, brings the split up lines back into one variable'
-		print ob
-		'grab the time by splitting by the second control, taking the end value, and stripping whitespace'
-		tmstring = ob.split(C)[-1].strip()
+
 		'now translate the time, and wrap in a try statement, to catch bad times = bad obs'
 		try:
-			tm = s2t(tmstring[:2]+tmstring[4:-4]+'UTC','%m/%d/%Y %H:%M:%S%Z')
-			'Note, this will fail in 2100, assumes 012 == 2012 (only uses 2 digit year)'
+			print tmstring
+			'THIS IS THE PART THAT NEEDS FIXING, THE TIME STRINGS ARE NOT IN A HAPPY FORMAT'
+			tm = s2t(tmstring+'CST','%m/%d/%Y %H:%M:%S %p%Z')
+			'Note, this assumes 2-digit time values, which are not used'
 		except:
 			'the time was not in the right format, so it was probably garbage, next ob please.'
+			print 'bad ob',tmstring
 			continue
 		'now grab just the observation text'
 		try:
