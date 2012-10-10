@@ -170,8 +170,7 @@ while True:
 
 		'now translate the time, and wrap in a try statement, to catch bad times = bad obs'
 		try:
-			print tmstring
-			'THIS IS THE PART THAT NEEDS FIXING, THE TIME STRINGS ARE NOT IN A HAPPY FORMAT'
+			'commented out below is the more native time formattting, everything that follows is new.'
 			#tm = s2t(tmstring+'CST','%m/%d/%Y %H:%M:%S %p%Z')
 			'start by breaking up the tieme string to date and time pieces'
 			timepieces = tmstring.replace('"','').split(' ',1)
@@ -207,7 +206,7 @@ while True:
 		if not out:
 			continue
 		'if we made it to this point, the ob has been read successfully! So, now just save it'
-		print 'ob:',time.ctime(tm),'CST'
+		print 'ob:',time.ctime(tm),'(computer local time)'
 		
 		'Now we will write this to the file, using join and map to convert values to strings'
 		bs = ','.join(map(str,out[0]))
