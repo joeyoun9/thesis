@@ -2,7 +2,7 @@
 """
 An all in one package for reading and producing two CSV files from CT12 data
 
-DeWekker formatted timestamps.
+TAMU formatted timestamps.
 
 This is coded to read whatever file is passed to it in the form of ./ct12tocsv_continuous_time.py [raw_file_path]
 and will save raw_file_path.backscatter.csv and raw_file_path.status.csv 
