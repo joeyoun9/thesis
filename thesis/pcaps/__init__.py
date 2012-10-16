@@ -52,5 +52,6 @@ def iop(num,buffer=False):
 # make a simple dir available for other events
 events = {
 	'pcaps':(s2t('2010120100UTC','%Y%m%d%H%Z'),s2t('2012021800UTC','%Y%m%d%H%Z')),
+	'target1':(s2t('201012040000UTC','%Y%m%d%H%M%Z'),s2t('201012051200UTC','%Y%m%d%H%M%Z'))
 
 }	
