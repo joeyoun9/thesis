@@ -49,9 +49,11 @@ def iop(num,buffer=False):
 		out[1]=out[1] + 86400*buffer
 		return out
 
-# make a simple dir available for other events
+# make a simple dict available for other events
 events = {
 	'pcaps':(s2t('2010120100UTC','%Y%m%d%H%Z'),s2t('2012021800UTC','%Y%m%d%H%Z')),
-	'target1':(s2t('201012040000UTC','%Y%m%d%H%M%Z'),s2t('201012051200UTC','%Y%m%d%H%M%Z'))
+	'target1':(s2t('201012040000UTC','%Y%m%d%H%M%Z'),s2t('201012051200UTC','%Y%m%d%H%M%Z')),
+	
+	
 
 }	
