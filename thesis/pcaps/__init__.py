@@ -53,7 +53,7 @@ def iop(num,buffer=False):
 events = {
 	'pcaps':(s2t('2010120100UTC','%Y%m%d%H%Z'),s2t('2012021800UTC','%Y%m%d%H%Z')),
 	'target1':(s2t('201012040000UTC','%Y%m%d%H%M%Z'),s2t('201012051200UTC','%Y%m%d%H%M%Z')),
-	'target2':(s2t('201101050430UTC','%Y%m%d%H%M%Z'),s2t('201101050700UTC','%Y%m%d%H%M%Z')), # WAVES!!!
+	'target2':(s2t('201101050430UTC','%Y%m%d%H%M%Z'),s2t('201101050800UTC','%Y%m%d%H%M%Z')), # WAVES!!!
 	
 	
 
