@@ -155,7 +155,7 @@ def timebin(dat,time,dt):
 		outT[i]=binlow + dt/2
 		'... do the processing'
 
-		outD[i] = np.mean(dat[(time<binhigh)&(time>=binlow)],axis=1)
+		outD[i] = np.mean(dat[(time<binhigh)&(time>=binlow)],axis=0)
 		binlow=binhigh
 		if binhigh > end:
 			break 
