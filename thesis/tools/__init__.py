@@ -142,7 +142,7 @@ def timebin(dat,time,dt):
 	'''
 	begin = np.min(time)
 	end = np.max(time)
-	length = np.floor(end-begin/dt) + 1
+	length = np.floor((end-begin)/dt) + 1
 	outT=np.zeros(length)
 	outshape = [length]+list(dat.shape[1:])
 	print outshape
