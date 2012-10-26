@@ -159,6 +159,6 @@ def timebin(dat,time,dt):
 		binlow=binhigh
 		if binhigh > end:
 			break 
-		
+	return outD,outT
 		
 	
