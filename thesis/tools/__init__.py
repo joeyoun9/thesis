@@ -144,7 +144,7 @@ def timebin(dat,time,dt):
 	end = np.max(time)
 	length = np.floor(end-begin/dt) + 1
 	outT=np.zeros(length)
-	outshape = [length]+dat.shape[1:]
+	outshape = [length]+list(dat.shape[1:])
 	print outshape
 	outD = np.zeros(outshape)
 	binlow = begin
