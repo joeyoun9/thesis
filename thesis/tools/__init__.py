@@ -125,3 +125,40 @@ def stdev2d(dat,binsize):
 		except:
 			break
 	return out	
+
+def timebin(dat,time,dt):
+	'''
+	move data into time-oriented bins, returning the binned average of multi-dimensional data
+	
+	This is fairly slow.
+	
+	Parameters
+	----------
+	
+	dat: numpy array
+		the data to be averaged into bins, first dimension should correspond to time length
+		
+		etc...
+	'''
+	begin = np.min(time)
+	end = np.max(time)
+	length = np.floor(end-begin/dt) + 1
+	outT=np.zeros(length)
+	outshape = [length]+dat.shape[1:]
+	print outshape
+	outD = np.zeros(outshape)
+	binlow = begin
+	i=-1
+	while True:
+		binhigh = binlow+dt
+		i+=1
+		outT[i]=binlow + dt/2
+		'... do the processing'
+		q = time[(time<binhigh)&(time>=binlow)]
+		outD[i] = np.mean(dat[q],axis=1)
+		binlow=binhigh
+		if binhigh > end:
+			break 
+		
+		
+	
