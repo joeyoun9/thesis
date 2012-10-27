@@ -154,8 +154,12 @@ def timebin(dat,time,dt):
 		i+=1
 		outT[i]=binlow + dt/2
 		'... do the processing'
-
-		outD[i] = np.mean(dat[(time<binhigh)&(time>=binlow)],axis=0)
+		q = dat[(time<binhigh)&(time>=binlow)]
+		if len(q) > 0:
+			res = np.mean(q,axis=0)
+		else
+			res = np.nan
+		outD[i] = res
 		binlow=binhigh
 		if binhigh > end:
 			break 
