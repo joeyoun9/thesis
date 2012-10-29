@@ -25,7 +25,7 @@ def threshold_depth(threshold, data, height, cloud=-5):
         computed above clouds, as they are somewhat meaningless.
         
     '''
-    depth = [0 for x in range(len(data))]
+    depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
         for y in range(len(data[x])):
