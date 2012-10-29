@@ -157,7 +157,8 @@ def timebin(dat,time,dt):
 		q = dat[(time<binhigh)&(time>=binlow)]
 		if len(q) > 0:
 			res = np.mean(q,axis=0)
-		else
+		else:
+			'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
 			res = np.nan
 		outD[i] = res
 		binlow=binhigh
