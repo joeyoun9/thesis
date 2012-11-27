@@ -13,7 +13,7 @@ matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
 from thesis.tools import *
-from thesis.pytables import h5
+from thesis.tools.pytables import h5
 import thesis.tools.figure as TFigure
 import cleanfig as cf
 from cleanfig import *
