@@ -166,7 +166,7 @@ def timebin(dat,time,dt):
 			break 
 	return outD,outT
 
-def comp2date(**timetup):
+def comp2time(*timetup):
 	'''
 	convert darn numbers to useful dates.
 	ASSUMES THE GIVEN DATE IS IN UTC
