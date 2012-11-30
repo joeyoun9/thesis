@@ -167,17 +167,15 @@ def timebin(dat,time,dt):
 	return outD,outT
 
 def comp2time(*timetup):
-	'''
-	convert darn numbers to useful dates.
-	ASSUMES THE GIVEN DATE IS IN UTC
-	makes a tuple: yr,mn,day,hr,mn,sec, 0 0 0 
-	'''
-	'make timetup length = 9'
-	timetup = list(timetup) 
-	'friggin A dude.'
-	while len(timetup) < 9:
-		timetup.append(0)
-	calendar.timegm(timetup)
+    '''
+    convert darn numbers to useful dates.
+    ASSUMES THE GIVEN DATE IS IN UTC
+    makes a tuple: yr,mn,day,hr,mn,sec, 0 0 0
+    Can be made iterable. 
+    '''
+    while len(timetup) < 9:
+        timetup = np.append(timetup,[0])
+    return calendar.timegm(timetup)
 	
 		
 	
