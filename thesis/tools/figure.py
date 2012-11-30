@@ -48,6 +48,7 @@ def bottomcolorbar(data=None,label=None):
         'aspect':40,
         'drawedges':False
     }).set_label(label)
+    
 def equalaxis():
     '''
     Set the dimensions of the plot to be equal
@@ -58,3 +59,10 @@ def equalaxis():
     
     '''
     plt.axis('equal')
+def title(str):
+    plt.suptitle(str)
+def xlabel(str):
+    plt.xlabel(str)
+def ylabel(s):
+    plt.ylabel(s)
+    
