@@ -173,7 +173,7 @@ def comp2time(*timetup):
 	makes a tuple: yr,mn,day,hr,mn,sec,
 	'''
 	
-	calendar.timegm(datetime.datetime(timetup))
+	calendar.timegm(datetime(timetup))
 	
 		
 	
