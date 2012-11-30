@@ -19,6 +19,7 @@ from thesis.tools.figure import *
 import cleanfig as cf
 from cleanfig import *
 from thesis.pcaps import *
+from thesis.pcaps.ceilometer.threshold import *
 from matplotlib.backends.backend_pdf import PdfPages
 
 reserved_words = ['np','h5','cf','s2t','plt','iop','events']
