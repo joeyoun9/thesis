@@ -170,10 +170,12 @@ def comp2time(*timetup):
 	'''
 	convert darn numbers to useful dates.
 	ASSUMES THE GIVEN DATE IS IN UTC
-	makes a tuple: yr,mn,day,hr,mn,sec,
+	makes a tuple: yr,mn,day,hr,mn,sec, 0 0 0 
 	'''
-	
-	calendar.timegm(datetime(timetup))
+	'make timetup length = 9'
+	while len(timetup) < 9:
+		timetup.append(0)
+	calendar.timegm(timetup)
 	
 		
 	
