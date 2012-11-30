@@ -24,4 +24,4 @@ reserved_words = ['np','h5','cf','s2t','plt','iop','events']
 'there are more, i have just been lazy.'
 
 
-print __name__,'imported, but you meant to say "from thesis.tools.bundle import *"'
+print __name__,'imported'

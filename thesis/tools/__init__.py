@@ -165,5 +165,15 @@ def timebin(dat,time,dt):
 		if binhigh > end:
 			break 
 	return outD,outT
+
+def comp2date(**timetup):
+	'''
+	convert darn numbers to useful dates.
+	ASSUMES THE GIVEN DATE IS IN UTC
+	makes a tuple: yr,mn,day,hr,mn,sec,
+	'''
+	
+	calendar.timegm(datetime.datetime(timetup))
+	
 		
 	
