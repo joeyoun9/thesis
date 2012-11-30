@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from thesis.tools import *
 from thesis.tools.pytables import h5
 import thesis.tools.figure as TFigure
-from thesis.tools.figur import *
+from thesis.tools.figure import *
 import cleanfig as cf
 from cleanfig import *
 from thesis.pcaps import *
