@@ -173,7 +173,8 @@ def comp2time(*timetup):
 	makes a tuple: yr,mn,day,hr,mn,sec, 0 0 0 
 	'''
 	'make timetup length = 9'
-	timetup = list(timetup) 'friggin A dude.'
+	timetup = list(timetup) 
+	'friggin A dude.'
 	while len(timetup) < 9:
 		timetup.append(0)
 	calendar.timegm(timetup)
