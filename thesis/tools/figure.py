@@ -37,6 +37,8 @@ rcParams['axes.linewidth']=.5 # set the outer border to be thin
 
 #rcParams['text.usetex']= True
 
+plt.grid()
+
 def bottomcolorbar(data=None,label=None):
     plt.colorbar(data,**{
         'orientation':'horizontal',
