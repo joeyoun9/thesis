@@ -70,7 +70,21 @@ def gradient(data,cloud=-5,limit=1500,binsize=20):
         depth[x]=mh
     return (depth,time)
 
-def stdev(threshold,data,binsize=20):
+def variance(data, threshold, binsize=20):
+    '''
+    the evaluation of boundary layer height using the assumption that variance
+    is highest at the top of the boundary layer
+    '''
+    from thesis.tools import runmean
+    height = data['height']
+    time = mean1d(data['time'],binsize)
+    data = runmean(data['bs'],20)#200 m running vertical mean
+    data = np.stdev(mean2d(data,binsize),20)[0]
+    return data
+
+
+
+def noise_variance(threshold,data,binsize=20):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
@@ -103,4 +117,5 @@ def stdev(threshold,data,binsize=20):
         
     # and return a tuple
     return (depth,time)
+
     
