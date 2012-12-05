@@ -19,8 +19,12 @@ from thesis.tools.figure import *
 import cleanfig as cf
 from cleanfig import *
 from thesis.pcaps import *
-from thesis.pcaps.ceilometer.threshold import *
+from thesis.pcaps.ceilometer.mlh import *
+from thesis.pcaps.ceilometer.particle import *
 from matplotlib.backends.backend_pdf import PdfPages
+'this may be a painful addition'
+from pylab import *
+from scipy import *
 
 reserved_words = ['np','h5','cf','s2t','plt','iop','events']
 'there are more, i have just been lazy.'

@@ -38,6 +38,7 @@ rcParams['axes.linewidth']=.5 # set the outer border to be thin
 #rcParams['text.usetex']= True
 
 plt.grid()
+'this does not seem to robustly add grids to everything'
 
 def bottomcolorbar(data=None,label=None):
     plt.colorbar(data,**{
