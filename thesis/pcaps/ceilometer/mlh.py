@@ -142,7 +142,7 @@ def idealized(data, binsize=300, returnfield=False):
         the length in SECONDS for bins to be produced. Longer bins increase the chance of success
     returnfield: bool, optional
         return only the field analyzed, not very useful for this operation.
-    '''
+   
 
     bs = data['bs']
     times = data['time']
@@ -151,15 +151,12 @@ def idealized(data, binsize=300, returnfield=False):
     if returnfield:
         return (bs,times)
     first_guesses = threshold(bs)
-    first_guess_mean = 
-        np.array(map(lambda x:np.mean(bs[x][height<=first_guesses[x]]),range(len(first_guesses))))
+    first_guess_mean = np.array(map(lambda x:np.mean(bs[x][height<=first_guesses[x]]),range(len(first_guesses))))
     'now, for each time bin, we will run the optimization'
     outH = np.zeros(len(times))
     outdH = np.zeros(len(times))
     for i in range(len(times)):
-        '''
-        make first guesses and fix the two variables
-        '''
+        ' make first guesses and fix the two variables'
         b = bs[i] # the backscatter profile
         h = first_guesses[i] # first guess height (a very good guess)]
         dh = 200.
@@ -167,7 +164,7 @@ def idealized(data, binsize=300, returnfield=False):
         p0 = [h,dh]
         if h == 0: continue
         bm = first_guess_mean[i] # approximation for boundary layer intensity, assumed valid
-        bu = -8 'this is a gross approximation, and will lead to errors...'
+        bu = -8 #this is a gross approximation, and will lead to errors...
         'There are two coefficients, A1 and A2, and one is fixed for the fitting'
         a1 = (bm+bu)/2.
         a2 = (bm-bu)/2.
@@ -176,6 +173,7 @@ def idealized(data, binsize=300, returnfield=False):
         p1,success = optimize.leastsq(errfunc, p0, args=(b,))
         print p1
         
-        
+    '''
+    pass
     
     
