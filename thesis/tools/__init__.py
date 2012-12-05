@@ -126,7 +126,7 @@ def stdev2d(dat,binsize):
 			break
 	return out	
 
-def timebin(dat,time,dt):
+def timebin(dat,time,dt,verbose=False):
 	'''
 	move data into time-oriented bins, returning the binned average of multi-dimensional data
 	
@@ -145,7 +145,8 @@ def timebin(dat,time,dt):
 	length = np.floor((end-begin)/dt) + 1
 	outT=np.zeros(length)
 	outshape = [length]+list(dat.shape[1:])
-	print outshape
+	if verbose:
+		print outshape
 	outD = np.zeros(outshape)
 	binlow = begin
 	i=-1
