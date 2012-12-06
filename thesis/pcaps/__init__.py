@@ -81,29 +81,27 @@ virga_periods = [
 		(s2t('2010 12 05 02 UTC','%Y %m %d %H %Z'),s2t('2010 12 05 07 UTC','%Y %m %d %H %Z')),
 		(s2t('2010 12 09 09 UTC','%Y %m %d %H %Z'),s2t('2010 12 09 12 UTC','%Y %m %d %H %Z')),
 		(s2t('2010 12 10 00 UTC','%Y %m %d %H %Z'),s2t('2010 12 10 06 UTC','%Y %m %d %H %Z')),
-		(s2t('2011 01 04 00 UTC','%Y %m %d %H %Z'),s2t('2011 01 04 20 UTC','%Y %m %d %H %Z')), # big one!
+		(s2t('2011 01 04 00 UTC','%Y %m %d %H %Z'),s2t('2011 01 04 20 UTC','%Y %m %d %H %Z')),
+		# This is the most interesting virga event
 		(s2t('2011 01 08 22 UTC','%Y %m %d %H %Z'),s2t('2011 01 09 06 UTC','%Y %m %d %H %Z')),
 		(s2t('2011 01 14 00 UTC','%Y %m %d %H %Z'),s2t('2011 01 14 17 UTC','%Y %m %d %H %Z')),
 		(s2t('2011 01 15 11 UTC','%Y %m %d %H %Z'),s2t('2011 01 15 17 UTC','%Y %m %d %H %Z')),
 		(s2t('2011 01 20 13 UTC','%Y %m %d %H %Z'),s2t('2011 01 20 16 UTC','%Y %m %d %H %Z')),
 		(s2t('2011 01 25 08 UTC','%Y %m %d %H %Z'),s2t('2011 01 26 02 UTC','%Y %m %d %H %Z')),
 		]
-
+'''
+Light aerosol periods constitute times during IOP events where the aerosol concentration better
+resembled a convectively mixing atmosphere.
+'''
 lightAerosol_periods = [
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
-		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z')),
+		(s2t('2010 12 08 09 UTC','%Y %m %d %H %Z'),s2t('2010 12 08 17 UTC','%Y %m %d %H %Z')),
+		(s2t('2010 12 10 07 UTC','%Y %m %d %H %Z'),s2t('2010 12 10 13 UTC','%Y %m %d %H %Z')),
+		(s2t('2010 12 12 14 UTC','%Y %m %d %H %Z'),s2t('2010 12 13 22 UTC','%Y %m %d %H %Z')),
+		(s2t('2010 12 26 06 UTC','%Y %m %d %H %Z'),s2t('2010 12 26 14 UTC','%Y %m %d %H %Z')),
+		(s2t('2011 01 01 02 UTC','%Y %m %d %H %Z'),s2t('2011 01 01 22 UTC','%Y %m %d %H %Z')),
+		(s2t('2011 01 11 10 UTC','%Y %m %d %H %Z'),s2t('2011 01 12 00 UTC','%Y %m %d %H %Z')),
+		# sarted before IOP Began
+		(s2t('2011 01 21 01 UTC','%Y %m %d %H %Z'),s2t('2011 01 21 07 UTC','%Y %m %d %H %Z')),
+		(s2t('2011 01 23 12 UTC','%Y %m %d %H %Z'),s2t('2011 02 24 13 UTC','%Y %m %d %H %Z')),
+		(s2t('2011 02 02 21 UTC','%Y %m %d %H %Z'),s2t('2011 02 03 15 UTC','%Y %m %d %H %Z')),
 		]
