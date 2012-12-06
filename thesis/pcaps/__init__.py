@@ -19,32 +19,23 @@ def iop(num,buffer=False):
 		length in days to extend the tuple.
 	'''
 	# organize events, and return proper interpretable time tuples
-	if num == 0:
-		out= (s2t('2010120112UTC','%Y%m%d%H%Z'),s2t('2011021800UTC','%Y%m%d%H%Z'))
-	elif num == 1:
-		out= (s2t('2010120112UTC','%Y%m%d%H%Z'),s2t('2010120702UTC','%Y%m%d%H%Z'))
-	elif num == 2:
-		out= (s2t('2010120712UTC','%Y%m%d%H%Z'),s2t('2010121015UTC','%Y%m%d%H%Z'))
-	elif num == 3:
-		out= (s2t('2010121212UTC','%Y%m%d%H%Z'),s2t('2010121421UTC','%Y%m%d%H%Z'))
-	elif num == 4:
-		out= (s2t('2010122400UTC','%Y%m%d%H%Z'),s2t('2010122621UTC','%Y%m%d%H%Z'))
-	elif num == 5:
-		out= (s2t('2011010100UTC','%Y%m%d%H%Z'),s2t('2011010912UTC','%Y%m%d%H%Z'))
-	elif num == 6:
-		out= (s2t('2011011112UTC','%Y%m%d%H%Z'),s2t('2011011720UTC','%Y%m%d%H%Z'))
-	elif num == 7:
-		out= (s2t('2011012012UTC','%Y%m%d%H%Z'),s2t('2011012206UTC','%Y%m%d%H%Z'))
-	elif num == 8:
-		out= (s2t('2011012312UTC','%Y%m%d%H%Z'),s2t('2011012612UTC','%Y%m%d%H%Z'))
-	elif num == 9:
-		out= (s2t('2011012612UTC','%Y%m%d%H%Z'),s2t('2011013106UTC','%Y%m%d%H%Z'))
-	elif num == 10:
-		out= (s2t('2011020218UTC','%Y%m%d%H%Z'),s2t('2011020518UTC','%Y%m%d%H%Z'))
+	out = [
+		(s2t('2010 12 01 12UTC','%Y %m %d %H%Z'),s2t('2011 02 1800UTC','%Y %m %d%H%Z'))
+		(s2t('2010 12 01 12UTC','%Y %m %d %H%Z'),s2t('2010 12 0702UTC','%Y %m %d%H%Z'))
+		(s2t('2010 12 07 12UTC','%Y %m %d %H%Z'),s2t('2010 12 1015UTC','%Y %m %d%H%Z'))
+		(s2t('2010 12 12 12UTC','%Y %m %d %H%Z'),s2t('2010 12 1421UTC','%Y %m %d%H%Z'))
+		(s2t('2010 12 24 00UTC','%Y %m %d %H%Z'),s2t('2010 12 2621UTC','%Y %m %d%H%Z'))
+		(s2t('2011 01 01 00UTC','%Y %m %d %H%Z'),s2t('2011 01 0912UTC','%Y %m %d%H%Z'))
+		(s2t('2011 01 11 12UTC','%Y %m %d %H%Z'),s2t('2011 01 1720UTC','%Y %m %d%H%Z'))
+		(s2t('2011 01 20 12UTC','%Y %m %d %H%Z'),s2t('2011 01 2206UTC','%Y %m %d%H%Z'))
+		(s2t('2011 01 23 12UTC','%Y %m %d %H%Z'),s2t('2011 01 2612UTC','%Y %m %d%H%Z'))
+		(s2t('2011 01 26 12UTC','%Y %m %d %H%Z'),s2t('2011 01 3106UTC','%Y %m %d%H%Z'))
+		(s2t('2011 02 02 18UTC','%Y %m %d %H%Z'),s2t('2011 02 0518UTC','%Y %m %d%H%Z'))
+		]
 	if not buffer:
-		return out
+		return out[num]
 	else:
-		out = list(out)
+		out = list(out[num])
 		out[0] = out[0] - 86400*buffer
 		out[1]=out[1] + 86400*buffer
 		return out
@@ -55,8 +46,63 @@ events = {
 	'target1':(s2t('201012040000UTC','%Y%m%d%H%M%Z'),s2t('201012051200UTC','%Y%m%d%H%M%Z')),
 	'target2':(s2t('201101050430UTC','%Y%m%d%H%M%Z'),s2t('201101050800UTC','%Y%m%d%H%M%Z')), # WAVES!!!
 	'target3':(s2t('201012020000UTC','%Y%m%d%H%M%Z'),s2t('201012041200UTC','%Y%m%d%H%M%Z')), #wave breakup
-
-	
-	
-
 }	
+
+aerosol = [
+		(s2t('2010 12 01 15 UTC','%Y %m %d %H %Z'),s2t('2010 12 02 03 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 02 12 UTC','%Y %m %d %H %Z'),s2t('2010 12 03 02 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 03 07 UTC','%Y %m %d %H %Z'),s2t('2010 12 03 21 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 07 12 UTC','%Y %m %d %H %Z'),s2t('2010 12 08 09 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 08 18 UTC','%Y %m %d %H %Z'),s2t('2010 12 09 04 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 09 14 UTC','%Y %m %d %H %Z'),s2t('2010 12 10 00 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 13 22 UTC','%Y %m %d %H %Z'),s2t('2010 12 14 20 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 25 17 UTC','%Y %m %d %H %Z'),s2t('2010 12 26 06 UTC','%Y %m %d %H %Z'))
+		(s2t('2010 12 26 14 UTC','%Y %m %d %H %Z'),s2t('2010 12 26 17 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 02 01 UTC','%Y %m %d %H %Z'),s2t('2011 01 04 00 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 04 20 UTC','%Y %m %d %H %Z'),s2t('2011 01 07 01 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 07 18 UTC','%Y %m %d %H %Z'),s2t('2011 01 08 02 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 08 18 UTC','%Y %m %d %H %Z'),s2t('2011 01 09 00 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 12 01 UTC','%Y %m %d %H %Z'),s2t('2011 01 14 00 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 14 18 UTC','%Y %m %d %H %Z'),s2t('2011 01 15 10 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 15 19 UTC','%Y %m %d %H %Z'),s2t('2011 01 16 10 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 20 16 UTC','%Y %m %d %H %Z'),s2t('2011 01 21 01 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 21 08 UTC','%Y %m %d %H %Z'),s2t('2011 01 22 06 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 23 15 UTC','%Y %m %d %H %Z'),s2t('2011 01 23 13 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 24 14 UTC','%Y %m %d %H %Z'),s2t('2011 01 25 07 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 26 03 UTC','%Y %m %d %H %Z'),s2t('2011 01 26 05 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 26 22 UTC','%Y %m %d %H %Z'),s2t('2011 01 28 02 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 28 17 UTC','%Y %m %d %H %Z'),s2t('2011 01 29 01 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 01 29 17 UTC','%Y %m %d %H %Z'),s2t('2011 01 30 01 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 02 03 14 UTC','%Y %m %d %H %Z'),s2t('2011 02 05 03 UTC','%Y %m %d %H %Z'))
+		(s2t('2011 02 05 06 UTC','%Y %m %d %H %Z'),s2t('2011 02 05 15 UTC','%Y %m %d %H %Z'))
+
+		
+		]
+virga = [
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		]
+
+lightAerosol = [
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		(s2t(' UTC','%Y %m %d %H %Z'),s2t(' UTC','%Y %m %d %H %Z'))
+		]
