@@ -102,6 +102,6 @@ lightAerosol_periods = [
 		(s2t('2011 01 11 10 UTC','%Y %m %d %H %Z'),s2t('2011 01 12 00 UTC','%Y %m %d %H %Z')),
 		# sarted before IOP Began
 		(s2t('2011 01 21 01 UTC','%Y %m %d %H %Z'),s2t('2011 01 21 07 UTC','%Y %m %d %H %Z')),
-		(s2t('2011 01 23 12 UTC','%Y %m %d %H %Z'),s2t('2011 02 24 13 UTC','%Y %m %d %H %Z')),
+		(s2t('2011 01 23 12 UTC','%Y %m %d %H %Z'),s2t('2011 01 24 13 UTC','%Y %m %d %H %Z')),
 		(s2t('2011 02 02 21 UTC','%Y %m %d %H %Z'),s2t('2011 02 03 15 UTC','%Y %m %d %H %Z')),
 		]
