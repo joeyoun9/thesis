@@ -126,11 +126,10 @@ def stdev2d(dat,binsize):
 			break
 	return out	
 
-def timebin(dat,time,dt,verbose=False):
+def timemean(dat,time,dt,verbose=False):
 	'''
 	move data into time-oriented bins, returning the binned average of multi-dimensional data
 	
-	This is fairly slow.
 	
 	Parameters
 	----------
@@ -140,6 +139,9 @@ def timebin(dat,time,dt,verbose=False):
 		
 		etc...
 	'''
+	if dt == 0:
+		'do nothing, the function was just invariably wrapped into something'
+		return dat,time
 	begin = np.min(time)
 	end = np.max(time)
 	length = np.floor((end-begin)/dt) + 1
@@ -158,6 +160,55 @@ def timebin(dat,time,dt,verbose=False):
 		q = dat[(time<binhigh)&(time>=binlow)]
 		if len(q) > 0:
 			res = np.mean(q,axis=0)
+		else:
+			'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
+			res = np.nan
+		outD[i] = res
+		binlow=binhigh
+		if binhigh > end:
+			break 
+	return outD,outT
+
+def timebin(dat,time,dt,verbose=False):
+	'''
+	A replacemaent for the name timebin, to preserve intercompatibility.
+	'''
+	return timemean(dat,time,dt,verbose)
+
+def timestd(dat,time,dt,verbose=False):
+	'''
+	Compute time-oriented standard deviations, instead of means for any particular bin.
+	This allows computation of standard deviations on a time-binned basis.
+	
+	Parameters
+	----------
+	
+	dat: numpy array
+		the data to be averaged into bins, first dimension should correspond to time length
+		
+		etc...
+	'''
+	if dt == 0:
+		'do nothing, the function was just invariably wrapped into something'
+		return dat,time
+	begin = np.min(time)
+	end = np.max(time)
+	length = np.floor((end-begin)/dt) + 1
+	outT=np.zeros(length)
+	outshape = [length]+list(dat.shape[1:])
+	if verbose:
+		print outshape
+	outD = np.zeros(outshape)
+	binlow = begin
+	i=-1
+	while True:
+		binhigh = binlow+dt
+		i+=1
+		outT[i]=binlow + dt/2
+		'... do the processing'
+		q = dat[(time<binhigh)&(time>=binlow)]
+		if len(q) > 0:
+			res = np.std(q,axis=0)
 		else:
 			'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
 			res = np.nan

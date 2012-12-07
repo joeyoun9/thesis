@@ -1,10 +1,17 @@
 '''
 A module to assist in the analysis of ceilometer boundary layers
+
+methods posess an about keyword argument, which when passed, will return
+a 3-character boolean string which indicates:
+[0] is there time binning used
+[1] is a threshold required?
+[2] undefined
+
 '''
 import numpy as np
 from thesis.tools import *
 
-def threshold(data, threshold = -7.6, cloud=-5, returnfield=False):
+def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
     '''
     for a formatted backsctter dataset, determine a timeseries of the lowest incidence
     of the specified backscatter value, regardless of mathematical base.
@@ -22,6 +29,9 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False):
         computed above clouds, as they are somewhat meaningless.
         
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '010'
     z = data['height']
     data = data['bs']
     'time is not a factor for this analysis'
@@ -41,18 +51,23 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False):
             # and plot
     return depth
 
-def gradient(data, threshold=False, cloud=-5,limit=1500,binsize=300, returnfield=False):
+def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
     
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '110'
     #FIXME: this could be modified to detect multiple layers above a certain gradient level
+    if not threshold:
+        raise ValueError, 'You must specify a threshold value'
     from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
     z = data['height']
-    bs,times = timebin(runmean(data['bs'],20),data['time'],binsize)
+    bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
     data = np.gradient(bs,20)[1]
     if returnfield:
@@ -72,19 +87,25 @@ def gradient(data, threshold=False, cloud=-5,limit=1500,binsize=300, returnfield
         depth[x]=mh
     return (depth,times)
 
-def gradient2(data, threshold=False, cloud=-5, limit=1500,binsize=300, returnfield=False):
+
+def gradient2(data, threshold=.1, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
     
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '110'
     #FIXME: this could be modified to detect multiple layers above a certain gradient level
+    if not threshold:
+        raise ValueError, 'You must specify a threshold value'
     from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
     height = data['height']
 
-    bs,times = timebin(runmean(data['bs'],20),data['time'],binsize)
+    bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
     'Compute the gradient of the gradient'
     data = np.gradient(np.gradient(bs,20)[1],20)[1]
@@ -107,23 +128,31 @@ def gradient2(data, threshold=False, cloud=-5, limit=1500,binsize=300, returnfie
     return (depth,times)
 
 
-def variance(data, threshold, binsize=20,returnfield=False):
+def variance(data, threshold=5, binsize=300,returnfield=False, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '110'
+    if not threshold:
+        raise ValueError, 'You must specify a threshold value'
     from thesis.tools import runmean
     height = data['height']
-    time = mean1d(data['time'],binsize)
-    data = runmean(data['bs'],10) #100 m running vertical mean
-    data = np.stdev(mean2d(data,binsize),20)[0]
+    data,time = timemean(runmean(data['bs'],10),data['time'],binsize) 
+    'compute time mean data with 100 m running vertical mean'
+    data = np.std(data,5)[0]
+    'Compute the temporal standard deviation over 5 binsize blocks.' 
     if returnfield:
         return data,time
     else:
         raise ValueError, 'Sorry, there is no deterministic output for the variance analysis currently'
     'for now all this routine returns is the actual plot of data...'
+    
+    
 
-def noise_variance(data, threshold, binsize=20,returnfield=False):
+def noise_variance(data, threshold=10, binsize=300,returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
@@ -139,10 +168,14 @@ def noise_variance(data, threshold, binsize=20,returnfield=False):
     binsize: int, optional
         the size of bins to create the calculations from, default to 20
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '110'
+    if not threshold:
+        raise ValueError, 'You must specify a threshold value'
     time = data['time']
     height = data['height']
-    data = stdev2d(data['bs'],binsize) # becomes too huge by expanding the logarithm
-    time = mean1d(time,binsize) 
+    data,time = timestd(data['bs'],data['time'],binsize) # becomes too huge by expanding the logarithm
     depth = [0 for x in range(len(data))]
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
@@ -154,11 +187,11 @@ def noise_variance(data, threshold, binsize=20,returnfield=False):
             #    depth[x]=np.nan
             #    break
         
-    # and return a tuple
+    'and return a tuple'
     return (depth,time)
 
 
-def idealized(data, binsize=300, returnfield=False, savebin=False):
+def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
@@ -179,11 +212,15 @@ def idealized(data, binsize=300, returnfield=False, savebin=False):
         operation. 
    
     '''
+    if 'about' in kwargs.keys():
+        'Then something just wants an info string about the method, so spit it out'
+        return '100'
+    
     from scipy import optimize,special
     bs = data['bs'][:,5:200]
     times = data['time']
     z = data['height'][5:200]
-    bs,times = timebin(bs,times,binsize)
+    bs,times = timemean(bs,times,binsize)
     if returnfield:
         return (bs,times)
     first_guesses = threshold({'bs':bs,'height':z}) # gotta fake it this time
