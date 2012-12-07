@@ -49,7 +49,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
                 break
             
             # and plot
-    return depth
+    return depth,data['time']
 
 def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
