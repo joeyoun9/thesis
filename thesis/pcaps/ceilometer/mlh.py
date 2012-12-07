@@ -188,7 +188,7 @@ def idealized(data, binsize=300, returnfield=False, savebin=False):
         return (bs,times)
     first_guesses = threshold({'bs':bs,'height':z}) # gotta fake it this time
     'compute the low-level means from the 5th ob up to the guess height'
-    first_guess_mean = np.array(map(lambda x:np.mean(bs[x][z[5:]<=first_guesses[x]]),range(len(first_guesses))))
+    first_guess_mean = np.array(map(lambda x:np.mean(bs[x][z<=first_guesses[x]]),range(len(first_guesses))))
     'now, for each time bin, we will run the optimization'
     outH = np.zeros(len(times))
     outdH = np.zeros(len(times))
