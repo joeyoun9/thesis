@@ -29,7 +29,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
         computed above clouds, as they are somewhat meaningless.
         
     '''
-    if data ==''about:
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
         return '010Threshold'
     z = data['height']
