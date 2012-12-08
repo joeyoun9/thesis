@@ -29,9 +29,9 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
         computed above clouds, as they are somewhat meaningless.
         
     '''
-    if 'about' in kwargs.keys():
+    if data ==''about:
         'Then something just wants an info string about the method, so spit it out'
-        return '010'
+        return '010Threshold'
     z = data['height']
     t = data['time']
     data = data['bs']
@@ -58,9 +58,9 @@ def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=Fa
     (this is not the second gradient method)
     
     '''
-    if 'about' in kwargs.keys():
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
-        return '110'
+        return '110Gradient'
     #FIXME: this could be modified to detect multiple layers above a certain gradient level
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
@@ -95,9 +95,9 @@ def gradient2(data, threshold=.1, cloud=-5, limit=1500,binsize=300, returnfield=
     (this is not the second gradient method)
     
     '''
-    if 'about' in kwargs.keys():
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
-        return '110'
+        return '1102nd Gradient'
     #FIXME: this could be modified to detect multiple layers above a certain gradient level
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
@@ -134,9 +134,9 @@ def variance(data, threshold=5, binsize=300,returnfield=False, **kwargs):
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
     '''
-    if 'about' in kwargs.keys():
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
-        return '110'
+        return '110Variance'
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
     from thesis.tools import runmean
@@ -169,9 +169,9 @@ def noise_variance(data, threshold=10, binsize=300,returnfield=False, **kwargs):
     binsize: int, optional
         the size of bins to create the calculations from, default to 20
     '''
-    if 'about' in kwargs.keys():
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
-        return '110'
+        return '110Noise Variance'
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
     time = data['time']
@@ -213,9 +213,9 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
         operation. 
    
     '''
-    if 'about' in kwargs.keys():
+    if data =='about':
         'Then something just wants an info string about the method, so spit it out'
-        return '100'
+        return '100Idealized Profile'
     
     from scipy import optimize,special
     bs = data['bs'][:,5:200]
