@@ -267,7 +267,7 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
             'in this case, this is the only operation engaged by the code.' 
             exit()
         
-    print 'Returning Idealized Statistics: 'outH.shape,times.shape,outdH.shape
+    print 'Returning Idealized Statistics: ',outH.shape,times.shape,outdH.shape
     return (outH,times,outdH)
 
 
