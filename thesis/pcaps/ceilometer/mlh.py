@@ -33,6 +33,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
         'Then something just wants an info string about the method, so spit it out'
         return '010'
     z = data['height']
+    t = data['time']
     data = data['bs']
     'time is not a factor for this analysis'
     if returnfield:
@@ -49,7 +50,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
                 break
             
             # and plot
-    return depth,data['time']
+    return depth,t
 
 def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
