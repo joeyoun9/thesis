@@ -104,7 +104,7 @@ def gradient2(data, threshold=.1, cloud=-5, limit=1500,binsize=300, returnfield=
     from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
-    height = data['height']
+    z = data['height']
 
     bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
