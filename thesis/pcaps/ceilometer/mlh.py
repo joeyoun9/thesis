@@ -50,7 +50,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
                 break
             
             # and plot
-    return depth,t
+    return (depth,t)
 
 def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
@@ -146,7 +146,7 @@ def variance(data, threshold=5, binsize=300,returnfield=False, **kwargs):
     data = np.std(data,5)[0]
     'Compute the temporal standard deviation over 5 binsize blocks.' 
     if returnfield:
-        return data,time
+        return (data,time)
     else:
         raise ValueError, 'Sorry, there is no deterministic output for the variance analysis currently'
     'for now all this routine returns is the actual plot of data...'
@@ -177,6 +177,8 @@ def noise_variance(data, threshold=10, binsize=300,returnfield=False, **kwargs):
     time = data['time']
     height = data['height']
     data,time = timestd(data['bs'],data['time'],binsize) # becomes too huge by expanding the logarithm
+    if returnfield:
+        return (data,time)
     depth = [0 for x in range(len(data))]
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
@@ -224,9 +226,10 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
     bs,times = timemean(bs,times,binsize)
     if returnfield:
         return (bs,times)
-    first_guesses,times = threshold({'bs':bs,'height':z,'time':times}) # gotta fake it this time
+    first_guesses,times = threshold({'bs':bs,'height':z,'time':times}) 
     'compute the low-level means from the 5th ob up to the guess height'
-    first_guess_mean = np.array(map(lambda x:np.mean(bs[x][z<=first_guesses[x]]),range(len(first_guesses))))
+    guess_mean = lambda x:np.mean(bs[x][z<=first_guesses[x]])
+    first_guess_mean = np.array(map(guess_mean,range(len(first_guesses))))
     'now, for each time bin, we will run the optimization'
     outH = np.zeros(len(times))
     outdH = np.zeros(len(times))
@@ -237,8 +240,8 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
         '''
         b = bs[i] # the backscatter profile
         h = first_guesses[i] # first guess height (a very good guess)]
-        dh = 50.
-        'for now we are always assuming a 200m transition layer until told othewise'
+        dh = 100. # guess value of dh, based on observation
+        'for now we are always assuming a 100m transition layer until told otherwise'
         p0 = [h,dh]
         if h == 0: continue
         bm = first_guess_mean[i] # approximation for boundary layer intensity, assumed valid
@@ -265,7 +268,7 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
             exit()
         
         
-    return (outH,outdH,times)
+    return (outH,times,outdH)
 
 
     
