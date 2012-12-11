@@ -25,7 +25,9 @@ from thesis.pcaps import *
 import thesis.pcaps.ceilometer.mlh as mlh
 from thesis.pcaps.ceilometer.particle import *
 from matplotlib.backends.backend_pdf import PdfPages
-
+'Import structues for unique datasets'
+import tables
+from scipy.io import netcdf
 
 reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh']
 'there are more, i have just been lazy.'
