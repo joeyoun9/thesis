@@ -235,6 +235,8 @@ def salt_lake_map():
 	Creates and returns a map object which is tuned to a good map
 	of the Salt Lake Valley. Takes no inputs
 	'''
+	from mpl_toolkits.basemap import  Basemap
+	'Yes, yes, that is against the rules... '
 	m=Basemap(width=45000,height=40000,resolution='l',
                 projection='eqdc',lat_1=40.4,lat_2=40.8,
                 lat_0=40.6,lon_0=-111.95) 
