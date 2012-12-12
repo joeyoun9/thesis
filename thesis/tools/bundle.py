@@ -28,6 +28,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 'Import structues for unique datasets'
 import tables
 from scipy.io import netcdf
+from mpl_toolkits.basemap import  Basemap
+
 
 reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh']
 'there are more, i have just been lazy.'
