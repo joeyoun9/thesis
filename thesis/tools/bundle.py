@@ -19,6 +19,7 @@ from thesis.tools import *
 from thesis.tools.pytables import h5
 import thesis.tools.figure as TFigure
 from thesis.tools.figure import *
+from thesis.tools.sounding import *
 import cleanfig as cf
 from cleanfig import *
 from thesis.pcaps import *
