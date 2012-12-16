@@ -93,7 +93,7 @@ virga_periods = [
 Light aerosol periods constitute times during IOP events where the aerosol concentration better
 resembled a convectively mixing atmosphere.
 '''
-lightAerosol_periods = [
+light_aerosol_periods = [
 		(s2t('2010 12 08 09 UTC','%Y %m %d %H %Z'),s2t('2010 12 08 17 UTC','%Y %m %d %H %Z')),
 		(s2t('2010 12 10 07 UTC','%Y %m %d %H %Z'),s2t('2010 12 10 13 UTC','%Y %m %d %H %Z')),
 		(s2t('2010 12 12 14 UTC','%Y %m %d %H %Z'),s2t('2010 12 13 22 UTC','%Y %m %d %H %Z')),
