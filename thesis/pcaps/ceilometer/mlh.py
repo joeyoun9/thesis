@@ -159,7 +159,7 @@ def variance(data, threshold=0.1, binsize=300,returnfield=False, **kwargs):
                 break
     return depth,time
 
-def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs):
+def noise_variance(data, threshold=0.4, binsize=300,returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
