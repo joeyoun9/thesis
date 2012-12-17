@@ -139,7 +139,7 @@ def variance(data, threshold=3e-5, binsize=300,returnfield=False, **kwargs):
         raise ValueError, 'You must specify a threshold value'
     from thesis.tools import runmean
     height = data['height']
-    data,time = timemean(runmean(data['bs'],10),data['time'],binsize) 
+    data,time = timemean(runmean(data['bs'],10),data['time'],binsize/3) 
     'compute time mean data with 100 m running vertical mean'
     data,time = timestd(data,time,binsize)
     'Compute the temporal standard deviation over 5 binsize blocks.' 
