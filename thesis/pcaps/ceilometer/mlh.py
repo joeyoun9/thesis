@@ -127,7 +127,7 @@ def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfie
         depth[x]=mh
     return (depth,times)
 
-def variance(data, threshold=3e-5, binsize=300,returnfield=False, **kwargs):
+def variance(data, threshold=0.1, binsize=300,returnfield=False, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
@@ -140,11 +140,24 @@ def variance(data, threshold=3e-5, binsize=300,returnfield=False, **kwargs):
     from thesis.tools import runmean
     height = data['height']
     data,time = timemean(runmean(data['bs'],10),data['time'],binsize/3) 
-    'compute time mean data with 100 m running vertical mean'
+    'compute time mean (total bin / 3) data with 100 m running vertical mean'
     data,time = timestd(data,time,binsize)
-    'Compute the temporal standard deviation over 5 binsize blocks.' 
+    'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
     if returnfield:
         return (data,time)
+    depth = np.zeros(len(time))
+    'To find a deterministic value, determine where the value exceeds the threshold from the bottom'
+    for x in range(len(data)):
+        "for each bin, find the lowest point the value is the threshold"
+        for y in range(len(data[x])):
+            if data[x,y] >= threshold:
+                'Quick QC check'
+                if data[x,y] > 0.35:
+                    'then we have a noise problem'
+                    break
+                depth[x] = height[y]
+                break
+    return depth,time
 
 def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs):
     '''
@@ -173,7 +186,7 @@ def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs)
     # becomes too huge by expanding the logarithm
     if returnfield:
         return (data,time)
-    depth = [0 for x in range(len(data))]
+    depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
         for y in range(len(data[x])):
