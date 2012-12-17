@@ -98,6 +98,7 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
             hitcount = 0
             for y in np.arange(len(z))[(z>=50)&(z<=limit)]:
                 if data[x,y] <= threshold and z[y] > depth[x,hitcount-1]+200:
+                    print hitcount,depth[x,hitcount-1]+200,z[y]
                     depth[x,hitcount]=z[y]
                     hitcount +=1
                 if hitcount == 4:
