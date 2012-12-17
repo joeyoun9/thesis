@@ -88,7 +88,6 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500,binsize=300, returnfield
         depth[x]=mh
     return (depth,times)
 
-
 def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
@@ -128,8 +127,7 @@ def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfie
         depth[x]=mh
     return (depth,times)
 
-
-def variance(data, threshold=3e-5 binsize=300,returnfield=False, **kwargs):
+def variance(data, threshold=3e-5, binsize=300,returnfield=False, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
@@ -147,8 +145,6 @@ def variance(data, threshold=3e-5 binsize=300,returnfield=False, **kwargs):
     'Compute the temporal standard deviation over 5 binsize blocks.' 
     if returnfield:
         return (data,time)
-    
-    
 
 def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs):
     '''
@@ -190,7 +186,6 @@ def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs)
         
     'and return a tuple'
     return (depth,time)
-
 
 def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
     '''
