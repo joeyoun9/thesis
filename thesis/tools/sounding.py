@@ -12,11 +12,11 @@ default_time_conversions = {
     'tf' : 800,
     'rh' : 900,
 }
+
 def skew (temp,pres, rate=.005):
     #return temp + (1000-pres)*.05
     dz = 5740.*np.log(1000/pres)
     return temp + rate*dz 
-
 
 def skewz (temp, z, rate=.005):
     return temp + rate*z
@@ -85,7 +85,6 @@ def prof_height (v,z,length=99999.,bottom=0.):
             prof_zreal.append(z[k])
     return prof,prof_z,prof_zreal
 
-
 def rh2td(t,rh,kc):
     # use the more accurate approximation
     # TEMP IN K
@@ -116,7 +115,6 @@ def sounding_dewpoint(t,rh):
     # td can be found by rearranging the clausius-clapeyron equation
     return td
 
-
 def e_calc(t,rh):
     pass
     # this will use an iterative method of solving for e (vapor pressure)
@@ -145,12 +143,19 @@ def moist_adiabat (tmp,pres,kc):
     return te
 
 def ws (t,pres):
-    # saturation mixing ratio, a function of saturation vapor pressure
+    'Compute saturation mixing ratio at any temperature and pressure of Earth air'
     pres = pres * 100 # expect entry of hPa - convert to pa because that is the unit es returns
     return 0.622 * ( es(t)/(pres - es(t)) )
 
 def es (t):
-    # saturation vapor pressure
+    '''
+    Calculate saturation vapor pressure for any temperature in dry air (earth).
+    
+    Parameters
+    ----------
+    t: float
+        temperature in KELVIN.
+    '''
     es0 = 6.11 #Pa
     t0 = 273.15
     l = 2500000. # J/whatever kg m^2 blah
@@ -197,8 +202,15 @@ def thetae(t,p):
     cp = 1004
     return theta(t,p)*np.exp((l*rc)/(cp*t))
 
-def z(p):
-    'z as a function of p (NOT T) in hPa'
+def _z(p):
+    '''
+     Compute z as a function of p (NOT T) in hPa
+     
+     This uses an absolute reference temperature of 0C
+     to compute an absolute reference Z for any pressure. This is needed
+     for plotting background values on soundings, which require a direct and
+     persistent conversion between P and Z. This should not be used elsewhere.
+    '''
     return (287./9.81)*273.15*np.log(1000/p)
 
 def plot_skewt(plt,t,td,p,skew=.006):
@@ -212,7 +224,7 @@ def plot_skewt(plt,t,td,p,skew=.006):
     "Compute initial value matrices"
     pss = (dp.T+ps).T # full gridded pressure information
     tss = dp+ts # get temperature on the pressure grid
-    zss = z(pss)
+    zss = _z(pss)
     "Compute special variables"
     thet = theta(tss+273.15,pss)-273.15#((tss+273.15)*(1000/pss)**(.286)) - 273.15
     thte = thetae(tss+273.15,pss)-273.15 #(theta+273.15)*np.exp((l*rc)/(cp*(tss+273.15))) - 273.15

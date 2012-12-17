@@ -6,6 +6,8 @@ from datetime import timedelta,datetime
 import numpy as np
 import thesis # ensure thesisverbose is accessible
 
+all = ['bundle','figure','map','metcalcs','pytables','sounding']
+
 def s2t(string,time_format):
 	'''
 	Convert a textual string time representation to a unix epoch time using the standard time format string
@@ -41,8 +43,7 @@ def strz(n,z=2):
     convert a number to a string with the proper number of leading zeros
     '''
     return str(n).zfill(z)
-    
-
+   
 def mean2d(dat,binsize):
 	# this will compute a ceilometer style mean along the first axis -- WARNING - USES A FOR LOOP	
 	# for every binsize number of rows, produce a single average
@@ -83,8 +84,7 @@ def mean1d(dat,binsize):
 		except:
 			break
 	return out
-	
-	
+		
 def runmean(dat,binsize):
 	'''
 	Deprecated.
@@ -111,7 +111,6 @@ def runmean(dat,binsize):
 		#print 'row',i,dat2[i],weights
 
 	return dat2
-
 
 def stdev2d(dat,binsize):
 	out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
@@ -228,20 +227,8 @@ def comp2time(*timetup):
     while len(timetup) < 9:
         timetup = np.append(timetup,[0])
     return calendar.timegm(timetup)
-   
-   
-def salt_lake_map():
-	'''
-	Creates and returns a map object which is tuned to a good map
-	of the Salt Lake Valley. Takes no inputs
-	'''
-	from mpl_toolkits.basemap import  Basemap
-	'Yes, yes, that is against the rules... '
-	m=Basemap(width=45000,height=40000,resolution='l',
-                projection='eqdc',lat_1=40.4,lat_2=40.8,
-                lat_0=40.6,lon_0=-111.95) 
-	return m
-	
+     
+
 	
 		
 	

@@ -52,7 +52,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
             # and plot
     return (depth,t)
 
-def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
+def gradient(data, threshold=-.002, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
@@ -89,7 +89,7 @@ def gradient(data, threshold=.9, cloud=-5,limit=1500,binsize=300, returnfield=Fa
     return (depth,times)
 
 
-def gradient2(data, threshold=.1, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
+def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
@@ -129,7 +129,7 @@ def gradient2(data, threshold=.1, cloud=-5, limit=1500,binsize=300, returnfield=
     return (depth,times)
 
 
-def variance(data, threshold=5, binsize=300,returnfield=False, **kwargs):
+def variance(data, threshold=3e-5 binsize=300,returnfield=False, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
@@ -143,17 +143,14 @@ def variance(data, threshold=5, binsize=300,returnfield=False, **kwargs):
     height = data['height']
     data,time = timemean(runmean(data['bs'],10),data['time'],binsize) 
     'compute time mean data with 100 m running vertical mean'
-    data = np.std(data,5)[0]
+    data,time = timestd(data,time,binsize)
     'Compute the temporal standard deviation over 5 binsize blocks.' 
     if returnfield:
         return (data,time)
-    else:
-        raise ValueError, 'Sorry, there is no deterministic output for the variance analysis currently'
-    'for now all this routine returns is the actual plot of data...'
     
     
 
-def noise_variance(data, threshold=10, binsize=300,returnfield=False, **kwargs):
+def noise_variance(data, threshold=0.7, binsize=300,returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
@@ -176,7 +173,8 @@ def noise_variance(data, threshold=10, binsize=300,returnfield=False, **kwargs):
         raise ValueError, 'You must specify a threshold value'
     time = data['time']
     height = data['height']
-    data,time = timestd(data['bs'],data['time'],binsize) # becomes too huge by expanding the logarithm
+    data,time = timestd(data['bs'],data['time'],binsize)
+    # becomes too huge by expanding the logarithm
     if returnfield:
         return (data,time)
     depth = [0 for x in range(len(data))]

@@ -36,28 +36,23 @@ def ll2utm(lat, lon, zone=False):
 	
 
 # defining several functions needed
+
 def v(lat,ec):
 	return 1/sqrt(1-pow(ec,2)*pow(sin(lat),2))
-
 def A(lat,lon,zone,ec):
 	lon0 = radians(zone * 6 - 180 - 3)
 	#print degrees(lon),degrees(lon0) # just confuses me when it prints
 	return (lon - lon0)* cos(lat)
-
 def s(lat,ec):
 	a = (1 - pow(ec,2)/4 - 3 * pow(ec,4)/64 - 5 * pow(ec,6)/256) * lat
 	b = (3*pow(ec,2)/8 + 3 * pow(ec,4)/32 + 45*pow(ec,6)/1024)*sin(2*lat)
 	c = (15*pow(ec,4)/256 + 45*pow(ec,6)/1024) * sin(4*lat)
 	d = 35*pow(ec,6)*sin(6*lat) / 3072
 	return a - b + c - d
-
 def T(lat,ec):
 	return pow(tan(lat),2)
-
 def C(lat,ec):
 	return pow(ec,2)*pow(cos(lat),2) / (1- pow(ec,2))
-
-
 
 def find_zone(lon):
 	"""
@@ -71,9 +66,6 @@ def find_zone(lon):
 			break
 	print "Identified as zone",zone
 	return zone
-
-
-
 
 def gridsub(x1,y1,d1,x2,y2,d2):
 	"""
@@ -144,10 +136,20 @@ def gridsub(x1,y1,d1,x2,y2,d2):
 			if not np.isnan(d2[y2k,x2k]):
 				# woohoo, a value! - set the initial value to this
 				d1[y,x] = d2[y2k,x2k]
-
 	return d1
 
-
+def salt_lake_map():
+	'''
+	Creates and returns a map object which is tuned to a good map
+	of the Salt Lake Valley. Takes no inputs
+	'''
+	from mpl_toolkits.basemap import  Basemap
+	'Yes, yes, that is against the rules... '
+	m=Basemap(width=45000,height=40000,resolution='l',
+                projection='eqdc',lat_1=40.4,lat_2=40.8,
+                lat_0=40.6,lon_0=-111.95) 
+	return m
+	
 
 def lincross(x0,y0,x1,y1,x,y,d):
 	"""
@@ -207,9 +209,6 @@ def _dvalx(v1,v2,d):
 	return d[v1,v2]
 def _dvaly(v1,v2,d):
 	return d[v2,v1]
-
-
-
 
 def findkey(v,l):
 	# a simple function to find the key, however this also finds the closest key

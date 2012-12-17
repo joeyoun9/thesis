@@ -26,12 +26,13 @@ from thesis.pcaps import *
 import thesis.pcaps.ceilometer.mlh as mlh
 from thesis.pcaps.ceilometer.particle import *
 from matplotlib.backends.backend_pdf import PdfPages
+import thesis.tools.map as map # this is a risky thing to use as a reserved word
 'Import structues for unique datasets'
 import tables
 from scipy.io import netcdf
 
 
-reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh']
+reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh', 'map']
 'there are more, i have just been lazy.'
 
 
