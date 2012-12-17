@@ -74,7 +74,7 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
     if returnfield:
         return (data,times)
     depth = np.zeros(len(data))
-    if not mutliple:
+    if not multiple:
         for x in range(len(data)):
             "each time bin."
             max_grad = 0 #"we seek the minimum gradient..."
