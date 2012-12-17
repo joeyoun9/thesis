@@ -62,8 +62,8 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
         'Then something just wants an info string about the method, so spit it out'
         return '110Gradient'
     #FIXME: this could be modified to detect multiple layers above a certain gradient level
-    if not threshold:
-        raise ValueError, 'You must specify a threshold value'
+    if not threshold and multiple:
+        raise ValueError, 'You must specify a threshold value to get multiple layers'
     from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
@@ -73,8 +73,8 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
     data = np.gradient(bs,20)[1]
     if returnfield:
         return (data,times)
-    depth = np.zeros(len(data))
     if not multiple:
+        depth = np.zeros(len(data))
         for x in range(len(data)):
             "each time bin."
             max_grad = 0 #"we seek the minimum gradient..."
@@ -97,7 +97,8 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
         for x in range(len(data)):
             hitcount = 0
             for y in np.arange(len(z))[(z>=50)&(z<=50)]:
-                if data[x,y]<threshold:
+                if data[x,y] <= threshold:
+                    print data[x,y]
                     depth[x,hitcount]=z[y]
                     hitcount +=1
                 if hitcount == 4:
