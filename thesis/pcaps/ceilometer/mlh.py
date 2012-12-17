@@ -100,7 +100,7 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
                 if data[x,y]<threshold:
                     depth[x,hitcount]=z[y]
                     hitcount +=1
-                if hitcount = 4:
+                if hitcount == 4:
                     'only 4 heights can be saved.'
                     break
         return (depth,times)
