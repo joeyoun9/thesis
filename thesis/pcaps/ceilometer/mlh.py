@@ -52,7 +52,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
             # and plot
     return (depth,t)
 
-def gradient(data, threshold=-.002, cloud=-5,limit=1500,binsize=300, returnfield=False, **kwargs):
+def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=False, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
@@ -74,19 +74,37 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500,binsize=300, returnfield
     if returnfield:
         return (data,times)
     depth = np.zeros(len(data))
-    for x in range(len(data)):
-        "each time bin."
-        max_grad = 0 #"we seek the minimum gradient..."
-        mh = 0 #"the height of the current winner"
-        for y in np.arange(len(z))[(z>50)&(z<=limit)]:
-            "loop through heights, but only for keys less than 1500m"
-            if data[x,y] < max_grad:
-                mh = z[y]
-                max_grad = data[x,y]
-            #if height[y]>=std[x]:
-            #    break
-        depth[x]=mh
-    return (depth,times)
+    if not mutliple:
+        for x in range(len(data)):
+            "each time bin."
+            max_grad = 0 #"we seek the minimum gradient..."
+            mh = 0 #"the height of the current winner"
+            for y in np.arange(len(z))[(z>50)&(z<=limit)]:
+                "loop through heights, but only for keys less than 1500m"
+                if data[x,y] < max_grad:
+                    mh = z[y]
+                    max_grad = data[x,y]
+                #if height[y]>=std[x]:
+                #    break
+            depth[x]=mh
+        return (depth,times)
+    else:
+        '''
+        The multiple option on this method means that we search for all
+        points where the gradient exceeds the threshold:
+        '''
+        depth = np.zeros((len(data),4))
+        for x in range(len(data)):
+            hitcount = 0
+            for y in np.arange(len(z))[(z>=50)&(z<=50)]:
+                if data[x,y]<threshold:
+                    depth[x,hitcount]=z[y]
+                    hitcount +=1
+                if hitcount = 4:
+                    'only 4 heights can be saved.'
+                    break
+        return (depth,times)
+            
 
 def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
