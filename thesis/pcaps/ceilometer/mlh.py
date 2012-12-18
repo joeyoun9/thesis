@@ -69,9 +69,9 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300,
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
     z = data['height']
-    bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
+    bs,times = timemean(runmean(data['bs']**10,20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
-    data = np.gradient(bs,eval_distance)[1]
+    data = np.log(np.gradient(bs,eval_distance)[1])
     if returnfield:
         return (data,times)
     if not multiple:
