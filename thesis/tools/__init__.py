@@ -85,7 +85,7 @@ def mean1d(dat,binsize):
 			break
 	return out
 		
-def runmean(dat,binsize):
+def runmean(dat,time,binsize):
 	'''
 	Deprecated.
 	
@@ -99,18 +99,16 @@ def runmean(dat,binsize):
 	binsize : int
 		Full width of the window used for averaging. (binsize/2 values on either end)
 		
-		
 	'''
-	#global thesisverbose
 	weights = np.repeat(1.0,binsize)/binsize
 	dat2 = np.zeros(dat[:,:-(binsize-1)].shape)
 	for i in range(len(dat)):
-		# average row by row, to maintain data shape, as convolve is 1 dimensional
-	#	if thesisverbose:
+		' average row by row, to maintain data shape, as convolve is 1 dimensional'
 		dat2[i] = np.convolve(dat[i],weights)[binsize-1:-(binsize-1)]
-		#print 'row',i,dat2[i],weights
-
-	return dat2
+	'provide the user the time values, since there is a discrete shape change.'
+	time = time[binsize/2:1-binsize/2]
+	'this interpretation may not be completely valid...'
+	return (dat2,time)
 
 def stdev2d(dat,binsize):
 	out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
