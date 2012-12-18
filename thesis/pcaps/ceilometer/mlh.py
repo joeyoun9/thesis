@@ -52,7 +52,8 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
             # and plot
     return (depth,t)
 
-def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=False, returnfield=False, **kwargs):
+def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300,
+            multiple=False, returnfield=False, eval_distance=20, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
@@ -70,7 +71,7 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
     z = data['height']
     bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
-    data = np.gradient(bs,20)[1]
+    data = np.gradient(bs,eval_distance)[1]
     if returnfield:
         return (data,times)
     if not multiple:
