@@ -52,7 +52,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
             # and plot
     return (depth,t)
 
-def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300,
+def gradient(data, window=20, cloud=-5, limit=1500, binsize=300,
             multiple=False, returnfield=False, eval_distance=20, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
@@ -62,56 +62,45 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300,
     if data =='about':
         'Then something just wants an info string about the method, so spit it out'
         return '110Gradient'
-    #FIXME: this could be modified to detect multiple layers above a certain gradient level
-    if not threshold and multiple:
-        raise ValueError, 'You must specify a threshold value to get multiple layers'
     from thesis.tools import runmean
     ''' start by evaluating a .7 std dev threshold '''
     #std = stdev(.6,data,binsize=binsize)[0]
     z = data['height']
-    bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
+    bs,times = timemean(runmean(10**data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
-    data = np.log10(-1*np.gradient(bs**10,eval_distance)[1])
-    data[np.isnan(data)]=0
+    data = np.log10(-1*np.gradient(bs,eval_distance)[1])+9
     'and seek local maxima!'
     if returnfield:
+        data[np.isnan(data)]=np.nanmin(data)
         return (data,times)
+    '///////////////////  DETERMINISTIC SECTION  /////////////////////////////'
     if not multiple:
         depth = np.zeros(len(data))
         for x in range(len(data)):
-            "each time bin."
-            max_grad = 0 #"we seek the minimum gradient..."
-            mh = 0 #"the height of the current winner"
-            for y in np.arange(len(z))[(z>50)&(z<=limit)]:
-                "loop through heights, but only for keys less than 1500m"
-                if data[x,y] < max_grad:
-                    mh = z[y]
-                    max_grad = data[x,y]
-                #if height[y]>=std[x]:
-                #    break
-            depth[x]=mh
+            "each time bin. - point of max gradient in the first 100 vals"
+            depth[x] = z[data[x,:100]==np.max(data[x,:100])]
         return (depth,times)
     else:
         '''
-        The multiple option on this method means that we search for all
-        points where the gradient exceeds the threshold:
-        
-        There is one other rule, in order to be picked again, there MUST
-        be a positive gradient value between the two.
+        Multiple levels should be returned, with the 
         '''
         depth = np.zeros((len(data),4))
         for x in range(len(data)):
             hitcount = 0
             beenpositive=True
-            for y in np.arange(len(z))[(z>=50)&(z<=limit)]:
-                if data[x,y] <= threshold and beenpositive:
+            'Identify up to 4 local maxima'
+            'Compute local maxima'
+            dw = window/2
+            for y in range(len(data[x])):
+                'dont make any assessments before we can look at a full window'
+                if y < dw:
+                    continue
+                'if the value is the maximum value in the window, then we are golden'
+                if data[x,y] == np.nanmax(data[x,y-dw:y+dw]):
                     depth[x,hitcount]=z[y]
-                    beenpositive=False
-                    hitcount +=1
-                if data[x,y] > 0:
-                    beenpositive = True
-                if hitcount == 4:
-                    'only 4 heights can be saved.'
+                    hitcount+=1
+                'Only record up to 4 values per time bin'
+                if hitcount==4:
                     break
         return (depth,times)
             
