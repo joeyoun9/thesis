@@ -92,14 +92,21 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300, multiple=F
         '''
         The multiple option on this method means that we search for all
         points where the gradient exceeds the threshold:
+        
+        There is one other rule, in order to be picked again, there MUST
+        be a positive gradient value between the two.
         '''
         depth = np.zeros((len(data),4))
         for x in range(len(data)):
             hitcount = 0
+            beenpositive=True
             for y in np.arange(len(z))[(z>=50)&(z<=limit)]:
-                if data[x,y] <= threshold and z[y] > depth[x,hitcount-1]+50:
+                if data[x,y] <= threshold and beenpositive:
                     depth[x,hitcount]=z[y]
+                    beenpositive=False
                     hitcount +=1
+                if data[x,y] > 0:
+                    beenpositive = True
                 if hitcount == 4:
                     'only 4 heights can be saved.'
                     break
