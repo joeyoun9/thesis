@@ -71,7 +71,7 @@ def gradient(data, threshold=-.002, cloud=-5,limit=1500, binsize=300,
     z = data['height']
     bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
     'compute 200m vertical running mean on BS data'
-    data = np.log(-1*np.gradient(bs**10,eval_distance)[1])
+    data = np.log10(-1*np.gradient(bs**10,eval_distance)[1])
     data[np.isnan(data)]=0
     'and seek local maxima!'
     if returnfield:
