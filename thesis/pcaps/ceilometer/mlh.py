@@ -69,7 +69,7 @@ def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, continuous=False
     z = data['height']
     'runmean is not fixed temporal...'
     if continuous:
-        bs,times,z = runmean2d(dat['bs'],dat['time'],dat['height'],bin,20)
+        bs,times,z = runmean2d(data['bs'],data['time'],data['height'],binsize,vertbin)
         'compute means within binned values...'
     else:
         bs,z = runmean(10**data['bs'],z,vertbin)
