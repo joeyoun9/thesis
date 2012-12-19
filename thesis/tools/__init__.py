@@ -57,7 +57,7 @@ def mean2d(dat,dim,binsize):
 		THIS MEANS THAT THERE IS NO TRANSPOSE OPERATIONS NEEDED FOR COMPUTATION
 	"""
 	datO = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize
-	dimO = 
+	dimO = np.zeros(int(dim.shape[0]/binsize))
 	chunk = dat[0:binsize]
 	dimx = dim[0:binsize]
 	i=0 # index
