@@ -137,7 +137,7 @@ def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500, binsize=300, inTime=T
     data = np.gradient(np.gradient(bs,20)[1],20)[1]
     
     if returnfield:
-        return (data,times)
+        return (data,times,z)
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "each time bin."
@@ -175,7 +175,7 @@ def variance(data, threshold=0.1, binsize=300, inTime=True, returnfield=False, *
 
     'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
     if returnfield:
-        return (data,time)
+        return (data,time,height)
     depth = np.zeros(len(time))
     'To find a deterministic value, determine where the value exceeds the threshold from the bottom'
     for x in range(len(data)):
@@ -219,7 +219,7 @@ def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=Fa
     else:
         data,time = std2d(data['bs'],time,binsize)
     if returnfield:
-        return (data,time)
+        return (data,time,height)
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
@@ -263,7 +263,7 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, 
     else:
         bs,times = mean2d(bs,times,binsize)
     if returnfield:
-        return (bs,times)
+        return (bs,times,z)
     first_guesses,times = threshold({'bs':bs,'height':z,'time':times}) 
     'compute the low-level means from the 5th ob up to the guess height'
     guess_mean = lambda x:np.mean(bs[x][z<=first_guesses[x]])
