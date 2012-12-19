@@ -41,16 +41,11 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
-        depth[x]=z[data[x]<=threshold][0]
-    '''
-        for y in range(len(data[x])):
-            if data[x,y] <= threshold:
-                depth[x] = z[y]
-                break
-            if data[x,y] > cloud:
-                depth[x]=np.nan
-                break
-    '''
+        try:
+            depth[x]=z[data[x]<=threshold][0]
+        except:
+            depth[x]=0
+
     return (depth,t)
 
 
@@ -223,7 +218,12 @@ def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=Fa
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
-        depth[x]=height[data[x]<=threshold][0]
+        try:
+            depth[x]=height[data[x]>=threshold][0]
+        except:
+            'presumably key 0 did not exist, so no values were found to exceed'
+            depth[x]=0
+            
     'and return a tuple'
     return (depth,time)
 
