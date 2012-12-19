@@ -54,7 +54,7 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
     return (depth,t)
 
 
-def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, continuous=False,
+def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, inTime=False, continuous=False,
             multiple=False, returnfield=False, eval_distance=20, vertbin=20, 
             **kwargs):
     '''
@@ -116,24 +116,22 @@ def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, continuous=False
 
 
 
-def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
+def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500, binsize=300, inTime=True, returnfield=False, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
     
+    note, if inTime is false, a time value is still required!!!
     '''
     if data =='about':
         'Then something just wants an info string about the method, so spit it out'
         return '1102nd Gradient'
-    #FIXME: this could be modified to detect multiple layers above a certain gradient level
-    if not threshold:
-        raise ValueError, 'You must specify a threshold value'
-    from thesis.tools import runmean
-    ''' start by evaluating a .7 std dev threshold '''
-    #std = stdev(.6,data,binsize=binsize)[0]
-    z = data['height']
 
-    bs,times = timemean(runmean(data['bs'],20),data['time'],binsize)
+    datab,z = runmean(data['bs'],data['height'],20)
+    if inTime:
+        bs,times = timemean(datab,data['time'],binsize)
+    else:
+        bs,times = mean2d(datab,data['time'],binsize)
     'compute 200m vertical running mean on BS data'
     'Compute the gradient of the gradient'
     data = np.gradient(np.gradient(bs,20)[1],20)[1]
@@ -155,7 +153,7 @@ def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfie
         depth[x]=mh
     return (depth,times)
 
-def variance(data, threshold=0.1, binsize=300,returnfield=False, **kwargs):
+def variance(data, threshold=0.1, binsize=300, inTime=True, returnfield=False, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
@@ -165,11 +163,16 @@ def variance(data, threshold=0.1, binsize=300,returnfield=False, **kwargs):
         return '110Variance'
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
-    from thesis.tools import runmean
-    height = data['height']
-    data,time = timemean(runmean(data['bs'],10),data['time'],binsize/3) 
-    'compute time mean (total bin / 3) data with 100 m running vertical mean'
-    data,time = timestd(data,time,binsize)
+    datab,height = runmean(data['bs'],data['height'],10)
+    if inTime:
+        data,time = timemean(datab,data['time'],binsize/3) 
+        'compute time mean (total bin / 3) data with 100 m running vertical mean'
+        data,time = timestd(data,time,binsize)
+    else:
+        data,time = mean2d(datab,data['time'],binsize)
+        data,time = stdev2d(data,time,binsize)
+    
+
     'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
     if returnfield:
         return (data,time)
@@ -187,7 +190,7 @@ def variance(data, threshold=0.1, binsize=300,returnfield=False, **kwargs):
                 break
     return depth,time
 
-def noise_variance(data, threshold=0.4, binsize=300,returnfield=False, **kwargs):
+def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
@@ -209,26 +212,22 @@ def noise_variance(data, threshold=0.4, binsize=300,returnfield=False, **kwargs)
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
     time = data['time']
+    'bla bla not preserving namespace bla bla bla...'
     height = data['height']
-    data,time = timestd(data['bs'],data['time'],binsize)
-    # becomes too huge by expanding the logarithm
+    if inTime:
+        data,time = timestd(data['bs'],time,binsize)
+    else:
+        data,time = std2d(data['bs'],time,binsize)
     if returnfield:
         return (data,time)
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
-        for y in range(len(data[x])):
-            if data[x,y] >= threshold:
-                depth[x] = height[y]
-                break
-            #if data[x,y] > cloud:
-            #    depth[x]=np.nan
-            #    break
-        
+        depth[x]=height[data[x]<=threshold][0]
     'and return a tuple'
     return (depth,time)
 
-def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
+def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
@@ -244,6 +243,8 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
         the length in SECONDS for bins to be produced. Longer bins increase the chance of success
     returnfield: bool, optional
         return only the field analyzed, not very useful for this operation.
+    inTime: bool, optional
+        specify if the provided time dimension is actually epoch time stamps, or just bin numbers
     savebin: str, optional
         only save a demonstrative figure of a single bin. A possibly useful demonstration
         operation. 
@@ -257,7 +258,10 @@ def idealized(data, binsize=300, returnfield=False, savebin=False, **kwargs):
     bs = data['bs'][:,5:200]
     times = data['time']
     z = data['height'][5:200]
-    bs,times = timemean(bs,times,binsize)
+    if inTime:
+        bs,times = timemean(bs,times,binsize)
+    else:
+        bs,times = mean2d(bs,times,binsize)
     if returnfield:
         return (bs,times)
     first_guesses,times = threshold({'bs':bs,'height':z,'time':times}) 
