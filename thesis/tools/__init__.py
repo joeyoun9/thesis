@@ -85,30 +85,45 @@ def mean1d(dat,binsize):
 			break
 	return out
 		
-def runmean(dat,time,binsize):
-	'''
-	Deprecated.
-	
-	Create a running mean the same shape as dat.
-	
-	Parameters
-	----------
-	dat : numpy array
-		Two dimensional gridded dataset, will be averaged in binsize running bins in
-		the first dimension
-	binsize : int
-		Full width of the window used for averaging. (binsize/2 values on either end)
-		
-	'''
-	weights = np.repeat(1.0,binsize)/binsize
-	dat2 = np.zeros(dat[:,:-(binsize-1)].shape)
-	for i in range(len(dat)):
-		' average row by row, to maintain data shape, as convolve is 1 dimensional'
-		dat2[i] = np.convolve(dat[i],weights)[binsize-1:-(binsize-1)]
-	'provide the user the time values, since there is a discrete shape change.'
-	time = time[binsize/2:1-binsize/2]
-	'this interpretation may not be completely valid...'
-	return (dat2,time)
+def runmean2d(dat,dim1,dim2,bin1,bin2):
+    '''
+    compute the running mean for a field with dimensions 1 and 2,
+    and return the field, along with the new dimensions, in the original structure
+    which woud be shape = (dim1.shape,dim2.shape)
+    
+    For time/height this ought to be written as dim1=height, dim2=time
+    '''
+    if not dat.shape == (dim1.shape[0],dim2.shape[0]):
+        print 'Your dimensions are incorrect.'
+    dat,dim1 = runmean(dat.T,dim1,bin1)
+    dat,dim2 = runmean(dat.T,dim2,bin2)
+    return dat,dim1,dim2        
+
+def runmean(dat,dim,binsize):
+    '''    
+    Create a running mean the same shape as dat. Binsize must be even!!
+    
+    Parameters
+    ----------
+    dat : numpy array
+        Two dimensional gridded dataset, will be averaged in binsize running bins in
+        the first dimension
+    binsize : int
+        Full width of the window used for averaging. (binsize/2 values on either end)
+        
+    '''
+    if not binsize%2 == 0:
+        binsize +=1
+    weights = np.repeat(1.0,binsize)/binsize
+    dat_out = np.zeros(dat[:,:-(binsize-1)].shape)
+    for i in range(len(dat)):
+        ' average row by row, to maintain data shape, as convolve is 1 dimensional' 
+        dat_out[i] = np.convolve(dat[i],weights)[binsize-1:1-(binsize)]
+    'provide the user the time values, since there is an unfortunate shape change.'
+    dim = dim[binsize/2:1-binsize/2]
+    'this interpretation may not be completely valid...'
+    return (dat_out,dim)
+
 
 def stdev2d(dat,binsize):
 	out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
