@@ -164,9 +164,9 @@ def variance(data, threshold=0.1, binsize=300, inTime=True, returnfield=False, *
         'compute time mean (total bin / 3) data with 100 m running vertical mean'
         data,time = timestd(data,time,binsize)
     else:
-        data,time = mean2d(datab,data['time'],binsize/3)
-        data,time = stdev2d(data,binsize)
-        'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
+        data,time = mean2d(datab,data['time'],binsize/5)
+        data,time = stdev2d(data,time,binsize)
+        'Compute the temporal standard deviation over 5 blocks, as computed from earlier' 
     if returnfield:
         return (data,time,height)
     depth = np.zeros(len(time))
