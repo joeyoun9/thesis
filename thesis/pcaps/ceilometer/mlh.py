@@ -164,25 +164,20 @@ def variance(data, threshold=0.1, binsize=300, inTime=True, returnfield=False, *
         'compute time mean (total bin / 3) data with 100 m running vertical mean'
         data,time = timestd(data,time,binsize)
     else:
-        data,time = mean2d(datab,data['time'],binsize)
-        data,time = stdev2d(data,time,binsize)
-    
-
-    'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
+        data,time = mean2d(datab,data['time'],binsize/3)
+        data,time = stdev2d(data,binsize)
+        'Compute the temporal standard deviation over 3 blocks, as computed from earlier' 
     if returnfield:
         return (data,time,height)
     depth = np.zeros(len(time))
     'To find a deterministic value, determine where the value exceeds the threshold from the bottom'
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
-        for y in range(len(data[x])):
-            if data[x,y] >= threshold:
-                'Quick QC check'
-                if data[x,y] > 0.35:
-                    'then we have a noise problem'
-                    break
-                depth[x] = height[y]
-                break
+        try:
+            depth[x]=height[data[x]>=threshold][0]
+        except:
+            'presumably key 0 did not exist, so no values were found to exceed'
+            depth[x]=0
     return depth,time
 
 def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=False, **kwargs):
@@ -212,7 +207,7 @@ def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=Fa
     if inTime:
         data,time = timestd(data['bs'],time,binsize)
     else:
-        data,time = std2d(data['bs'],time,binsize)
+        data,time = stdev2d(data['bs'],time,binsize)
     if returnfield:
         return (data,time,height)
     depth = np.zeros(len(data))
