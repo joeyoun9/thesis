@@ -41,6 +41,8 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
     depth = np.zeros(len(data))
     for x in range(len(data)):
         "for each bin, find the lowest point the value is the threshold"
+        depth[x]=z[data[x]<=threshold][0]
+    '''
         for y in range(len(data[x])):
             if data[x,y] <= threshold:
                 depth[x] = z[y]
@@ -48,12 +50,13 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
             if data[x,y] > cloud:
                 depth[x]=np.nan
                 break
-            
-            # and plot
+    '''
     return (depth,t)
 
-def gradient(data, window=20, cloud=-5, limit=1500, binsize=300,
-            multiple=False, returnfield=False, eval_distance=20, **kwargs):
+
+def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, continuous=False,
+            multiple=False, returnfield=False, eval_distance=20, vertbin=20, 
+            **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
@@ -63,22 +66,29 @@ def gradient(data, window=20, cloud=-5, limit=1500, binsize=300,
         'Then something just wants an info string about the method, so spit it out'
         return '110Gradient'
     from thesis.tools import runmean
-    ''' start by evaluating a .7 std dev threshold '''
-    #std = stdev(.6,data,binsize=binsize)[0]
     z = data['height']
-    bs,times = timemean(runmean(10**data['bs'],20),data['time'],binsize)
-    'compute 200m vertical running mean on BS data'
-    data = np.log10(-1*np.gradient(bs,eval_distance)[1])+9
-    'and seek local maxima!'
+    'runmean is not fixed temporal...'
+    if continuous:
+        bs,times,z = runmean2d(dat['bs'],dat['time'],dat['height'],bin,20)
+        'compute means within binned values...'
+    else:
+        bs,z = runmean(10**data['bs'],z,vertbin)
+        '10*vertbin vertical running mean '
+        bs,times = timebin(bs,data['time'],binsize)
+        'and a binsize temporal bin - NOTE that bin sizes should not be the same'
+    data = np.gradient(bs,eval_distance)[1]
+    data[data>=0.]=np.nan
+    data = np.log10(-1*data)
+    
     if returnfield:
         data[np.isnan(data)]=np.nanmin(data)
-        return (data,times)
+        return (data,times,z)
     '///////////////////  DETERMINISTIC SECTION  /////////////////////////////'
     if not multiple:
         depth = np.zeros(len(data))
         for x in range(len(data)):
             "each time bin. - point of max gradient in the first 100 vals"
-            depth[x] = z[data[x,:100]==np.max(data[x,:100])]
+            depth[x] = z[data[x,:100]==np.nanmax(data[x,:100])]
         return (depth,times)
     else:
         '''
@@ -92,7 +102,7 @@ def gradient(data, window=20, cloud=-5, limit=1500, binsize=300,
             'Compute local maxima'
             dw = window/2
             for y in range(len(data[x])):
-                'dont make any assessments before we can look at a full window'
+                'don\'t make any assessments before we can look at a full window'
                 if y < dw:
                     continue
                 'if the value is the maximum value in the window, then we are golden'
@@ -103,7 +113,8 @@ def gradient(data, window=20, cloud=-5, limit=1500, binsize=300,
                 if hitcount==4:
                     break
         return (depth,times)
-            
+
+
 
 def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500,binsize=300, returnfield=False, **kwargs):
     '''
