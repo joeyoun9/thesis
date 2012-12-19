@@ -132,7 +132,7 @@ def runmean(dat,dim,binsize):
     return (dat_out,dim)
 
 
-def stdev2d(dat,binsize):
+def stdev2d(dat,dim,binsize):
 	out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
 	chunk = dat[0:binsize]
 	i=0 # index
@@ -143,7 +143,7 @@ def stdev2d(dat,binsize):
 			chunk = dat[i*binsize:(i+1)*binsize]
 		except:
 			break
-	return out	
+	return out,mean1d(dim,binsize)	
 
 def timemean(dat,time,dt,verbose=False):
 	'''
