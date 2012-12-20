@@ -12,7 +12,7 @@ import numpy as np
 from thesis.tools import *
 
 def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, binsize=0,
-               inTime=True, continuous=False, vertbin=20 **kwargs):
+               inTime=True, continuous=False, vertbin=20, **kwargs):
     '''
     for a formatted backsctter dataset, determine a timeseries of the lowest incidence
     of the specified backscatter value, regardless of mathematical base.
@@ -154,6 +154,7 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True, re
     return (depth,time)
 
 def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
+
               continuous=False, vertbin=5 **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
@@ -226,6 +227,11 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
             'in this case, this is the only operation engaged by the code.' 
             exit()
     return (outH,times,outdH)
+
+'''
+Additional future methods could be the wavelet method, the log gradient method, 
+others...
+'''
 
 def _MaxDepth(data,z,range=1000):
     '''
