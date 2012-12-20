@@ -11,7 +11,8 @@ a 3-character boolean string which indicates:
 import numpy as np
 from thesis.tools import *
 
-def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
+def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, binsize=0,
+               inTime=True, continuous=False, vertbin=20 **kwargs):
     '''
     for a formatted backsctter dataset, determine a timeseries of the lowest incidence
     of the specified backscatter value, regardless of mathematical base.
@@ -22,169 +23,107 @@ def threshold(data, threshold = -7.6, cloud=-5, returnfield=False, **kwargs):
         specify the cutoff value for the threshold to be determined from the bottom up
         
     data: numpy 2-d array
-        the dataset from which the thresholds are determined
-        
-    cloud: float, optional
-        a value specifying the maximum value to be interpreted as a cloud. Values are not 
-        computed above clouds, as they are somewhat meaningless.
-        
+        the dataset from which the thresholds are determined 
     '''
     if data =='about':
         'Then something just wants an info string about the method, so spit it out'
         return '010Threshold'
-    z = data['height']
-    t = data['time']
-    data = data['bs']
-    'time is not a factor for this analysis'
+    if binsize == 0:
+        'no binning or averaging or whatnot is to be done.'
+        z = data['height']
+        t = data['time']
+        data = data['bs']
+    else:
+        data,t,z = _ComputeFieldMeans(data,binsize,inTime=inTime,continuous=continuous,vertbin=vertbin)
     if returnfield:
-        raise ValueError,'There is no computed field for the threshold analysis'
-    depth = np.zeros(len(data))
-    for x in range(len(data)):
-        "for each bin, find the lowest point the value is the threshold"
-        try:
-            depth[x]=z[data[x]<=threshold][0]
-        except:
-            depth[x]=0
-
+        return (data,z,t)
+    depth = _ThresholdLT(data,z,threshold,range=1200)
     return (depth,t)
 
-
-def gradient(data, window=20, cloud=-5,limit=1500, binsize=300, inTime=False, continuous=False,
-            multiple=False, returnfield=False, eval_distance=20, vertbin=20, 
+def gradient(data, window=20, cloud=-5,limit=1000, binsize=300, inTime=True,
+             continuous=False, multiple=False, returnfield=False,
+             eval_distance=20, vertbin=20, 
             **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
-    
     '''
     if data =='about':
-        'Then something just wants an info string about the method, so spit it out'
         return '110Gradient'
-    from thesis.tools import runmean
-    z = data['height']
-    'runmean is not fixed temporal...'
-    if continuous:
-        bs,times,z = runmean2d(data['bs'],data['time'],data['height'],binsize,vertbin)
-        'compute means within binned values...'
-    else:
-        bs,z = runmean(10**data['bs'],z,vertbin)
-        '10*vertbin vertical running mean '
-        bs,times = timebin(bs,data['time'],binsize)
-        'and a binsize temporal bin - NOTE that bin sizes should not be the same'
-    data = np.gradient(bs,eval_distance)[1]
-    data[data>=0.]=np.nan
-    data = np.log10(-1*data)
-    
+    bs,times,z = _ComputeFieldMeans(data,binsize,inTime=inTime,
+                                    continuous=continuous,vertbin=vertbin,
+                                    power=True)
+    field = np.gradient(bs,eval_distance)[1]
+    field[field>=0.]=np.nan
+    field = np.log10(-1*data)
     if returnfield:
-        data[np.isnan(data)]=np.nanmin(data)
-        return (data,times,z)
+        field[np.isnan(field)]=np.nanmin(field)
+        return (field,times,z)
+    
     '///////////////////  DETERMINISTIC SECTION  /////////////////////////////'
     if not multiple:
-        depth = np.zeros(len(data))
-        for x in range(len(data)):
-            "each time bin. - point of max gradient in the first 100 vals"
-            depth[x] = z[data[x,:100]==np.nanmax(data[x,:100])]
-        return (depth,times)
+        depth = _MaxDepth(field,z,range=limit)
     else:
         '''
         Multiple levels should be returned, with the 
         '''
-        depth = np.zeros((len(data),4))
-        for x in range(len(data)):
-            hitcount = 0
-            beenpositive=True
-            'Identify up to 4 local maxima'
-            'Compute local maxima'
-            dw = window/2
-            for y in range(len(data[x])):
-                'don\'t make any assessments before we can look at a full window'
-                if y < dw:
-                    continue
-                'if the value is the maximum value in the window, then we are golden'
-                if data[x,y] == np.nanmax(data[x,y-dw:y+dw]):
-                    depth[x,hitcount]=z[y]
-                    hitcount+=1
-                'Only record up to 4 values per time bin'
-                if hitcount==4:
-                    break
-        return (depth,times)
+        depth = _LocalMaxDepths(field,z,window,4,range=limit)
+    return (depth,times)
 
-
-
-def gradient2(data, threshold=-5e-5, cloud=-5, limit=1500, binsize=300, inTime=True, returnfield=False, **kwargs):
+def gradient2(data, limit=1000, binsize=300, inTime=True, eval_dist=20,
+              continuous=False,returnfield=False, vertbin=20, **kwargs):
     '''
     determine mixed layer/aerosol depth by determinng the maximum decrease 
     (this is not the second gradient method)
+
+    Known as the inflection point method (IPM)
     
     note, if inTime is false, a time value is still required!!!
     '''
     if data =='about':
-        'Then something just wants an info string about the method, so spit it out'
         return '1102nd Gradient'
-
-    datab,z = runmean(data['bs'],data['height'],20)
-    if inTime:
-        bs,times = timemean(datab,data['time'],binsize)
-    else:
-        bs,times = mean2d(datab,data['time'],binsize)
-    'compute 200m vertical running mean on BS data'
+    bs,times,z = _ComputeFieldMeans(data,binsize,inTime=inTime,
+                                    continuous=continuous,vertbin=vertbin,
+                                    power=True)
     'Compute the gradient of the gradient'
-    data = np.gradient(np.gradient(bs,20)[1],20)[1]
-    
+    'FIXME - do i want negative or positive gradients!?!!'
+    data = np.gradient(np.gradient(bs,eval_dist)[1],eval_dist)[1]
+    data[data>=0.] = np.NAN
+    data = np.log10(-1*data)
     if returnfield:
+        data[np.isnan(data)]=np.nanmin(data)
         return (data,times,z)
-    depth = np.zeros(len(data))
-    for x in range(len(data)):
-        "each time bin."
-        max_grad = 0 #"we seek the minimum gradient..."
-        mh = 0 #"the height of the current winner"
-        for y in np.arange(len(z))[(z>50)&(z<=limit)]:
-            "loop through heights, but only for keys less than 1500m"
-            if data[x,y] < max_grad:
-                mh = z[y]
-                max_grad = data[x,y]
-            #if height[y]>=std[x]:
-            #    break
-        depth[x]=mh
+    'this should be detailed as the most negative second gradient'
+    depth = _MaxDepth(data,z,range=limit)
     return (depth,times)
 
-def variance(data, threshold=0.1, binsize=300, inTime=True, returnfield=False, **kwargs):
+def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
+             continuous=False, power=False, vertbin=20, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
     '''
     if data =='about':
-        'Then something just wants an info string about the method, so spit it out'
         return '110Variance'
-    if not threshold:
-        raise ValueError, 'You must specify a threshold value'
-    datab,height = runmean(data['bs'],data['height'],10)
+    data,time,height = _ComputeFieldMeans(data,binsize/3,inTime=inTime,
+                                          continuous=continuous,vertbin=vertbin,
+                                          power=power)
     if inTime:
-        data,time = timemean(datab,data['time'],binsize/3) 
-        'compute time mean (total bin / 3) data with 100 m running vertical mean'
         data,time = timestd(data,time,binsize)
     else:
-        data,time = mean2d(datab,data['time'],binsize/5)
         data,time = stdev2d(data,time,binsize)
-        'Compute the temporal standard deviation over 5 blocks, as computed from earlier' 
+
     if returnfield:
         return (data,time,height)
-    depth = np.zeros(len(time))
-    'To find a deterministic value, determine where the value exceeds the threshold from the bottom'
-    for x in range(len(data)):
-        "for each bin, find the lowest point the value is the threshold"
-        try:
-            depth[x]=height[data[x]>=threshold][0]
-        except:
-            'presumably key 0 did not exist, so no values were found to exceed'
-            depth[x]=0
-    return depth,time
-
-def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=False, **kwargs):
+    depth = _MaxDepth(data,height,range=limit)
+    
+def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True, returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
     under the theory that robust returns come from particle presence, and 
     noise is harder to filter where there is low return.
+    
+    Note, this method does not perform any averaging, and cannot be done continuously
     
     Parameters
     ----------
@@ -210,19 +149,12 @@ def noise_variance(data, threshold=0.4, binsize=300, inTime=True, returnfield=Fa
         data,time = stdev2d(data['bs'],time,binsize)
     if returnfield:
         return (data,time,height)
-    depth = np.zeros(len(data))
-    for x in range(len(data)):
-        "for each bin, find the lowest point the value is the threshold"
-        try:
-            depth[x]=height[data[x]>=threshold][0]
-        except:
-            'presumably key 0 did not exist, so no values were found to exceed'
-            depth[x]=0
-            
+    depth = _ThresholdGT(data,height,threshold,range=limit)       
     'and return a tuple'
     return (depth,time)
 
-def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, **kwargs):
+def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
+              continuous=False, vertbin=5 **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
@@ -248,17 +180,12 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, 
     if data =='about':
         'Then something just wants an info string about the method, so spit it out'
         return '100Idealized Profile'
-    
     from scipy import optimize,special
-    bs = data['bs'][:,5:200]
-    times = data['time']
-    z = data['height'][5:200]
-    if inTime:
-        bs,times = timemean(bs,times,binsize)
-    else:
-        bs,times = mean2d(bs,times,binsize)
+    bs,times,z=_ComputeFieldMeans(data,binsize,inTime=inTime,continuous=continuous,vertbin=vertbin)
+    'no, this method will not use power'
     if returnfield:
         return (bs,times,z)
+    
     first_guesses,times = threshold({'bs':bs,'height':z,'time':times}) 
     'compute the low-level means from the 5th ob up to the guess height'
     guess_mean = lambda x:np.mean(bs[x][z<=first_guesses[x]])
@@ -266,7 +193,6 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, 
     'now, for each time bin, we will run the optimization'
     outH = np.zeros(len(times))
     outdH = np.zeros(len(times))
-    print 'looping'
     for i in range(len(times)):
         '''
         make first guesses and fix the two variables
@@ -299,9 +225,85 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False, 
             plt.savefig(savebin)
             'in this case, this is the only operation engaged by the code.' 
             exit()
-        
-    print 'Returning Idealized Statistics: ',outH.shape,times.shape,outdH.shape
     return (outH,times,outdH)
 
+def _MaxDepth(data,z,range=1000):
+    '''
+    Internally compute the height of the maximum value of an array, with given inputs
+    '''
+    if range:
+        data = data[:,range/10]
+    return map(lambda x:z[data[x]==np.nanmax(data[x])],range(len(data)))
+
+def _LocalMaxDepths(data,z,window,hits=4,range=False):
+    '''
+    Compute all local max's of a field up to hits number of hits or range
+    '''
+    if range:
+        data = data[:,:range/10]
+    dw = window/2
+    '''
+    I haven't found a nice way to simply map this one up yet.
+    '''
+    def __scanprof(x):
+        hitcount = 0
+        dict = np.zeros(hits)
+        for y in range(len(data[x])):
+            'don\'t make any assessments before we can look at a full window'
+            if y < dw:
+                continue
+            'if the value is the maximum value in the window, then we are golden'
+            if data[x,y] == np.nanmax(data[x,y-dw:y+dw]):
+                dict[x,hitcount]=z[y]
+                hitcount+=1
+            'Only record up to 4 values per time bin'
+            if hitcount==hits:
+                break
+        return dict
+    return map(__scanprof,range(len(data)))
+
+def _ThresholdLT(data,z,threshold,range=False):
+    '''
+    Find the lowest height where the value is less than the threshold
+    IE in Threshold calcs.
+    '''
+    if range:
+        data=data[:,:range/10]
+    return map(lambda x: z[data[x]<=threshold][0])
+
+def _ThresholdGT(data,z,threshold,range=False):
+    '''
+    The first height wheret he value is greater than the threshold,
+    ie, the Variance method
+    '''
+    if range:
+        data=data[:,:range/10]
+    return map(lambda x: z[data[x]>=threshold][0])
+
+def _ComputeFieldMeans(data,binsize,inTime=True,continuous=False,vertbin=20,
+                       power=False):
+    '''
+    Computed the background data field given the variables from a given data variable
+    (slice output is taken as the input) 
+    '''
+    if power:
+        data['bs'] = 10**data['bs']
+    if continuous:
+        'continuous is not computed WRT time ever, so it is irrelevant'
+        bs,times,z = runmean2d(data['bs'],data['time'],data['height'],binsize,vertbin)
+        'compute means within binned values...'
+    else:
+        if vertbin:
+            bs,z = runmean(data['bs'],z,vertbin)
+            '10*vertbin vertical running mean is given...'
+        else:
+            bs,z = data['bs'],data['height']
+            
+        if inTime:
+            bs,times = timebin(bs,data['time'],binsize)
+        else:
+            bs,times = mean2d(bs,data['time'],binsize)
+        'and a binsize temporal bin - NOTE that bin sizes should not be the same'
+    return bs,times,z
 
     
