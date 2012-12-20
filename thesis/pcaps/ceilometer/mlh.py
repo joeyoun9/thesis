@@ -155,7 +155,7 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True, re
 
 def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
 
-              continuous=False, vertbin=5 **kwargs):
+              continuous=False, vertbin=5, **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
