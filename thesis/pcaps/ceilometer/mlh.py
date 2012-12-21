@@ -117,6 +117,7 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
     if returnfield:
         return (data,time,height)
     depth = _MaxDepth(data,height,range=limit)
+    return (depth,time)
     
 def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True, returnfield=False, **kwargs):
     '''
