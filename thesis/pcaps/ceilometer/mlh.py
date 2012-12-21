@@ -99,20 +99,20 @@ def gradient2(data, limit=1000, binsize=300, inTime=True, eval_dist=20,
     return (depth,times)
 
 def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
-             continuous=False, power=False, vertbin=20, **kwargs):
+             continuous=False, power=False, vertbin=20, nbins=4, **kwargs):
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
     '''
     if data =='about':
         return '110Variance'
-    data,time,height = _ComputeFieldMeans(data,binsize/3,inTime=inTime,
+    data,time,height = _ComputeFieldMeans(data,binsize/nbins,inTime=inTime,
                                           continuous=continuous,vertbin=vertbin,
                                           power=power)
     if inTime:
-        data,time = timestd(data,time,binsize)
+        data,time = timestd(data,time,nbins)
     else:
-        data,time = stdev2d(data,time,binsize)
+        data,time = stdev2d(data,time,nbins)
 
     if returnfield:
         return (data,time,height)
