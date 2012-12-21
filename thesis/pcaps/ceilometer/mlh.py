@@ -275,7 +275,7 @@ def _ThresholdLT(data,z,threshold,range=False):
     '''
     if range:
         data=data[:,:range/10]
-    return map(lambda x: z[data[x]<=threshold][0])
+    return map(lambda x: z[x<=threshold][0],data)
 
 def _ThresholdGT(data,z,threshold,range=False):
     '''
@@ -284,7 +284,7 @@ def _ThresholdGT(data,z,threshold,range=False):
     '''
     if range:
         data=data[:,:range/10]
-    return map(lambda x: z[data[x]>=threshold][0])
+    return map(lambda x: z[x>=threshold][0],data)
 
 def _ComputeFieldMeans(data,binsize,inTime=True,continuous=False,vertbin=20,
                        power=False):
