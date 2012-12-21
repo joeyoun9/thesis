@@ -281,7 +281,7 @@ def _ThresholdLT(data,z,threshold,range=False):
         except:
             return 0
         
-    return map(lambda x: th(x,z,threashold),data)
+    return map(lambda x: th(x,z,threshold),data)
 
 def _ThresholdGT(data,z,threshold,range=False):
     '''
@@ -296,7 +296,7 @@ def _ThresholdGT(data,z,threshold,range=False):
         except:
             return 0
         
-    return map(lambda x: th(x,z,threashold),data)
+    return map(lambda x: th(x,z,threshold),data)
 
 def _ComputeFieldMeans(data,binsize,inTime=True,continuous=False,vertbin=20,
                        power=False):
