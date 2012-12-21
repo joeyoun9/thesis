@@ -103,6 +103,8 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
     '''
     the evaluation of boundary layer height using the assumption that variance
     is highest at the top of the boundary layer
+    
+    If you do this one continuously, you're gonna have a bad time.
     '''
     if data =='about':
         return '110Variance'
