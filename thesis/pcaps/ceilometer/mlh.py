@@ -54,8 +54,9 @@ def gradient(data, window=20, cloud=-5,limit=1000, binsize=300, inTime=True,
                                     continuous=continuous,vertbin=vertbin,
                                     power=True)
     field = np.gradient(bs,eval_distance)[1]
-    field[field>=0.]=np.nan
-    field = np.log10(-1*data)
+    field[field>=0.]=np.nan 
+    'this line, though it is undone in 3 lines, is to protect log10'
+    field = np.log10(-1*field)
     if returnfield:
         field[np.isnan(field)]=np.nanmin(field)
         return (field,times,z)
@@ -281,7 +282,7 @@ def _ThresholdLT(data,z,threshold,range=False):
         except:
             return 0
         
-    return map(lambda x: th(x,z,threshold),data)
+    return np.array(map(lambda x: th(x,z,threshold),data))
 
 def _ThresholdGT(data,z,threshold,range=False):
     '''
@@ -296,7 +297,7 @@ def _ThresholdGT(data,z,threshold,range=False):
         except:
             return 0
         
-    return map(lambda x: th(x,z,threshold),data)
+    return np.array(map(lambda x: th(x,z,threshold),data))
 
 def _ComputeFieldMeans(data,binsize,inTime=True,continuous=False,vertbin=20,
                        power=False):
