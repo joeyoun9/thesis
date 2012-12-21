@@ -300,7 +300,7 @@ def _ComputeFieldMeans(data,binsize,inTime=True,continuous=False,vertbin=20,
         'compute means within binned values...'
     else:
         if vertbin:
-            bs,z = runmean(data['bs'],z,vertbin)
+            bs,z = runmean(data['bs'],data['height'],vertbin)
             '10*vertbin vertical running mean is given...'
         else:
             bs,z = data['bs'],data['height']
