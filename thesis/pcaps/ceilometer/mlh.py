@@ -240,7 +240,7 @@ def _MaxDepth(data,z,range=1000):
     '''
     if range:
         data = data[:,range/10]
-    return map(lambda x:z[data[x]==np.nanmax(data[x])],range(len(data)))
+    return np.array(map(lambda x: z[x==np.nanmax(x)],data))
 
 def _LocalMaxDepths(data,z,window,hits=4,range=False):
     '''
@@ -253,21 +253,22 @@ def _LocalMaxDepths(data,z,window,hits=4,range=False):
     I haven't found a nice way to simply map this one up yet.
     '''
     def __scanprof(x):
+        'x is a single profile'
         hitcount = 0
         dict = np.zeros(hits)
-        for y in range(len(data[x])):
+        for y in range(len(x)):
             'don\'t make any assessments before we can look at a full window'
             if y < dw:
                 continue
             'if the value is the maximum value in the window, then we are golden'
-            if data[x,y] == np.nanmax(data[x,y-dw:y+dw]):
-                dict[x,hitcount]=z[y]
+            if x[y] == np.nanmax(x[y-dw:y+dw]):
+                x[hitcount]=z[y]
                 hitcount+=1
             'Only record up to 4 values per time bin'
             if hitcount==hits:
                 break
         return dict
-    return map(__scanprof,range(len(data)))
+    return np.array(map(__scanprof,data))
 
 def _ThresholdLT(data,z,threshold,range=False):
     '''
