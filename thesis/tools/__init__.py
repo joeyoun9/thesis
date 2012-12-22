@@ -45,35 +45,30 @@ def strz(n,z=2):
     return str(n).zfill(z)
    
 def mean2d(dat,dim,binsize):
-	'''
-	compute a chunk/bin style mean along the first axis, with dimension key of the same size
-	'''
-	# this will compute a ceilometer style mean along the first axis -- WARNING - USES A FOR LOOP	
-	# for every binsize number of rows, produce a single average
-	"""
-		the first index should be time, and the second height, we will average by taking chunks in time
-		and averaging
-		
-		THIS MEANS THAT THERE IS NO TRANSPOSE OPERATIONS NEEDED FOR COMPUTATION
-	"""
-	datO = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize
-	dimO = np.zeros(int(dim.shape[0]/binsize))
-	chunk = dat[0:binsize]
-	dimx = dim[0:binsize]
-	i=0 # index
-	while True:
-		try:
-			datO[i] = np.mean(chunk,axis=0) 
-			dimO[i] = np.mean(dimc)
-			i+=1
-			#take a chunk of 'profiles' in 'time' ( ||| ||| ||| = 3 chunks)
-			chunk = dat[i*binsize:(i+1)*binsize]
-			dimc = dat[i*binsize:(i+1)*binsize]
-		except:
-			break
+    '''
+    compute a chunk/bin style mean along the first axis, with dimension key of the same size
+   
+        the first index should be time, and the second height, we will average by taking chunks in time
+        and averaging
+        
+        THIS MEANS THAT THERE IS NO TRANSPOSE OPERATIONS NEEDED FOR COMPUTATION
+    '''
+    datO = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize
+    chunk = dat[0:binsize]
+    dimx = dim[0:binsize]
+    i=0 # index
+    while True:
+        try:
+            datO[i] = np.mean(chunk,axis=0)
+            i+=1
+            #take a chunk of 'profiles' in 'time' ( ||| ||| ||| = 3 chunks)
+            chunk = dat[i*binsize:(i+1)*binsize]
+        except:
+            break
 
-	# we could convolve as well, but that is just not as nice! (and not much faster either)
-	return datO,dimO
+    # we could convolve as well, but that is just not as nice! (and not much faster either)
+    print datO
+    return datO,mean1d(dim,binsize)
 
 def mean1d(dat,binsize):
 	"""
