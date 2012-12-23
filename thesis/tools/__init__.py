@@ -65,9 +65,7 @@ def mean2d(dat,dim,binsize):
             chunk = dat[i*binsize:(i+1)*binsize]
         except:
             break
-
     # we could convolve as well, but that is just not as nice! (and not much faster either)
-    print datO
     return datO,mean1d(dim,binsize)
 
 def mean1d(dat,binsize):
