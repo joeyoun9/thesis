@@ -241,6 +241,23 @@ def comp2time(*timetup):
         timetup = np.append(timetup,[0])
     return calendar.timegm(timetup)
      
+def plt_info(str,coords=[]):
+	'''
+	I would like this to be a method which puts valuable
+	information into a plot so that it can be effectively
+	reproduced. This includes averaging times, start/end
+	dates, and analysis performed. - as there are no
+	titles.
+	
+	Parameters
+	----------
+	str: str
+		the text which should be included in the box
+	coords: list
+		the coordinates (position and length of the info box
+	'''
+	plt.text()
+	
 
 	
 		

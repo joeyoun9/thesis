@@ -4,14 +4,18 @@
 
 	STARE DATA ONLY!!!
 """
-import calendar,time
+from thesis.tools.pytables import *
+from thesis.tools import s2t
 import numpy as np
 
-def stares(files, bin_size=5):
+def h5_compress_stares(files, save, bin_size=5):
 	"""
 		Read the files and return a gridded data object
 		bin_size is the distance in minutes of the bins
 	"""
+	doc = h5(save)
+	doc.create(indices={'height':100})
+	
 	X = [] # time dimension
 	Y = [] # height dimension (ASSUMED TO BE 1-DIMENSIONAL!!!)
 	Z = [] # data
@@ -20,7 +24,7 @@ def stares(files, bin_size=5):
 		# get the file time
 		fname = fd.split('/')[-1]
 		# file format expected: lidardata_joe_20110218.dat
-		otime = calendar.timegm(time.strptime(fname[-12:-4]+"00UTC","%Y%m%d%H%Z"))
+		otime = s2t(fname[-12:-4]+"00UTC","%Y%m%d%H%Z")
 		# files last for 1 24 hour period, so, yeah, add 86400
 		if otime + 86400 < self.data.begin or otime - 86400 > self.data.end:
 			continue

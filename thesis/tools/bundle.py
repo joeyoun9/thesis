@@ -12,6 +12,7 @@ matplotlib.use('Agg')
 
 import numpy as np
 'this may be a painful addition'
+import os,sys
 from pylab import *
 from scipy import *
 import matplotlib.pyplot as plt
