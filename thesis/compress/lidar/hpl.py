@@ -1,13 +1,10 @@
 """
-	read in lidar data from the gridded hoch lidar flatfiles
-	one per day
-
-	STARE DATA ONLY!!!
+	Read in halophotonics data files from their doppler scanning lidar
+	
 """
-from thesis.tools.pytables import *
+from thesis.tools.bundle import *
 from thesis.tools import s2t
 import numpy as np
-import logging
 
 def h5_compress_stares(files, save, maxdim=312):
     """
