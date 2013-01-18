@@ -19,7 +19,7 @@ def h5_compress_stares(files, save, maxdim=312):
     for fd in files:
 
         fname = fd.split('/')[-1]
-        print 'reading',fname
+        logging.info('reading',fname)
         # file format expected: Stare_20_20110617_18.hpl
         'we are only looking for the date. The hour is given elsewhere'
         otime = s2t(fname[-15:-7]+"UTC","%Y%m%d%Z")
@@ -42,7 +42,7 @@ def h5_compress_stares(files, save, maxdim=312):
                 doc.close()
                 exit()
             except:
-                print data.shape
+                logging.debug('Encountered an error, with data shape:',data.shape)
                 'a file never recovers from this'
                 break
     doc.close()

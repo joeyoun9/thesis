@@ -28,8 +28,12 @@ import thesis.pcaps.ceilometer.mlh as mlh
 from thesis.pcaps.ceilometer.particle import *
 from matplotlib.backends.backend_pdf import PdfPages
 import thesis.tools.mymap as mymap # this is a risky thing to use as a reserved word
-'Import structues for unique datasets'
+'Import structures for unique datasets'
 import tables
+import logging
+logging.basicConfig(level=logging.DEBUG,
+    format='%(asctime)s: %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
+
 from scipy.io import netcdf
 
 
