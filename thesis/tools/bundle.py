@@ -31,6 +31,7 @@ import thesis.tools.mymap as mymap # this is a risky thing to use as a reserved 
 'Import structures for unique datasets'
 import tables
 import logging
+
 logging.basicConfig(level=logging.DEBUG,
     format='%(asctime)s: %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
 
@@ -41,4 +42,4 @@ reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh', 'map']
 'there are more, i have just been lazy.'
 
 
-print __name__,'imported'
+logging.info(__name__,'imported')

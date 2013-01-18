@@ -7,6 +7,7 @@
 from thesis.tools.pytables import *
 from thesis.tools import s2t
 import numpy as np
+import logging
 
 def h5_compress_stares(files, save, maxdim=312):
     """
