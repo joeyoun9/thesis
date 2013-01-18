@@ -85,7 +85,74 @@ def mean1d(dat,binsize):
 			break
 	return out
 		
-def runmean2d(dat,dim1,dim2,bin1,bin2):
+def runmean(field,nbins=30,ax=0):
+    '''
+    Compute a running mean along the axis specified, evaluating over the
+    distance 'nbins' 2D datasets only.
+    
+    '''
+    if ax == 1:
+        field = field.T
+    i=0
+    ln = len(field)
+    newdata = np.zeros(field.shape)
+    while i < len(field):
+        'I am assuming that int/int = int'
+        i0=i-nbins/2
+        i1 =i+nbins/2
+        if i < nbins/2:
+            i0 = 0
+        if i > ln-nbins/2:
+            i1=ln
+        
+        clump = field[i0:i1]
+        newdata[i]=np.mean(clump,axis=0)
+        i+=1
+    field=newdata
+    del newdata
+    if ax==1:
+        field = field.T
+    return field
+    'This is tolerably fast.'
+
+def runmean2d(field,dim1bin,dim2bin):
+    '''
+    Compute a 2-dimensional running mean on field field
+    with lengths [dim1bin] bins in the first dimension
+    and dim2bin in the second.
+    '''
+	field = runmeanB(field.T,dim2bin)
+	field = runmeanB(field.T,dim1bin)
+	return field
+
+def runstd(field,nbins=30,ax=0):
+    '''
+    Compute a running mean along the axis specified, evaluating over the
+    distance 'length' 2D datasets only, 
+    '''
+    if ax == 1:
+        field = field.T
+    i=0
+    ln = len(field)
+    newdata = np.zeros(field.shape)
+    while i < len(field):
+        'I am assuming that int/int = int'
+        i0=i-nbins/2
+        i1 =i+nbins/2
+        if i < nbins/2:
+            i0 = 0
+        if i > ln-nbins/2:
+            i1=ln
+		clump = field[i0:i1]
+		newdata[i]=np.std(clump,axis=0)
+		i+=1
+	field=newdata
+	del newdata
+	if ax==1:
+		field = field.T
+	return field
+           
+def lazy_runmean2d(dat,dim1,dim2,bin1,bin2):
     '''
     compute the running mean for a field with dimensions 1 and 2,
     and return the field, along with the new dimensions, in the original structure
@@ -99,7 +166,7 @@ def runmean2d(dat,dim1,dim2,bin1,bin2):
     dat,dim2 = runmean(dat.T,dim2,bin2)
     return dat,dim1,dim2        
 
-def runmean(dat,dim,binsize):
+def lazy_runmean(dat,dim,binsize):
     '''    
     Create a running mean the same shape as dat. Binsize must be even!!
     
@@ -256,7 +323,8 @@ def plt_info(str,coords=[]):
 	coords: list
 		the coordinates (position and length of the info box
 	'''
-	plt.text()
+	pass
+	#FIXME (MAKEME)
 	
 
 	

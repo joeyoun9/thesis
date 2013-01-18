@@ -7,6 +7,11 @@ from thesis.tools.bundle import *
 
 Won't be fast, but it should be complete.
 '''
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+    format='%(asctime)s: %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
+logging.info('Execution Initiated')
 import matplotlib
 matplotlib.use('Agg')
 
@@ -30,10 +35,6 @@ from matplotlib.backends.backend_pdf import PdfPages
 import thesis.tools.mymap as mymap # this is a risky thing to use as a reserved word
 'Import structures for unique datasets'
 import tables
-import logging
-
-logging.basicConfig(level=logging.DEBUG,
-    format='%(asctime)s: %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
 
 from scipy.io import netcdf
 

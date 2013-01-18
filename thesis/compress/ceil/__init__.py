@@ -6,9 +6,7 @@ Joe Young, June 2012
 all=['ct12','cl31','ct25']
 
 import ct25,ct12,cl31
-from thesis.tools.pytables import *
-from thesis.tools import s2t
-import numpy as np
+from thesis.tools.bundle import *
 
 
 #WARNING -> this is quite slow!!!
@@ -88,7 +86,7 @@ def h5compress(files,ceilometer,creator='vaisala',save=False):
 			tkey = -1
 	else:
 		raise ValueError('Your input for ceilometer type was not valid')
-	print "File Initialized"
+	logging.info("File Initialized")
 	# now read the file, and get the times as per the formatting
 	# always split by one thing, to get ob plus time, 
 	#and then split by the other to isolate the time
