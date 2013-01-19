@@ -4,39 +4,38 @@ Tools for checking times and whatont
 import calendar,time
 from datetime import timedelta,datetime
 import numpy as np
-import thesis # ensure thesisverbose is accessible
 
 all = ['bundle','figure','map','metcalcs','pytables','sounding']
 
 def s2t(string,time_format):
-	'''
-	Convert a textual string time representation to a unix epoch time using the standard time format string
-	provided. Identical to
-	
-		>>> calendar.timegm(time.strptime(string,time_format) 
-		
-	Parameters
-	----------
-	string: str
-		a time stamp of whatever format, as long as it is information that can be interpreted by the 
-		time.strptime() function
-		
-	
-	
-	Note
-	----
-	Specify UTC in the string, and %Z in the format to ensure the data is properly 
-	interpreted as UTC/GMT
-	'''
-	return calendar.timegm(time.strptime(string,time_format))
+    '''
+    Convert a textual string time representation to a unix epoch time using the standard time format string
+    provided. Identical to
+    
+        >>> calendar.timegm(time.strptime(string,time_format) 
+        
+    Parameters
+    ----------
+    string: str
+        a time stamp of whatever format, as long as it is information that can be interpreted by the 
+        time.strptime() function
+        
+    
+    
+    Note
+    ----
+    Specify UTC in the string, and %Z in the format to ensure the data is properly 
+    interpreted as UTC/GMT
+    '''
+    return calendar.timegm(time.strptime(string,time_format))
 
 def m2t(t):
-	"""
-		create a unix time from a matlab ordinal time
-	"""
-	dt = datetime.fromordinal(int(t))+timedelta(days=t%1) - timedelta(days=366) 
-	# well, that's close...
-	return calendar.timegm(dt.timetuple()) #woohoo?
+    """
+        create a unix time from a matlab ordinal time
+    """
+    dt = datetime.fromordinal(int(t))+timedelta(days=t%1) - timedelta(days=366) 
+    # well, that's close...
+    return calendar.timegm(dt.timetuple()) #woohoo?
 
 def strz(n,z=2):
     '''
@@ -55,7 +54,6 @@ def mean2d(dat,dim,binsize):
     '''
     datO = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize
     chunk = dat[0:binsize]
-    dimx = dim[0:binsize]
     i=0 # index
     while True:
         try:
@@ -69,22 +67,22 @@ def mean2d(dat,dim,binsize):
     return datO,mean1d(dim,binsize)
 
 def mean1d(dat,binsize):
-	"""
-	an equivalent method for single dimension averaging (such as getting equivalent times)
-	"""
-	out = np.zeros(int(dat.shape[0]/binsize))#one dimensional only!!
-	chunk = dat[0:binsize]
-	i=0 # index
-	while True:
-		try:
-			out[i] = np.mean(chunk,axis=0)# axis does not have to be specified
-			i+=1
-			#take a chunk of 'profiles' in 'time' ( ||| ||| ||| = 3 chunks)
-			chunk = dat[i*binsize:(i+1)*binsize]
-		except:
-			break
-	return out
-		
+    """
+    an equivalent method for single dimension averaging (such as getting equivalent times)
+    """
+    out = np.zeros(int(dat.shape[0]/binsize))#one dimensional only!!
+    chunk = dat[0:binsize]
+    i=0 # index
+    while True:
+        try:
+            out[i] = np.mean(chunk,axis=0)# axis does not have to be specified
+            i+=1
+            #take a chunk of 'profiles' in 'time' ( ||| ||| ||| = 3 chunks)
+            chunk = dat[i*binsize:(i+1)*binsize]
+        except:
+            break
+    return out
+        
 def runmean(field,nbins=30,ax=0):
     '''
     Compute a running mean along the axis specified, evaluating over the
@@ -121,9 +119,9 @@ def runmean2d(field,dim1bin,dim2bin):
     with lengths [dim1bin] bins in the first dimension
     and dim2bin in the second.
     '''
-	field = runmeanB(field.T,dim2bin)
-	field = runmeanB(field.T,dim1bin)
-	return field
+    field = runmean(field.T,dim2bin)
+    field = runmean(field.T,dim1bin)
+    return field
 
 def runstd(field,nbins=30,ax=0):
     '''
@@ -143,14 +141,14 @@ def runstd(field,nbins=30,ax=0):
             i0 = 0
         if i > ln-nbins/2:
             i1=ln
-		clump = field[i0:i1]
-		newdata[i]=np.std(clump,axis=0)
-		i+=1
-	field=newdata
-	del newdata
-	if ax==1:
-		field = field.T
-	return field
+        clump = field[i0:i1]
+        newdata[i]=np.std(clump,axis=0)
+        i+=1
+    field=newdata
+    del newdata
+    if ax==1:
+        field = field.T
+    return field
            
 def lazy_runmean2d(dat,dim1,dim2,bin1,bin2):
     '''
@@ -193,109 +191,109 @@ def lazy_runmean(dat,dim,binsize):
 
 
 def stdev2d(dat,dim,binsize):
-	out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
-	chunk = dat[0:binsize]
-	i=0 # index
-	while True:
-		try:
-			out[i] = np.std(chunk,axis=0)
-			i+=1
-			chunk = dat[i*binsize:(i+1)*binsize]
-		except:
-			break
-	return out,mean1d(dim,binsize)	
+    out = np.zeros((int(dat.shape[0]/binsize),dat.shape[1])) #initialize, if it is in the wrong order, that will be quickly apparent.
+    chunk = dat[0:binsize]
+    i=0 # index
+    while True:
+        try:
+            out[i] = np.std(chunk,axis=0)
+            i+=1
+            chunk = dat[i*binsize:(i+1)*binsize]
+        except:
+            break
+    return out,mean1d(dim,binsize)    
 
 def timemean(dat,time,dt,verbose=False):
-	'''
-	move data into time-oriented bins, returning the binned average of multi-dimensional data
-	
-	
-	Parameters
-	----------
-	
-	dat: numpy array
-		the data to be averaged into bins, first dimension should correspond to time length
-		
-		etc...
-	'''
-	if dt == 0:
-		'do nothing, the function was just invariably wrapped into something'
-		return dat,time
-	begin = np.min(time)
-	end = np.max(time)
-	length = np.floor((end-begin)/dt) + 1
-	outT=np.zeros(length)
-	outshape = [length]+list(dat.shape[1:])
-	if verbose:
-		print outshape
-	outD = np.zeros(outshape)
-	binlow = begin
-	i=-1
-	while True:
-		binhigh = binlow+dt
-		i+=1
-		outT[i]=binlow + dt/2
-		'... do the processing'
-		q = dat[(time<binhigh)&(time>=binlow)]
-		if len(q) > 0:
-			res = np.mean(q,axis=0)
-		else:
-			'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
-			res = np.nan
-		outD[i] = res
-		binlow=binhigh
-		if binhigh > end:
-			break 
-	return outD,outT
+    '''
+    move data into time-oriented bins, returning the binned average of multi-dimensional data
+    
+    
+    Parameters
+    ----------
+    
+    dat: numpy array
+        the data to be averaged into bins, first dimension should correspond to time length
+        
+        etc...
+    '''
+    if dt == 0:
+        'do nothing, the function was just invariably wrapped into something'
+        return dat,time
+    begin = np.min(time)
+    end = np.max(time)
+    length = np.floor((end-begin)/dt) + 1
+    outT=np.zeros(length)
+    outshape = [length]+list(dat.shape[1:])
+    if verbose:
+        print outshape
+    outD = np.zeros(outshape)
+    binlow = begin
+    i=-1
+    while True:
+        binhigh = binlow+dt
+        i+=1
+        outT[i]=binlow + dt/2
+        '... do the processing'
+        q = dat[(time<binhigh)&(time>=binlow)]
+        if len(q) > 0:
+            res = np.mean(q,axis=0)
+        else:
+            'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
+            res = np.nan
+        outD[i] = res
+        binlow=binhigh
+        if binhigh > end:
+            break 
+    return outD,outT
 
 def timebin(dat,time,dt,verbose=False):
-	'''
-	A replacemaent for the name timebin, to preserve intercompatibility.
-	'''
-	return timemean(dat,time,dt,verbose)
+    '''
+    A replacemaent for the name timebin, to preserve intercompatibility.
+    '''
+    return timemean(dat,time,dt,verbose)
 
 def timestd(dat,time,dt,verbose=False):
-	'''
-	Compute time-oriented standard deviations, instead of means for any particular bin.
-	This allows computation of standard deviations on a time-binned basis.
-	
-	Parameters
-	----------
-	
-	dat: numpy array
-		the data to be averaged into bins, first dimension should correspond to time length
-		
-		etc...
-	'''
-	if dt == 0:
-		'do nothing, the function was just invariably wrapped into something'
-		return dat,time
-	begin = np.min(time)
-	end = np.max(time)
-	length = np.floor((end-begin)/dt) + 1
-	outT=np.zeros(length)
-	outshape = [length]+list(dat.shape[1:])
-	if verbose:
-		print outshape
-	outD = np.zeros(outshape)
-	binlow = begin
-	i=-1
-	while True:
-		binhigh = binlow+dt
-		i+=1
-		outT[i]=binlow + dt/2
-		'... do the processing'
-		q = dat[(time<binhigh)&(time>=binlow)]
-		if len(q) > 0:
-			res = np.std(q,axis=0)
-		else:
-			'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
-			res = np.nan
-		outD[i] = res
-		binlow=binhigh
-		if binhigh > end:
-			break 
-	return outD,outT
+    '''
+    Compute time-oriented standard deviations, instead of means for any particular bin.
+    This allows computation of standard deviations on a time-binned basis.
+    
+    Parameters
+    ----------
+    
+    dat: numpy array
+        the data to be averaged into bins, first dimension should correspond to time length
+        
+        etc...
+    '''
+    if dt == 0:
+        'do nothing, the function was just invariably wrapped into something'
+        return dat,time
+    begin = np.min(time)
+    end = np.max(time)
+    length = np.floor((end-begin)/dt) + 1
+    outT=np.zeros(length)
+    outshape = [length]+list(dat.shape[1:])
+    if verbose:
+        print outshape
+    outD = np.zeros(outshape)
+    binlow = begin
+    i=-1
+    while True:
+        binhigh = binlow+dt
+        i+=1
+        outT[i]=binlow + dt/2
+        '... do the processing'
+        q = dat[(time<binhigh)&(time>=binlow)]
+        if len(q) > 0:
+            res = np.std(q,axis=0)
+        else:
+            'WARNING This will not work for 2-d+ datasets!!! AHHH!!'
+            res = np.nan
+        outD[i] = res
+        binlow=binhigh
+        if binhigh > end:
+            break 
+    return outD,outT
 
 def comp2time(*timetup):
     '''
@@ -309,24 +307,24 @@ def comp2time(*timetup):
     return calendar.timegm(timetup)
      
 def plt_info(str,coords=[]):
-	'''
-	I would like this to be a method which puts valuable
-	information into a plot so that it can be effectively
-	reproduced. This includes averaging times, start/end
-	dates, and analysis performed. - as there are no
-	titles.
-	
-	Parameters
-	----------
-	str: str
-		the text which should be included in the box
-	coords: list
-		the coordinates (position and length of the info box
-	'''
-	pass
-	#FIXME (MAKEME)
-	
+    '''
+    I would like this to be a method which puts valuable
+    information into a plot so that it can be effectively
+    reproduced. This includes averaging times, start/end
+    dates, and analysis performed. - as there are no
+    titles.
+    
+    Parameters
+    ----------
+    str: str
+        the text which should be included in the box
+    coords: list
+        the coordinates (position and length of the info box
+    '''
+    pass
+    #FIXME (MAKEME)
+    
 
-	
-		
-	
+    
+        
+    
