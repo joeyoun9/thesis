@@ -213,7 +213,7 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
 
 def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
               continuous=False, guessmean=False, guessheight=False, vertbin=5,
-              limit=1000, background=-8.2, **kwargs):
+              limit=1000, background=-8.2, threshold=-7.6, **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
@@ -255,7 +255,7 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
         first_guess_mean = [guessmean for x in times]
     else:
         print 'Applying threshold theory'
-        first_guesses  = _ThresholdLT(bs,z,-7.6)
+        first_guesses  = _ThresholdLT(bs,z,threshold)
         'compute the low-level means from the 5th ob up to the guess height'
         guess_mean_func = lambda x:np.mean(bs[x][z<=first_guesses[x]])
         first_guess_mean = map(guess_mean_func,range(len(first_guesses)))
