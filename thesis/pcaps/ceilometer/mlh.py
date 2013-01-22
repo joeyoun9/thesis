@@ -213,7 +213,7 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
 
 def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
               continuous=False, guessmean=False, guessheight=False, vertbin=5,
-              limit=1000, **kwargs):
+              limit=1000, background=-8.2, **kwargs):
     '''
     Use the idealized backscatter method to identify the top of the aerosol layer.
     
@@ -234,6 +234,10 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
     savebin: str, optional
         only save a demonstrative figure of a single bin. A possibly useful demonstration
         operation. 
+    background: float, optional
+        set the background (low value) approximation. The current value is -8.2,
+        which is sufficient for Vaisala CL31 ceilometer backscatter in (m*sr)^-1
+        units.
    
     '''
     if data =='about':
@@ -270,7 +274,7 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
         p0 = [h,dh]
         if h == 0: continue
         bm = first_guess_mean[i] # approximation for boundary layer intensity, assumed valid
-        bu = -8.2 #this is a gross approximation, and will lead to errors...
+        bu = background #this is a gross approximation, and will lead to errors...
         'There are two coefficients, A1 and A2, and one is fixed for the fitting'
         a1 = (bm+bu)/2.
         a2 = (bm-bu)/2.

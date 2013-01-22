@@ -43,4 +43,4 @@ reserved_words = ['np','h5','cf','s2t','plt','iop','events','mlh', 'map']
 'there are more, i have just been lazy.'
 
 
-logging.info(__name__+'imported')
+logging.info(__name__+' imported')
