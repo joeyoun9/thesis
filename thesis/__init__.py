@@ -8,7 +8,6 @@ Joe Young, June 2012
 all = ['compress','tools','pcaps']
 
 
-thesisverbose=False
 #FIXME - this will be reset every time it is re-imported
 
 def verbose():
@@ -19,5 +18,4 @@ def verbose():
         
     Which is simply what this function does
     '''
-    global thesisverbose
-    thesisverbose=False
+    pass
