@@ -153,9 +153,10 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
                                           continuous=continuous, vertbin=vertbin,
                                           power=power)
     # Now, to preserve shape, I am going to do a running calculation of STDev
+    '''
+    I Cannot find a reason for this code, it will be deleted after testing.
     i = 0
     length = len(data)
-    '''
     newdata = np.zeros(data.shape)
     while i < length:
         'I am assuming that int/int = int'
@@ -205,9 +206,11 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
     'bla bla not preserving namespace bla bla bla...'
     height = data['height']
     if inTime:
-        data, time = timestd(data['bs'], time, binsize) ** 2
+        data, time = timestd(data['bs'], time, binsize)
     else:
-        data, time = stdev2d(data['bs'], time, binsize) ** 2
+        data, time = stdev2d(data['bs'], time, binsize)
+    # catch that we computed standard deviation, but we are talking variance
+    data = data ** 2
     if returnfield:
         return (data, time, height)
     depth = u._ThresholdGT(data, height, threshold, limit=limit)
