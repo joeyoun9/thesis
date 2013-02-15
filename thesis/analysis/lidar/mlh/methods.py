@@ -10,7 +10,7 @@ a 3-character boolean string which indicates:
 '''
 import numpy as np
 from thesis.tools import *
-from utilities import *
+import utilities as u
 import logging as l
 
 def threshold(data, threshold= -7.6, cloud= -5, returnfield=False, binsize=0,
@@ -36,10 +36,10 @@ def threshold(data, threshold= -7.6, cloud= -5, returnfield=False, binsize=0,
         t = data['time']
         data = data['bs']
     else:
-        data, t, z = _ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
+        data, t, z = u._ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
     if returnfield:
         return (data, t, z)
-    depth = _ThresholdLT(data, z, threshold, limit=1200)
+    depth = u._ThresholdLT(data, z, threshold, limit=1200)
     del data
     return (depth, t)
 
@@ -53,7 +53,7 @@ def gradient(data, window=20, cloud= -5, limit=1500, binsize=300, inTime=True,
     '''
     if data == 'about':
         return '110Gradient'
-    bs, times, z = _ComputeFieldMeans(data, binsize, inTime=inTime,
+    bs, times, z = u._ComputeFieldMeans(data, binsize, inTime=inTime,
                                     continuous=continuous, vertbin=vertbin,
                                     power=True)
     del data
@@ -106,7 +106,7 @@ def gradient(data, window=20, cloud= -5, limit=1500, binsize=300, inTime=True,
         '''
         Multiple levels should be returned, with the 
         '''
-        depth = _LocalMaxDepths(field, z, window, 4, limit=limit, minmax=minmax)
+        depth = u._LocalMaxDepths(field, z, window, 4, limit=limit, minmax=minmax)
     del field
     return (depth, times, tops, bottoms)
 
@@ -122,7 +122,7 @@ def ipm(data, limit=1000, binsize=300, inTime=True, eval_dist=20,
     '''
     if data == 'about':
         return '110Inflection Point Method'
-    bs, times, z = _ComputeFieldMeans(data, binsize, inTime=inTime,
+    bs, times, z = u._ComputeFieldMeans(data, binsize, inTime=inTime,
                                     continuous=continuous, vertbin=vertbin,
                                     power=True)
     'Compute the gradient of the gradient'
@@ -136,7 +136,7 @@ def ipm(data, limit=1000, binsize=300, inTime=True, eval_dist=20,
     field = field[:, 20:]
     z = z[20:]
     # We need to compute the max above 200m.
-    depth = _MaxDepth(field, z, limit=limit)
+    depth = u._MaxDepth(field, z, limit=limit)
     return (depth, times)
 
 
@@ -149,7 +149,7 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
     '''
     if data == 'about':
         return '110Variance'
-    data, time, height = _ComputeFieldMeans(data, binsize, inTime=inTime,
+    data, time, height = u._ComputeFieldMeans(data, binsize, inTime=inTime,
                                           continuous=continuous, vertbin=vertbin,
                                           power=power)
     # Now, to preserve shape, I am going to do a running calculation of STDev
@@ -174,7 +174,7 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
 
     if returnfield:
         return (data, time, height)
-    depth = _MaxDepth(data, height, limit=limit)
+    depth = u._MaxDepth(data, height, limit=limit)
     return (depth, time)
 
 def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
@@ -210,7 +210,7 @@ def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
         data, time = stdev2d(data['bs'], time, binsize) ** 2
     if returnfield:
         return (data, time, height)
-    depth = _ThresholdGT(data, height, threshold, limit=limit)
+    depth = u._ThresholdGT(data, height, threshold, limit=limit)
     'and return a tuple'
     return (depth, time)
 
@@ -250,7 +250,7 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
         'Then something just wants an info string about the method, so spit it out'
         return '100Idealized Profile'
     from scipy import optimize, special
-    bs, times, z = _ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
+    bs, times, z = u._ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
     bs, z = bs[:, :limit / 10], z[:limit / 10]
     'no, this method will not use power'
     if returnfield:
@@ -261,7 +261,7 @@ def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
         first_guess_mean = [guessmean for x in times]
     else:
         print 'Applying threshold theory'
-        first_guesses = _ThresholdLT(bs, z, threshold)
+        first_guesses = u._ThresholdLT(bs, z, threshold)
         'compute the low-level means from the 5th ob up to the guess height'
         guess_mean_func = lambda x:np.mean(bs[x][z <= first_guesses[x]])
         first_guess_mean = map(guess_mean_func, range(len(first_guesses)))
@@ -347,7 +347,7 @@ def idealized_multiple(data, binsize=300, returnfield=False, inTime=True, savebi
         'Then something just wants an info string about the method, so spit it out'
         return '100Idealized Profile'
     from scipy import optimize, special
-    bs, times, z = _ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
+    bs, times, z = u._ComputeFieldMeans(data, binsize, inTime=inTime, continuous=continuous, vertbin=vertbin)
     bs, z = bs[:, :limit / 10], z[:limit / 10]
     'no, this method will not use power'
     if returnfield:
@@ -358,7 +358,7 @@ def idealized_multiple(data, binsize=300, returnfield=False, inTime=True, savebi
         first_guess_mean = [guessmean for x in times]
     else:
         print 'Applying threshold theory'
-        first_guesses = _ThresholdLT(bs, z, threshold)
+        first_guesses = u._ThresholdLT(bs, z, threshold)
         'compute the low-level means from the 5th ob up to the guess height'
         guess_mean_func = lambda x:np.mean(bs[x][z <= first_guesses[x]])
         first_guess_mean = map(guess_mean_func, range(len(first_guesses)))
