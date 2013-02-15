@@ -29,14 +29,12 @@ from thesis.tools.pytables import h5
 import thesis.tools.figure as TFigure
 from thesis.tools.figure import *
 from thesis.tools.sounding import *
-logging.debug('Importing Cleanfig')
 import cleanfig as cf
 from cleanfig import *
-logging.debug('Cleanfig imported')
-from thesis.pcaps import *
-import thesis.pcaps.ceilometer.mlh as mlh
+from thesis.analysis import *
+import thesis.analysis.lidar.mlh as mlh
 # Libraries for particle tracing in ceilometers.
-from thesis.pcaps.ceilometer.particle import *
+from thesis.analysis.lidar.particle import *
 # Import structures for making mutliple page PDFs.
 from matplotlib.backends.backend_pdf import PdfPages
 # Import mapping libraries developed by myeslf in this package.
