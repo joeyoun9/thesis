@@ -12,6 +12,7 @@ setup(name='thesis',
 	'thesis.compress.ceil', 'thesis.compress.dem', 'thesis.compress.rwp',
 	'thesis.compress.isfs', 'thesis.compress.sonde', 'thesis.compress.lidar',
 	'thesis.compress.hobo', 'thesis.compress.sodar', 'thesis.analysis',
-    'thesis.analysis.lidar', 'thesis.analysis.pcaps'],
+    'thesis.analysis.lidar', 'thesis.analysis.pcaps',
+    'thesis.analysis.lidar.mlh'],
      )
 
