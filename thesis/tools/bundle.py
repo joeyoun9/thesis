@@ -33,7 +33,7 @@ import cleanfig as cf
 from cleanfig import *
 from thesis.analysis import *
 from thesis.analysis.pcaps import *
-import ..analysis.lidar.mlh as mlh
+import thesis.analysis.lidar.mlh as mlh
 # Libraries for particle tracing in ceilometers.
 from thesis.analysis.lidar.particle import *
 # Import structures for making mutliple page PDFs.
