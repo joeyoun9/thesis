@@ -33,7 +33,7 @@ import cleanfig as cf
 from cleanfig import *
 from thesis.analysis import *
 from thesis.analysis.pcaps import *
-import thesis.analysis.lidar.mlh as mlh
+import ..analysis.lidar.mlh as mlh
 # Libraries for particle tracing in ceilometers.
 from thesis.analysis.lidar.particle import *
 # Import structures for making mutliple page PDFs.
@@ -44,6 +44,7 @@ import thesis.tools.mymap as mymap
 import tables
 
 from scipy.io import netcdf
+import sources as a
 
 
 reserved_words = ['np', 'h5', 'cf', 's2t', 'plt', 'iop', 'events', 'mlh', 'map']
