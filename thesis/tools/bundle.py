@@ -44,7 +44,9 @@ import thesis.tools.mymap as mymap
 import tables
 
 from scipy.io import netcdf
-import sources as a
+import sources as srcs
+s = srcs
+sources = srcs
 
 
 reserved_words = ['np', 'h5', 'cf', 's2t', 'plt', 'iop', 'events', 'mlh', 'map']
