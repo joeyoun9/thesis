@@ -6,7 +6,7 @@ Created on Feb 18, 2013
 This is not to be included with a PUBLIC version of this repo. Somehow I willl
 need to remove references to the existence of this module
 '''
-from thesis.tools.object import go as o
+from thesis.tools.objects import go as o
 
 data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
 dropbox = '../../../Dropbox/figures/'
