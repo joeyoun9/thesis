@@ -8,36 +8,14 @@ The module is simply imported, no methods exist
 import logging as l
 
 from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
-# rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'arial'],
-#              'weight': ['lighter', 'normal']})
+rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'Arial'],
+              'weight': ['lighter', 'normal']})
 rc('text', usetex=True)
-
-try:
-    'wrapped for safety'
-    rcParams['axes.labelweight'] = 'light'
-except:
-    pass
-
-# rc('font', **{'family':'sans-serif', 'sans-serif':
-#     'Helvetica','weight':'bold'})
-#  font information
-
-'''
-Method for outlining available fonts on macs
-'''
-if False:
-    for font in fm.OSXInstalledFonts():
-        l.debug(str(font))
-
-
-rcParams['xtick.direction'] = 'out'
-rcParams['ytick.direction'] = 'out'
-rcParams['axes.linewidth'] = .5  # set the outer border to be thin
-
-# rcParams['text.usetex']= True
-
-plt.grid()
-# This does not add grids to everything, because it is often overridden.
+rc('axes', labelweight='light')
+rc('xtick', direction='out')
+rc('ytick', direction='out')
+rc('axes', linewidth=.5)
+# set outer border to be thin.
 
 def bottomcolorbar(data=None, label=None):
     plt.colorbar(data, **{
