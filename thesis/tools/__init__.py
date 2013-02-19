@@ -6,6 +6,7 @@ from datetime import timedelta, datetime
 import numpy as np
 import logging
 import sources as srcs
+import os
 
 __all__ = ['s2t',
            'm2t',
