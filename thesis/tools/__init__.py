@@ -22,7 +22,7 @@ __all__ = ['s2t',
            'timebin',
            'timestd',
            'comp2time',
-           'savef',
+           'saveF',
            ]
 
 def s2t(string, time_format):
