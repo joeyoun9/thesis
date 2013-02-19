@@ -379,8 +379,8 @@ def idealized_multiple(data, binsize=300, returnfield=False, inTime=True, savebi
         'for now we are always assuming a 100m transition layer until told otherwise'
         p0 = [h, dh]
         if h == 0: continue
-        bm = first_guess_mean[i]  # approximation for boundary layer intensity, assumed valid
-        bu = background  # this is a gross approximation, and will lead to errors...
+        bm = first_guess_mean[i]  # approximation for boundary layer intensity
+        bu = background  # approximation for free atmosphere intensity
         'There are two coefficients, A1 and A2, and one is fixed for the fitting'
         a1 = (bm + bu) / 2.
         a2 = (bm - bu) / 2.
