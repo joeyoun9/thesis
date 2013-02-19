@@ -178,7 +178,7 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
     depth = u._MaxDepth(data, height, limit=limit)
     return (depth, time)
 
-def noise_variance(data, threshold=0.4, limit=1000, binsize=300, inTime=True,
+def noise_variance(data, threshold=0.2, limit=1000, binsize=300, inTime=True,
                    returnfield=False, **kwargs):
     '''
     use standard deviation calculations to determine the top of the layer
