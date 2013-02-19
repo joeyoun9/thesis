@@ -6,12 +6,13 @@ Created on Feb 18, 2013
 A repository for data objects, similar to that to be developed for 
 Muto.
 
+This is not meant to be included in the bundle, it is an internal element.
 
 '''
 
-class go():
+class core_object():
     ''' 
-    A simple object which posesses the ability to have its attributes
+    A simple object which possesses the ability to have its attributes
     manipulated with via the dictionary structure as well as the attribute
     structure.
     
@@ -30,3 +31,7 @@ class go():
         self.__dict__[key] = value
 
 
+'''
+Create a data object which is able to perform some basic operations upon
+any 2d datasets within. 
+'''

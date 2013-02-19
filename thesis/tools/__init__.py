@@ -1,12 +1,26 @@
 """
-Tools for checking times and whatont
+Tools for checking times and whatnot
 """
 import calendar, time
 from datetime import timedelta, datetime
 import numpy as np
 import logging
 
-all = ['bundle', 'figure', 'map', 'metcalcs', 'pytables', 'sounding']
+__all__ = ['s2t',
+           'm2t',
+           'strz',
+           'mean2d',
+           'mean1d',
+           'runmean',
+           'runmean2d',
+           'runstd',
+           'lazy_runmean2d',
+           'lazy_runmean',
+           'stdev2d',
+           'timemean',
+           'timebin',
+           'timestd',
+           'comp2time']
 
 def s2t(string, time_format):
     '''
@@ -190,7 +204,6 @@ def lazy_runmean(dat, dim, binsize):
     'this interpretation may not be completely valid...'
     return (dat_out, dim)
 
-
 def stdev2d(dat, dim, binsize):
     out = np.zeros((int(dat.shape[0] / binsize), dat.shape[1]))  # initialize, if it is in the wrong order, that will be quickly apparent.
     chunk = dat[0:binsize]
@@ -301,29 +314,13 @@ def comp2time(*timetup):
     convert darn numbers to useful dates.
     ASSUMES THE GIVEN DATE IS IN UTC
     makes a tuple: yr,mn,day,hr,mn,sec, 0 0 0
-    Can be made iterable. 
+    
     '''
     while len(timetup) < 9:
         timetup = np.append(timetup, [0])
     return calendar.timegm(timetup)
 
-def plt_info(str, coords=[]):
-    '''
-    I would like this to be a method which puts valuable
-    information into a plot so that it can be effectively
-    reproduced. This includes averaging times, start/end
-    dates, and analysis performed. - as there are no
-    titles.
-    
-    Parameters
-    ----------
-    str: str
-        the text which should be included in the box
-    coords: list
-        the coordinates (position and length of the info box
-    '''
-    pass
-    # FIXME (MAKEME)
+
 
 
 

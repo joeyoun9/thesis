@@ -6,10 +6,12 @@ Created on Feb 18, 2013
 This is not to be included with a PUBLIC version of this repo. Somehow I willl
 need to remove references to the existence of this module
 '''
-from thesis.tools.objects import go as o
+from core.objects import core_object as o
 
 data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
+
 dropbox = '../../../Dropbox/figures/'
+
 # pcaps data
 pcaps = o()
 pcaps.raw = '/uufs/chpc.utah.edu/common/home/horel-group/pcaps.utah.edu/'
@@ -33,9 +35,6 @@ bcm.year2.hobos_t = data_dir + 'hdf5/BCM/kenne_t_hobos2011.h5'
 # some HOBO data from year 1 is actually with PCAPS -
 bcm.year1.hobos = data_dir + 'projects/bmcap/year1/hobo_locations.txt'
 bcm.year1.locations = data_dir + 'projects/bmcap/year1/kenne_locations.txt'
-
-
-
 
 # Ceilometer Network Data
 ceil = o()

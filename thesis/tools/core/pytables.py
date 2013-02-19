@@ -1,18 +1,21 @@
 """
 Class wrappers for thesis formatted HDF5 documents, for both saving and acquiring data
 from these files.
+
+This entire operation is deprecated, and shall only be used on thesis-format
+documents. But no more. There is another, and it is superior.
 """
 import tables
 import numpy as np
-
+from objects import core_object
 
 
 class h5(object):
 	'''
 	Class for interacting with HDF5 files in the format created by this class
 	'''
-	
-	def __init__(self,fname):
+
+	def __init__(self, fname):
 		"""
 		Create the object for interaction by simply providing the location of the 
 		HDF5 document
@@ -25,8 +28,8 @@ class h5(object):
 		"""
 		self.filename = fname
 		self.doc = False
-		
-	def create(self, close=True,indices=False, group='/', **variables):
+
+	def create(self, close=True, indices=False, group='/', **variables):
 		# create an hdf5 table for use with datasets, ideally of known size...
 		# variables specifies what variables will be filled in this archive
 		"""
@@ -43,7 +46,7 @@ class h5(object):
 			**variables:
 				name=[length,length,...] values to state the expandable variables for the dataset
 		"""
-		#FIXME  - only one category available.
+		# FIXME  - only one category available.
 		if not self.doc:
 			# if the doc has been opened before, then reopen it for appending.
 			self.doc = h5openw(self.filename)
@@ -51,24 +54,24 @@ class h5(object):
 			self.doc = h5opena(self.filename)
 
 		if group  is not '/':
-			#FIXME - if the group ends in '/', then we may have a problem, but at the same time, it ought to end in that!!
+			# FIXME - if the group ends in '/', then we may have a problem, but at the same time, it ought to end in that!!
 			gp = group.split('/')
 			# then create the group
-			drop = '/'.join(gp[:-1])+'/'
-			self.doc.createGroup(drop,name=gp[-1])
+			drop = '/'.join(gp[:-1]) + '/'
+			self.doc.createGroup(drop, name=gp[-1])
 
-		filters =  tables.Filters(complevel=6, complib='zlib')#blosc
+		filters = tables.Filters(complevel=6, complib='zlib')  # blosc
 		for k in variables:
 			# create the variable called k, with length variables[k]
 			dims = (0,)
 			if type(variables[k]) == tuple:
 				# then this is multidimensional
-				for i in variables[k]: #it had better be a list
+				for i in variables[k]:  # it had better be a list
 					dims = dims + (i,)
 			else:
-				dims = (0,variables[k])#hmm
-			self.doc.createEArray(group,k,tables.Float32Atom(),dims,filters=filters.copy())	
-			
+				dims = (0, variables[k])  # hmm
+			self.doc.createEArray(group, k, tables.Float32Atom(), dims, filters=filters.copy())
+
 		if indices:
 			for k in indices:
 				if type(indices[k]) == tuple:
@@ -77,32 +80,32 @@ class h5(object):
 						dims = dims + (i,)
 				else:
 					dims = (indices[k],)
-					
-				self.doc.createCArray(group,k,tables.Float32Atom(),dims,filters=filters.copy())
+
+				self.doc.createCArray(group, k, tables.Float32Atom(), dims, filters=filters.copy())
 
 
 		# the time table is a permenant feature
 		time_desc = {'time': tables.FloatCol(pos=1),
-			'key':tables.IntCol(8,pos=2),
+			'key':tables.IntCol(8, pos=2),
 		}
-		time = self.doc.createTable(group,'time',time_desc,filters=filters.copy())
+		time = self.doc.createTable(group, 'time', time_desc, filters=filters.copy())
 		del time_desc
-		# file attributes		
-		self.doc.setNodeAttr('/','creator', 'Joe Young\'s Thesis HDF5')
-		self.doc.setNodeAttr('/','version', '1.1')
+		# file attributes
+		self.doc.setNodeAttr('/', 'creator', 'Joe Young\'s Thesis HDF5')
+		self.doc.setNodeAttr('/', 'version', '1.1')
 		# and group attributes
-		self.doc.setNodeAttr(group,'maxtime',0) # metadata?
-		self.doc.setNodeAttr(group,'maxkey',-1) # metadata information - start at -1 so that maxkey +1 initially = 0
-		
-	
+		self.doc.setNodeAttr(group, 'maxtime', 0)  # metadata?
+		self.doc.setNodeAttr(group, 'maxkey', -1)  # metadata information - start at -1 so that maxkey +1 initially = 0
+
+
 		if close:
-			self.doc.close() # and close the file, we do not exchange open handles here
+			self.doc.close()  # and close the file, we do not exchange open handles here
 		return True
 
 
 
 
-	def slice(self,variables,begin=False,end=False,duration=False,timetup=False,indices=False,group='/'):
+	def slice(self, variables, begin=False, end=False, duration=False, timetup=False, indices=False, group='/'):
 		"""
 		Read a specific temporal subset of various variables, as well as fetch indices
 		
@@ -153,45 +156,45 @@ class h5(object):
 			begin = timetup[0]
 			end = timetup[1]
 		elif duration and not end and not begin:
-			# then 
-			end = self.doc.getNodeAttr(group,'maxtime')
-			begin = end - duration # duration is in seconds?
+			# then
+			end = self.doc.getNodeAttr(group, 'maxtime')
+			begin = end - duration  # duration is in seconds?
 		elif duration and begin:
 			end = begin + duration
 		elif duration and end:
 			begin = end - duration
 		elif not duration and not begin and not end:
 			# you gave me nothing
-			raise Exception('You must specify a time tuple (timetup), begin/end or a duration in order to slice. Use dump() so see an entire dataset') 
+			raise Exception('You must specify a time tuple (timetup), begin/end or a duration in order to slice. Use dump() so see an entire dataset')
 
-		index = self.doc.getNode(group).time.readWhere('(time >= '+str(begin)+')&(time <= '+str(end)+')')
-		
-		out = {}
+		index = self.doc.getNode(group).time.readWhere('(time >= ' + str(begin) + ')&(time <= ' + str(end) + ')')
+
+		out = core_object()
 		if len(index) > 0:
-			timekeys = zip(index['time'],index['key'])
+			timekeys = zip(index['time'], index['key'])
 			timekeys.sort()
-			times,keys = zip(*timekeys)
-			x = max(keys)+1
+			times, keys = zip(*timekeys)
+			x = max(keys) + 1
 			n = min(keys)
 			out['time'] = np.array(times)
 
 			if not type(variables) == list:
 				variables = [variables]
 			for v in variables:
-				out[v] = self.doc.getNode(group,name=v)[n:x][keys - n] #FIXME!!! DO YOU WORK>!>!>!>!>!>!
+				out[v] = self.doc.getNode(group, name=v)[n:x][keys - n]  # FIXME!!! DO YOU WORK>!>!>!>!>!>!
 		else:
 			self.doc.close()
 			raise Exception('This dataset does not have any data within the times specified')
 		if indices:
 			for i in indices:
-				out[i] = self.doc.getNode(group,name=i)[0] 
+				out[i] = self.doc.getNode(group, name=i)[0]
 				# indices should only have one value in time dimension
 				# note, it is [currently] your job to keep track of which variable is an index.
-		
+
 		self.doc.close()
 		return out
 
-	def index(self,index,group='/'):
+	def index(self, index, group='/'):
 		"""
 		Read out the entire value of the specified data indexing value. 
 		No searching is performed
@@ -204,11 +207,11 @@ class h5(object):
 			string representation of the group where the indices are read from.
 		"""
 		if not self.doc or not self.doc.isopen:
-			self.doc=h5openr(self.filename)
-		return self.doc.getNode(group,name=index)[0]
+			self.doc = h5openr(self.filename)
+		return self.doc.getNode(group, name=index)[0]
 		# take the first value ([0]) because indices are time invariant in that dimension
 
-	def loadIndices(self,group='/', **indices):
+	def loadIndices(self, group='/', **indices):
 		"""
 		Insert index variable arrays into the document
 		
@@ -226,7 +229,7 @@ class h5(object):
 			self.doc = h5opena(self.filename)
 
 		for i in indices:
-			self.doc.getNode(group,name=i)[:] = indices[i] # that is all!
+			self.doc.getNode(group, name=i)[:] = indices[i]  # that is all!
 
 		self.close()
 
@@ -259,32 +262,32 @@ class h5(object):
 		like height, x, y, etc. you must specify these as indices for readout purposes
 		
 		"""
-		
+
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5opena(self.filename)
-			
+
 		# determine high key
- 		i = self.doc.getNodeAttr(group,'maxkey') + 1
+ 		i = self.doc.getNodeAttr(group, 'maxkey') + 1
 
 		# Add this information to the keys table
-		self.doc.getNode(group,name='time').append([(time,i)])
-		
-		if time > self.doc.getNodeAttr(group,'maxtime'):
-			self.doc.setNodeAttr(group,'maxtime',time)
-		self.doc.setNodeAttr(group,'maxkey',i)
+		self.doc.getNode(group, name='time').append([(time, i)])
 
-		i+=1 # Wait until after the maxkey is set.
+		if time > self.doc.getNodeAttr(group, 'maxtime'):
+			self.doc.setNodeAttr(group, 'maxtime', time)
+		self.doc.setNodeAttr(group, 'maxkey', i)
+
+		i += 1  # Wait until after the maxkey is set.
 
 		# now loop through the given variables
 		for v in data:
-			#print 'writing',v
-			self.doc.getNode(group,name=v).append([data[v]])#brackets = reshape, must be array appended.
+			# print 'writing',v
+			self.doc.getNode(group, name=v).append([data[v]])  # brackets = reshape, must be array appended.
 		if not persist:
 			self.doc.close()
 		return True
 
 
-	def dump(self,variable,group='/'):
+	def dump(self, variable, group='/'):
 		"""
 		A method to quickly output the entire contents of any specific variable/index
 		array. 
@@ -303,7 +306,7 @@ class h5(object):
 		"""
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
-		out = self.doc.getNode(group,name=variable)[:]
+		out = self.doc.getNode(group, name=variable)[:]
 		self.close()
 		return out
 
@@ -316,20 +319,15 @@ class h5(object):
 
 
 
-"These functions can have the lockout functionality applied to them later"
 def h5openr(f):
-	# open the file f for reading, but check if it is open.. nevermind, forget safety
-	#DANGEROUS
-	f = tables.openFile(f,mode='r')
+	f = tables.openFile(f, mode='r')
 	return f
 
 def h5opena(f):
-	# open the file f for appending
-	#DANGEROUS
-	f = tables.openFile(f,mode='a')
+
+	f = tables.openFile(f, mode='a')
 	return f
 
 def h5openw(f):
-	#this will destroy whatever file it is opening, note
-	f = tables.openFile(f,mode='w', title='ms') # have to give it a title
+	f = tables.openFile(f, mode='w', title='ms')  # have to give it a title
 	return f
