@@ -20,7 +20,8 @@ __all__ = ['s2t',
            'timemean',
            'timebin',
            'timestd',
-           'comp2time']
+           'comp2time',
+           ]
 
 def s2t(string, time_format):
     '''
@@ -319,6 +320,9 @@ def comp2time(*timetup):
     while len(timetup) < 9:
         timetup = np.append(timetup, [0])
     return calendar.timegm(timetup)
+
+
+
 
 
 

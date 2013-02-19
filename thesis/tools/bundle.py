@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.DEBUG,
 logging.info('Execution Initiated')
 import matplotlib
 matplotlib.use('Agg')
+import os
 
 # import the whole of numpy, it will be used everywhere.
 import numpy as np
@@ -23,7 +24,23 @@ from scipy.io.netcdf import netcdf_file as nc
 import os, sys
 from pylab import *
 from scipy import *
-import matplotlib.pyplot as plt
+# the sources library was implemented
+# in a non-standard way for various reasons
+import sources as srcs
+s = srcs
+sources = srcs
+
+import matplotlib.pyplot
+# add a method to plt to save as the name of the file called
+class newplt(matplotlib.pyplot):
+    def saveF(self, ext='png'):
+        f = os.path.split(__file__)[-1][:-3]
+        fname = srcs.dropbox + '/paper_figures/' + f + 'ext'
+        logging.debug('Saving file as ' + fname)
+        self.savefig(fname)
+
+plt = newplt()
+
 from . import *
 from core.pytables import h5
 import figure as TFigure
@@ -38,10 +55,6 @@ from thesis.analysis.lidar.particle import *
 from matplotlib.backends.backend_pdf import PdfPages
 import mymap as mymap
 import tables
-# the sources library was implemented
-# in a non-standard way for various reasons
-import sources as srcs
-s = srcs
-sources = srcs
+
 
 logging.info(__name__ + ' imported')
