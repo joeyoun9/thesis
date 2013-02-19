@@ -12,7 +12,7 @@ setup(name='thesis',
                 'thesis.compress',
                 'thesis.compress.rass',
                 'thesis.tools',
-                'thesis.tools.core'
+                'thesis.tools.core',
                 'thesis.compress.ceil',
                 'thesis.compress.dem',
                 'thesis.compress.rwp',
