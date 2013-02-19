@@ -9,8 +9,9 @@ Muto.
 This is not meant to be included in the bundle, it is an internal element.
 
 '''
+import numpy
 
-class core_object():
+class core_object(numpy.array):
     ''' 
     A simple object which possesses the ability to have its attributes
     manipulated with via the dictionary structure as well as the attribute
