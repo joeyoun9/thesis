@@ -11,7 +11,7 @@ from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
 rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'Arial'],
               'weight': ['lighter', 'normal']})
 rc('text', usetex=True)
-rc('axes', labelweight='light')
+# rc('axes', labelweight='light')
 rc('xtick', direction='out')
 rc('ytick', direction='out')
 rc('axes', linewidth=.5)
