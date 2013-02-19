@@ -8,13 +8,9 @@ The module is simply imported, no methods exist
 import logging as l
 
 from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
-
-# font = fm.FontProperties().set_family('Helvetica')
-# # fm.FontProperties().get_family()
-# make the font helvetica (thin, appaerntly)
-
-rcParams['font.sans-serif'] = 'Luxi Sans, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
-rcParams['font.weight'] = 'light,lighter,bold,normal'
+rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'arial'],
+              'weight': ['light', 'normal']})
+rc('text', usetex=True)
 
 try:
     'wrapped for safety'
