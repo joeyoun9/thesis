@@ -5,6 +5,7 @@ import calendar, time
 from datetime import timedelta, datetime
 import numpy as np
 import logging
+import sources as srcs
 
 __all__ = ['s2t',
            'm2t',
@@ -21,6 +22,7 @@ __all__ = ['s2t',
            'timebin',
            'timestd',
            'comp2time',
+           'savef',
            ]
 
 def s2t(string, time_format):
@@ -321,6 +323,11 @@ def comp2time(*timetup):
         timetup = np.append(timetup, [0])
     return calendar.timegm(timetup)
 
+def saveF(plt, ext='png'):
+        f = os.path.split(__file__)[-1][:-3]
+        fname = srcs.dropbox + '/paper_figures/' + f + 'ext'
+        logging.debug('Saving file as ' + fname)
+        plt.savefig(fname)
 
 
 

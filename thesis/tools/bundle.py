@@ -8,7 +8,6 @@ from thesis.tools.bundle import *
 Won't be fast, but it should be complete.
 '''
 import logging
-
 logging.basicConfig(level=logging.DEBUG,
     format='%(asctime)s: %(levelname)s: %(message)s',
     datefmt='%m/%d/%Y %H:%M:%S')
@@ -24,24 +23,14 @@ from scipy.io.netcdf import netcdf_file as nc
 import os, sys
 from pylab import *
 from scipy import *
+from . import *
 # the sources library was implemented
 # in a non-standard way for various reasons
 import sources as srcs
 s = srcs
 sources = srcs
-
-import matplotlib.pyplot
-# add a method to plt to save as the name of the file called
-class newplt(matplotlib.pyplot):
-    def saveF(self, ext='png'):
-        f = os.path.split(__file__)[-1][:-3]
-        fname = srcs.dropbox + '/paper_figures/' + f + 'ext'
-        logging.debug('Saving file as ' + fname)
-        self.savefig(fname)
-
-plt = newplt()
-
-from . import *
+import matplotlib.pyplot as plt
+plt.saveF = saveF
 from core.pytables import h5
 import figure as TFigure
 from figure import *
