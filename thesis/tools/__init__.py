@@ -324,11 +324,12 @@ def comp2time(*timetup):
         timetup = np.append(timetup, [0])
     return calendar.timegm(timetup)
 
-def saveF(plt, ext='png'):
-        f = os.path.split(__file__)[-1][:-3]
-        fname = srcs.dropbox + '/paper_figures/' + f + 'ext'
-        logging.debug('Saving file as ' + fname)
-        plt.savefig(fname)
+def saveF(ext='png'):
+    import matplotlib.pyplot as plt
+    f = os.path.split(__file__)[-1][:-3]
+    fname = srcs.dropbox + '/paper_figures/' + f + ext
+    logging.debug('Saving file as ' + fname)
+    plt.savefig(fname)
 
 
 
