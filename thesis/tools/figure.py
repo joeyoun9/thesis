@@ -13,7 +13,7 @@ from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
 # # fm.FontProperties().get_family()
 # make the font helvetica (thin, appaerntly)
 
-rcParams['font.sans-serif'] = 'Geneva, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
+rcParams['font.sans-serif'] = 'Luxi Sans, Helvetica, Arial, sans-serif, Bitstream Vera Sans'
 rcParams['font.weight'] = 'light,lighter,bold,normal'
 
 try:
@@ -41,7 +41,7 @@ rcParams['axes.linewidth'] = .5  # set the outer border to be thin
 # rcParams['text.usetex']= True
 
 plt.grid()
-'this does not seem to robustly add grids to everything'
+# This does not add grids to everything, because it is often overridden.
 
 def bottomcolorbar(data=None, label=None):
     plt.colorbar(data, **{
