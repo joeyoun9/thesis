@@ -9,6 +9,7 @@ need to remove references to the existence of this module
 from core.objects import core_object as o
 
 data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
+projects = data_dir + 'projects'
 
 dropbox = '../../../Dropbox/figures/'
 
@@ -22,19 +23,31 @@ pcaps.ncar.rass = data_dir + 'hdf5/pcaps/ncar_rass_nima.h5'  # nima filtered
 pcaps.ncar.rwp = data_dir + 'hdf5/pcaps/ncar_rwp_nima.h5'
 pcaps.ncar.rwpm = data_dir + 'hdf5/pcaps/ncar_rwp_mom_nima.h5'
 pcaps.ncar.rawinsondes = data_dir + 'hdf5/pcaps/ncar_rawinsondes.h5'
-pcaps.ditto = data_dir + 'hdf5/pcaps/ditto_ceil.h5'
-pcaps.horizontal = data_dir + 'hdf5/pcaps/horizontal_ceil.h5'
+pcaps.dugway = o()
+pcaps.dugway.ditto = data_dir + 'hdf5/pcaps/ditto_ceil.h5'
+pcaps.dugway.horizontal = data_dir + 'hdf5/pcaps/horizontal_ceil.h5'
 
 
 # bingham data
 bcm = o()
+bcm.dir = projects + '/bmcap'
 bcm.year1 = o()
 bcm.year2 = o()
-bcm.year2.hobos_rh = data_dir + 'hdf5/BCM/kenne_rh_hobos_2011.h5'
-bcm.year2.hobos_t = data_dir + 'hdf5/BCM/kenne_t_hobos_2011.h5'
-# some HOBO data from year 1 is actually with PCAPS -
-bcm.year1.hobos = data_dir + 'projects/bmcap/year1/hobo_locations.txt'
-bcm.year1.locations = data_dir + 'projects/bmcap/year1/kenne_locations.txt'
+bcm.sites = o()
+# year 1 (2010-2011)
+bcm.year1.hobos_rh = bcm.dir + '/year1/rh_hobos.h5'
+bcm.year1.hobos_t = bcm.dir + '/year1/t_hobos.h5'
+bcm.year1.lidar = bcm.dir + '/year1/lidar.h5'
+# year 2 (2011 - 2012)
+bcm.year2.lidar = bcm.dir + '/year2/lidar.h5'
+bcm.year2.inpit = bcm.dir + '/year2/inpit_ceil.h5'
+bcm.year2.outpit = bcm.dir + 'outpit_ceil.h5'
+# Simple Location files
+bcm.sites.year1 = bcm.dir + '/year1/kenne_locations.txt'
+bcm.sites.year2 = bcm.dir + '/year2/kenne_locations.txt'
+bcm.sites.hobos1 = bcm.dir + '/year1/hobo_locations.txt'
+bcm.sites.hobos2 = bcm.dir + '/year2/hobo_locations.txt'
+
 
 # Ceilometer Network Data
 ceil = o()
@@ -43,8 +56,8 @@ ceil = o()
 # digital elevation models:
 dem = o()
 dem.slv = data_dir + 'hdf5/pcaps/dem_slc_10m.h5'
-dem.bcm2011 = data_dir + 'hdf5/BCM/dem_BCM2011_10m.h5'
-dem.bcm2010 = data_dir + 'hdf5/BCM/dem_BCM2010_10m.h5'
+dem.bcm2011 = data_dir + 'projects/bmcap/year2/dem_10m.h5'
+dem.bcm2010 = data_dir + 'projects/bmcap/year1/dem_10m.h5'
 
 # surface data sets...
 pcaps.hobo = o()
