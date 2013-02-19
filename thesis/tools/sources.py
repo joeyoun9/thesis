@@ -30,8 +30,8 @@ pcaps.horizontal = data_dir + 'hdf5/pcaps/horizontal_ceil.h5'
 bcm = o()
 bcm.year1 = o()
 bcm.year2 = o()
-bcm.year2.hobos_rh = data_dir + 'hdf5/BCM/kenne_rh_hobos2011.h5'
-bcm.year2.hobos_t = data_dir + 'hdf5/BCM/kenne_t_hobos2011.h5'
+bcm.year2.hobos_rh = data_dir + 'hdf5/BCM/kenne_rh_hobos_2011.h5'
+bcm.year2.hobos_t = data_dir + 'hdf5/BCM/kenne_t_hobos_2011.h5'
 # some HOBO data from year 1 is actually with PCAPS -
 bcm.year1.hobos = data_dir + 'projects/bmcap/year1/hobo_locations.txt'
 bcm.year1.locations = data_dir + 'projects/bmcap/year1/kenne_locations.txt'
