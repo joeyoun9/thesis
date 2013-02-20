@@ -325,7 +325,9 @@ def comp2time(*timetup):
     return calendar.timegm(timetup)
 
 def saveF(ext='png'):
+    pass
     import matplotlib.pyplot as plt
+    # yeah, so __file__ means *this* file, not what called it.
     f = os.path.split(__file__)[-1][:-3]
     fname = srcs.dropbox + '/paper_figures/' + f + ext
     logging.debug('Saving file as ' + fname)
