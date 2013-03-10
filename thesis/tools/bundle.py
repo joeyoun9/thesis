@@ -30,8 +30,6 @@ import sources as srcs
 s = srcs
 sources = srcs
 import matplotlib.pyplot as plt
-# an extra function for saving figures. Someday it may work right.
-plt.saveF = saveF
 from core.pytables import h5
 import figure as TFigure
 from figure import *
