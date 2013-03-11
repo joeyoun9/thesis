@@ -33,7 +33,7 @@ def iop(num, buffer=False):
         (s2t('2011 02 02 18 UTC', '%Y %m %d %H %Z'), s2t('2011 02 05 18 UTC', '%Y %m %d %H %Z')),
         ]
     if num == 'all':
-        return out
+        return out[1:]
     if not buffer:
         return out[num]
     else:
