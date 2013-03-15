@@ -4,7 +4,7 @@ and rain detection.
 
 Some of this is actually PCAPS specific, but, that will be dealt with later.
 '''
-import thesis.tools.core.objects.core_object as co
+from thesis.tools.core.objects import core_object as co
 import numpy as np
 
 class Filter(co):
