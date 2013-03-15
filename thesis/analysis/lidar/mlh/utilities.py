@@ -15,7 +15,9 @@ def _MaxDepth(data, z, limit=1000):
     Internally compute the height of the maximum value of an array, with given inputs
     '''
     if limit:
-        data = data[:, :limit / 10]
+        data = data[:, 7:limit / 10]
+    else:
+        data = data[:, 7:]
     def maxp(x):
         try:
             return z[x == np.nanmax(x)][0]
@@ -28,7 +30,9 @@ def _LocalMaxDepths(data, z, window, hits=4, limit=False, minmax=None):
     Compute all local max's of a field up to hits number of hits or range
     '''
     if limit:
-        data = data[:, :limit / 10]
+        data = data[:, 7:limit / 10]
+    else:
+        data = data[:, 7:]
     dw = window / 2
     '''
     I haven't found a nice way to simply map this one up yet.
@@ -58,7 +62,9 @@ def _ThresholdLT(data, z, threshold, limit=False):
     IE in Threshold calcs.
     '''
     if limit:
-        data = data[:, :limit / 10]
+        data = data[:, 7:limit / 10]
+    else:
+        data = data[:, 7:]
     def th(x, z, t):
         try:
             return z[x <= t][0]
@@ -73,7 +79,9 @@ def _ThresholdGT(data, z, threshold, limit=False):
     ie, the Variance method
     '''
     if limit:
-        data = data[:, :limit / 10]
+        data = data[:, 7:limit / 10]
+    else:
+        data = data[:, 7:]
     def th(x, z, t):
         try:
             return z[x >= t][0]
