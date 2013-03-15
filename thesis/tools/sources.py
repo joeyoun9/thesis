@@ -11,7 +11,7 @@ from core.objects import core_object as o
 data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
 projects = data_dir + 'projects'
 
-dropbox = '../../../Dropbox/figures/'
+dropbox = '/uufs/chpc.utah.edu/common/home/u0713352/Dropbox/figures/'
 
 # pcaps data
 pcaps = o()
