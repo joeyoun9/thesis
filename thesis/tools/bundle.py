@@ -41,8 +41,7 @@ from   thesis.analysis import *
 from   thesis.analysis.pcaps import *
 import thesis.analysis.lidar.mlh as mlh
 from   thesis.analysis.lidar.particle import *
-from   thesis.alalysis.lidar.ceil import Filter
-
+from   thesis.analysis.lidar.ceil import Filter
 
 from matplotlib.backends.backend_pdf import PdfPages
 import mymap as mymap
