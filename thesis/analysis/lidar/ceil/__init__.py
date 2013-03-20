@@ -6,6 +6,7 @@ Some of this is actually PCAPS specific, but, that will be dealt with later.
 '''
 from thesis.tools.core.objects import core_object as co
 import numpy as np
+from thesis.tools import *
 
 class Filter(co):
     '''
@@ -15,12 +16,31 @@ class Filter(co):
     All methods are designed for vertical lidar profiles, however they are also
     CL-31 ceilometer centric until further notice.
     
-    All methods will return times and 
+    All methods operate on the class and return itself, so it can be run as 
+    Filter.cloud().virga().mean2d(30) Though the .virga in this instance would be redundant
     '''
-    def __init__(self, data):
+    def __init__(self, data, copy=True):
+        '''
+        Initialize the filter object. By default data elements are duplicated 
+        to allow multuple procedures to engage. This may not be desired for memory reasons
+        
+        Set copy=False if copying is not desired
+        '''
         # initialize the class
-        self.bs = data.bs
-        self.time = data.time
+        if copy:
+            self.bs = data['bs'].copy()
+            self.time = data['time'].copy()
+        else:
+            self.bs = data['bs']
+            self.time = data['time']
+        if 'height' in dir(data):
+            if copy:
+                self.height = data['height'].copy()
+            else:
+                self.height = data['height']
+        else:
+            self.height = np.arange(self.bs.shape[1]) * 10
+            # CL31 centric height default
         self.len = self.time.shape[0]
         # now hopefully filters can be applied to any dataset quickly and efficiently.
 
@@ -38,11 +58,17 @@ class Filter(co):
         i = 0
         maxs = np.amax(self.bs, axis=1)
         for p in xrange(self.len):
-            if maxs[p] < -5:
-                self.bs[i] = self.bs[p]
-                self.time[i] = self.time[p]
-                i += 1
-            # if not, then continue
+            if exclude:
+                if maxs[p] < -5:
+                    self.bs[i] = self.bs[p]
+                    self.time[i] = self.time[p]
+                    i += 1
+            else:
+                # this data is being included, to the exclusion of all others
+                if maxs[p] > -5:
+                    self.bs[i] = self.bs[p]
+                    self.time[i] = self.time[p]
+                    i += 1
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
@@ -60,11 +86,16 @@ class Filter(co):
         # the mean of 50 - 150m backscatter should be > -5?
         means = np.mean(self.bs[:, 5:15], axis=1)
         for p in xrange(self.len):
-            if  means[p] < -5:
-                self.bs[i] = self.bs[p]
-                self.time[i] = self.time[p]
-                i += 1
-            # if not, then continue
+            if exclude:
+                if  means[p] < -5.5:
+                    self.bs[i] = self.bs[p]
+                    self.time[i] = self.time[p]
+                    i += 1
+            else:
+                if  means[p] >= -5.5:
+                    self.bs[i] = self.bs[p]
+                    self.time[i] = self.time[p]
+                    i += 1
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
@@ -72,10 +103,7 @@ class Filter(co):
 
     def virga(self, exclude=True):
         '''
-        Attempt to algorithmically identify peropds where there is virga
-        
-        Utilize backscatter thresholds and characteristic shape (strong, with
-        greater than 200m of high returns below it, but ending above 200m above the surface
+        Virga: greater than 100m of rain-like extinction without being present at the surface
         
         
         '''
@@ -92,27 +120,68 @@ class Filter(co):
         self.len = i
         return self
 
-    def CAP(self):
+    def CAP(self, exclude=False, threshold= -7.6):
         '''
-        Attempt to identify CAP periods, and possibly strength from ceilometer
-        data,
+        CAP in this research is defined as simply exceeding a threshold before going below it
         
-        This could simply be based on a successfull detection of a layer with the 
-        idealized profile method? -- too inefficient
+        Note that exclude is used in the same fashion as elsewhere, hence being default false.
         
         '''
-        i = 0
-        maxs = np.amax(self.bs, axis=1)
-        for p in xrange(self.len):
-            if max(self.bs[p]) < -5:
-                self.bs[i] = self.bs[p]
-                self.time[i] = self.time[p]
-                i += 1
-            # if not, then continue
-        self.bs = self.bs[:i]
-        self.time = self.time[:i]
-        self.len = i
+        keyarray = np.arange(self.bs.shape[1] - 7)
+        highs = (self.bs[:, 7:] > threshold)
+        lows = (self.bs[:, 7:] < threshold)
+        # if there is a CAP the value of 'high' should first occur lower than 'low'
+        c = 0
+        for i in xrange(self.len):
+            start_high = keyarray[highs[i]][0]
+            start_low = keyarray[lows[i]][0]
+            if not exclude and start_high < start_low:
+                self.bs[c] = self.bs[i]
+                self.time[c] = self.time[i]
+                c += 1
+            elif exclude and start_high > start_low:
+                self.bs[c] = self.bs[i]
+                self.time[c] = self.time[i]
+                c += 1
+        self.bs = self.bs[:c]
+        self.time = self.time[:c]
+        self.len = c
         return self
+
+    def mlh_method(self, method, **kwargs):
+        '''
+        run any mlh method, provided as method, with keyword arguments kwargs on the data contained
+        The contained data is not modified.
+        '''
+
+        return method(self, **kwargs)
+
+    def smooth(self, binsize, inTime=True, continuous=False, vertbin=20,
+                       power=False):
+        '''
+        Compute the temporal mean of the backscatter field, adjust time and bs values accordingly
+        
+        This can be done continuously, but if so, inTime must be turned off
+        '''
+        if power:
+            self.bs = 10 ** self.bs
+        if continuous:
+            'continuous is not computed WRT time ever, so it is irrelevant'
+            # FIXME - this should be redone as a c
+            self.bs = runmean2d(self.bs, binsize, vertbin)
+            # height and time information is not changed with running means
+        else:
+            # this is to be done chunk wise. Vertical smoothing is done automatically and continuously
+            if vertbin:
+                self.bs = runmean(self.bs, vertbin, ax=1)
+            if inTime:
+                self.bs, self.time = timebin(self.bs, self.time, binsize)
+            else:
+                # 'mean2d is meant to be much faster than timebin'
+                self.bs, self.time = mean2d(self.bs, self.time, binsize)
+        return self
+
+
 
 
 
