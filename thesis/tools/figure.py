@@ -14,8 +14,8 @@ rc('text', usetex=True)
 # rc('axes', labelweight='light')
 rc('xtick', direction='out')
 rc('ytick', direction='out')
-rc('axes', linewidth=.5)
-# set outer border to be thin.
+rc('axes', linewidth=1)
+# set outer border to be thin. - or not (JSY 21Mar2013)
 
 def bottomcolorbar(data=None, label=None):
     plt.colorbar(data, **{
@@ -45,3 +45,12 @@ def xlabel(string):
     plt.xlabel(string)
 def ylabel(string):
     plt.ylabel(string)
+
+
+def frac_mm(mm, plt=plt):
+    '''
+    Calculate the resulting figure fractions for a specified number of mm
+    Though the figure is in inches
+    '''
+    pass
+    # pipeDream

@@ -26,7 +26,7 @@ from scipy import *
 from . import *
 # the sources library was implemented
 # in a non-standard way for various reasons
-import sources as srcs
+import thesis.analysis.sources as srcs
 s = srcs
 sources = srcs
 import matplotlib.pyplot as plt
@@ -36,6 +36,7 @@ from figure import *
 from sounding import *
 import cleanfig
 from cleanfig import *
+
 # Analysis methods
 from   thesis.analysis import *
 from   thesis.analysis.pcaps import *
