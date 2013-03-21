@@ -156,7 +156,7 @@ class Filter(co):
 
         return method(self, **kwargs)
 
-    def smooth(self, binsize, inTime=True, continuous=False, vertbin=20,
+    def smooth(self, binsize, inTime=True, continuous=False, vertbin=5,
                        power=False):
         '''
         Compute the temporal mean of the backscatter field, adjust time and bs values accordingly
