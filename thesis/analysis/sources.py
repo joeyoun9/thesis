@@ -26,6 +26,9 @@ pcaps.ncar.rawinsondes = data_dir + 'hdf5/pcaps/ncar_rawinsondes.h5'
 pcaps.dugway = o()
 pcaps.dugway.ditto = data_dir + 'hdf5/pcaps/ditto_ceil.h5'
 pcaps.dugway.horizontal = data_dir + 'hdf5/pcaps/horizontal_ceil.h5'
+pcaps.daq = o()
+pcaps.daq.pm10 = projects + '/pcaps/PM10.txt'
+pcaps.daq.pm25 = projects + '/pcaps/PM25.txt'
 
 
 # bingham data
