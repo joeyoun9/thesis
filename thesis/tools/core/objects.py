@@ -10,6 +10,7 @@ This is not meant to be included in the bundle, it is an internal element.
 
 '''
 import copy
+from numpy import savez
 
 class CoreObject():
     ''' 
@@ -24,7 +25,8 @@ class CoreObject():
     '''
     def __init__(self):
         # nothing to do here at this time
-        pass
+        self.type = 'Common'
+
     def __getitem__(self, key):
         try:
             return self.__dict__[key]
@@ -40,6 +42,14 @@ class CoreObject():
         the recursive object property within
         '''
         return copy.deepcopy(self)
+    def savez(self, file):
+        '''
+        Save the data arrays in this object 
+        
+        The file is structured such that the first item is a list of names, and
+        the subsequent items are those specific values
+        '''
+        savez(file, **self.__dict__)
 
 # for backwards compatibility.
 

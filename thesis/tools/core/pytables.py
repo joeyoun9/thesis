@@ -7,7 +7,7 @@ documents. But no more. There is another, and it is superior.
 """
 import tables
 import numpy as np
-from objects import core_object
+from objects import CoreObject
 
 
 class h5(object):
@@ -169,7 +169,7 @@ class h5(object):
 
 		index = self.doc.getNode(group).time.readWhere('(time >= ' + str(begin) + ')&(time <= ' + str(end) + ')')
 
-		out = core_object()
+		out = CoreObject()
 		if len(index) > 0:
 			timekeys = zip(index['time'], index['key'])
 			timekeys.sort()
