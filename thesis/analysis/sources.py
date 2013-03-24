@@ -27,8 +27,10 @@ pcaps.dugway = o()
 pcaps.dugway.ditto = data_dir + 'hdf5/pcaps/ditto_ceil.h5'
 pcaps.dugway.horizontal = data_dir + 'hdf5/pcaps/horizontal_ceil.h5'
 pcaps.daq = o()
-pcaps.daq.pm10 = projects + '/pcaps/PM10.txt'
-pcaps.daq.pm25 = projects + '/pcaps/PM25.txt'
+pcaps.daq.pm10_txt = projects + '/pcaps/PM10.txt'
+pcaps.daq.pm25_txt = projects + '/pcaps/PM25.txt'
+pcaps.daq.pm10 = projects + '/pcaps/pm10.npz'
+pcaps.daq.pm25 = projects + '/pcaps/pm25.npz'
 
 
 # bingham data
