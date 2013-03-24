@@ -11,7 +11,7 @@ This is not meant to be included in the bundle, it is an internal element.
 '''
 import copy
 
-class core_object():
+class CoreObject():
     ''' 
     A simple object which possesses the ability to have its attributes
     manipulated with via the dictionary structure as well as the attribute
@@ -41,8 +41,7 @@ class core_object():
         '''
         return copy.deepcopy(self)
 
+# for backwards compatibility.
 
-'''
-Create a data object which is able to perform some basic operations upon
-any 2d datasets within. 
-'''
+
+core_object = CoreObject
