@@ -105,7 +105,8 @@ class h5(object):
 
 
 
-	def slice(self, variables, begin=False, end=False, duration=False, timetup=False, indices=False, group='/'):
+	def slice(self, variables, begin=False, end=False, duration=False,
+			timetup=False, indices=False, group='/', persist=False):
 		"""
 		Read a specific temporal subset of various variables, as well as fetch indices
 		
@@ -190,8 +191,8 @@ class h5(object):
 				out[i] = self.doc.getNode(group, name=i)[0]
 				# indices should only have one value in time dimension
 				# note, it is [currently] your job to keep track of which variable is an index.
-
-		self.doc.close()
+		if not persist:
+			self.doc.close()
 		return out
 
 	def index(self, index, group='/'):
