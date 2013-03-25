@@ -25,7 +25,7 @@ class CoreObject():
     '''
     def __init__(self):
         # nothing to do here at this time
-        self.type = 'Common'
+        pass
 
     def __getitem__(self, key):
         try:

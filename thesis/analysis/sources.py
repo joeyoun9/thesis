@@ -6,7 +6,7 @@ Created on Feb 18, 2013
 This is not to be included with a PUBLIC version of this repo. Somehow I willl
 need to remove references to the existence of this module
 '''
-from thesis.tools.core.objects import core_object as o
+from thesis.tools.core.objects import CoreObject as o
 
 data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
 projects = data_dir + 'projects'
@@ -16,6 +16,7 @@ dropbox = '/uufs/chpc.utah.edu/common/home/u0713352/Dropbox/figures/'
 # pcaps data
 pcaps = o()
 pcaps.raw = '/uufs/chpc.utah.edu/common/home/horel-group/pcaps.utah.edu/'
+pcaps.data = projects + '/pcaps'
 pcaps.ncar = o()
 pcaps.sodar = data_dir + 'hdf5/pcaps/sodar.h5'
 pcaps.ncar.ceil = data_dir + 'hdf5/pcaps/ncar_ceil.h5'
@@ -31,7 +32,14 @@ pcaps.daq.pm10_txt = projects + '/pcaps/PM10.txt'
 pcaps.daq.pm25_txt = projects + '/pcaps/PM25.txt'
 pcaps.daq.pm10 = projects + '/pcaps/pm10.npz'
 pcaps.daq.pm25 = projects + '/pcaps/pm25.npz'
-
+# surface data sets...
+pcaps.hobo = o()
+pcaps.hobo.harker = data_dir + 'hdf5/pcaps/harker_hobos.h5'
+pcaps.hobo.grandeur = data_dir + 'hdf5/pcaps/gradneur_hobos.h5'
+pcaps.isfs = o()
+pcaps.isfs.nc = o()
+pcaps.isfs.nc.nov = data_dir + '/projects/pcaps/'
+# Also make sure you add ISS2 - that is where the ceilometer was
 
 # bingham data
 bcm = o()
@@ -56,7 +64,7 @@ bcm.sites.hobos2 = bcm.dir + '/year2/hobo_locations.txt'
 
 # Ceilometer Network Data
 ceil = o()
-# at present, there are actually no ceilometer datasets available from this set
+# at present, there are no ceilometer datasets available from this set
 
 # digital elevation models:
 dem = o()
@@ -64,13 +72,6 @@ dem.slv = data_dir + 'hdf5/pcaps/dem_slc_10m.h5'
 dem.bcm2011 = data_dir + 'projects/bmcap/year2/dem_10m.h5'
 dem.bcm2010 = data_dir + 'projects/bmcap/year1/dem_10m.h5'
 
-# surface data sets...
-pcaps.hobo = o()
-pcaps.hobo.harker = data_dir + 'hdf5/pcaps/harker_hobos.h5'
-pcaps.hobo.grandeur = data_dir + 'hdf5/pcaps/gradneur_hobos.h5'
-pcaps.isfs = o()
-pcaps.isfs.nc = o()
-pcaps.isfs.nc.nov = data_dir + '/projects/pcaps/'
-# Also make sure you add ISS2 - that is where the ceilometer was
+
 
 
