@@ -129,6 +129,9 @@ class h5(object):
 			duration in seconds
 		group: str/group, opt
 			specify the HDF5 group where this dataset exists.
+		persist" bool, opt
+			should the HDF document be closed after each iteration? If true the
+			obj.close() method will have to be called at the end of the process
 			
 		Returns
 		-------
