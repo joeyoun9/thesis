@@ -30,7 +30,7 @@ class CoreObject(object):
 
     def __getitem__(self, key):
         try:
-            return object.__getattr__(self, key)
+            return object.__getattribute__(self, key)
         except:
             # in this case, the attribute does not exist - create it
             l.warning('Key "' + key + '" was not found')
