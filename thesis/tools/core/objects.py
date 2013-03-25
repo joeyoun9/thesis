@@ -12,7 +12,7 @@ This is not meant to be included in the bundle, it is an internal element.
 import copy
 from numpy import savez
 
-class CoreObject():
+class CoreObject(object):
     ''' 
     A simple object which possesses the ability to have its attributes
     manipulated with via the dictionary structure as well as the attribute
@@ -29,12 +29,13 @@ class CoreObject():
 
     def __getitem__(self, key):
         try:
-            return self.__dict__[key]
+            return object.__getattr__(self, key)
         except:
             # in this case, the attribute does not exist - create it
-            self.__dict__[key] = None
+            return object.__setattr(self, key, None)
+            return None
     def __setitem__(self, key, value):
-        self.__dict__[key] = value
+        object.__setattr(self, key, value)
 
     def copy(self):
         '''
@@ -42,16 +43,17 @@ class CoreObject():
         the recursive object property within
         '''
         return copy.deepcopy(self)
-    def savez(self, file):
+
+    def savez(self, filename):
         '''
         Save the data arrays in this object 
         
         The file is structured such that the first item is a list of names, and
         the subsequent items are those specific values
+        
+        
         '''
-        savez(file, **self.__dict__)
+        savez(filename, **self.__dict__)
 
 # for backwards compatibility.
-
-
 core_object = CoreObject

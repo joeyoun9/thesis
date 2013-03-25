@@ -27,20 +27,27 @@ class Filter(co):
         Set copy=False if copying is not desired
         '''
         # initialize the class
-        if copy:
-            self.bs = data['bs'].copy()
-            self.time = data['time'].copy()
+        if type(data) == str:
+            # if data is a string, then it is a filename we should initialize from
+            f = np.load(data)
+            self.bs = f['bs']
+            self.time = f['time']
+            self.height = f['height']
         else:
-            self.bs = data['bs']
-            self.time = data['time']
-        if 'height' in dir(data):
             if copy:
-                self.height = data['height'].copy()
+                self.bs = data['bs'].copy()
+                self.time = data['time'].copy()
             else:
-                self.height = data['height']
-        else:
-            self.height = np.arange(self.bs.shape[1]) * 10
-            # CL31 centric height default
+                self.bs = data['bs']
+                self.time = data['time']
+            if 'height' in dir(data):
+                if copy:
+                    self.height = data['height'].copy()
+                else:
+                    self.height = data['height']
+            else:
+                self.height = np.arange(self.bs.shape[1]) * 10
+                # CL31 centric height default
         self.len = self.time.shape[0]
         # now hopefully filters can be applied to any dataset quickly and efficiently.
 
