@@ -35,7 +35,7 @@ class CoreObject(object):
             return object.__setattr(self, key, None)
             return None
     def __setitem__(self, key, value):
-        object.__setattr(self, key, value)
+        object.__setattr__(self, key, value)
 
     def copy(self):
         '''
