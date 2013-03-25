@@ -66,13 +66,13 @@ class Filter(co):
         maxs = np.amax(self.bs, axis=1)
         for p in xrange(self.len):
             if exclude:
-                if maxs[p] < -5:
+                if maxs[p] < -5.7:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
             else:
                 # this data is being included, to the exclusion of all others
-                if maxs[p] > -5:
+                if maxs[p] > -5.7:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
@@ -115,7 +115,6 @@ class Filter(co):
         
         '''
         i = 0
-        maxs = np.amax(self.bs, axis=1)
         for p in xrange(self.len):
             if max(self.bs[p]) < -5:
                 self.bs[i] = self.bs[p]
