@@ -32,7 +32,7 @@ class CoreObject(object):
             return object.__getattr__(self, key)
         except:
             # in this case, the attribute does not exist - create it
-            return object.__setattr(self, key, None)
+            return object.__setattr__(self, key, None)
             return None
     def __setitem__(self, key, value):
         object.__setattr__(self, key, value)
