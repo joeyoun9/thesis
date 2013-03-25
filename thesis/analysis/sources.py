@@ -43,7 +43,7 @@ pcaps.isfs.nc.nov = data_dir + '/projects/pcaps/'
 # create a processed data object for computed datasets
 pcaps.proc = o()
 pcaps.proc.ceil_pm_fprecip = projects + '/pcaps/ceil_pm_fprecip.npz'
-pcaps.proc.ceil_pm_fcloud = projects + '/pcaps/ceil_pm_fprecip.npz'
+pcaps.proc.ceil_pm_fcloud = projects + '/pcaps/ceil_pm_fcloud.npz'
 
 # bingham data
 bcm = o()
