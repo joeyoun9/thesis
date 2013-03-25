@@ -42,7 +42,8 @@ pcaps.isfs.nc.nov = data_dir + '/projects/pcaps/'
 # Also make sure you add ISS2 - that is where the ceilometer was
 # create a processed data object for computed datasets
 pcaps.proc = o()
-pcaps.proc.ceil_pm_filter = projects + '/pcaps/ceil_pm_filter.npz'
+pcaps.proc.ceil_pm_fprecip = projects + '/pcaps/ceil_pm_fprecip.npz'
+pcaps.proc.ceil_pm_fcloud = projects + '/pcaps/ceil_pm_fprecip.npz'
 
 # bingham data
 bcm = o()
