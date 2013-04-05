@@ -156,9 +156,9 @@ class h5(object):
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
 		# determine the time boundaries
-		if timetup:
+		if not timetup===False:
 			begin = timetup[0]
-			end = timetup[1]
+			end = timetup[-1]
 		elif duration and not end and not begin:
 			# then
 			end = self.doc.getNodeAttr(group, 'maxtime')

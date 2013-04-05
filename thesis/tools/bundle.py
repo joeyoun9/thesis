@@ -26,7 +26,9 @@ from scipy import *
 from . import *
 # the sources library was implemented
 # in a non-standard way for various reasons
-import thesis.analysis.sources as srcs
+# #import thesis.analysis.sources as srcs
+from core import import_sources
+srcs = import_sources()
 s = srcs
 sources = srcs
 import matplotlib.pyplot as plt

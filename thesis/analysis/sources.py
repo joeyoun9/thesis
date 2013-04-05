@@ -12,7 +12,7 @@ data_dir = '/uufs/chpc.utah.edu/common/home/whiteman-group1/jyoung/'
 projects = data_dir + 'projects'
 
 dropbox = '/uufs/chpc.utah.edu/common/home/u0713352/Dropbox/figures/'
-paper = dropbox + '/paper_figures/'
+paper = dropbox + 'paper_figures/'
 # pcaps data
 pcaps = o()
 pcaps.raw = '/uufs/chpc.utah.edu/common/home/horel-group/pcaps.utah.edu/'

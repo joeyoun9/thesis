@@ -125,8 +125,8 @@ def ipm(data, limit=1000, binsize=300, inTime=True, eval_dist=20,
     bs, times, z = u._ComputeFieldMeans(data, binsize, inTime=inTime,
                                     continuous=continuous, vertbin=vertbin,
                                     power=True)
-    'Compute the gradient of the gradient'
-    'FIXME - do i want negative or positive gradients!?!!'
+    # Compute the gradient of the gradient'
+    # FIXME - do i want negative or positive gradients!?!!'
     field = np.gradient(np.gradient(bs, eval_dist)[1], eval_dist)[1]
     field[field >= 0.] = np.NAN
     field = np.log10(-1 * field)
@@ -144,38 +144,20 @@ def variance(data, binsize=300, limit=1000, inTime=True, returnfield=False,
              continuous=False, power=False, vertbin=5, nbins=20, **kwargs):
     '''
     Compute boundary layer/aerosol layer depth by evaluating temporal variance
-    under the assumption that sufficient smoothing will result in oscillations
+    under the assumption that sufficient smoothing will result in variations
     of boundary layer top being apparent.
     '''
     if data == 'about':
         return '110Variance'
-    data, time, height = u._ComputeFieldMeans(data, binsize, inTime=inTime,
+    field, time, height = u._ComputeFieldMeans(data, binsize, inTime=inTime,
                                           continuous=continuous, vertbin=vertbin,
                                           power=power)
     # Now, to preserve shape, I am going to do a running calculation of STDev
-    '''
-    I Cannot find a reason for this code, it will be deleted after testing.
-    i = 0
-    length = len(data)
-    newdata = np.zeros(data.shape)
-    while i < length:
-        'I am assuming that int/int = int'
-        i0 = i - nbins / 2
-        i1 = i + nbins / 2
-        if i < nbins / 2:
-            i0 = 0
-        if i > ln - nbins / 2:
-            i1 = ln
-
-        clump = data[i0:i1]
-        newdata[i] = np.std(clump, axis=0)**2
-        i += 1
-    '''
-    data = runstd(data, nbins) ** 2
+    field = runstd(field, nbins) ** 2
 
     if returnfield:
-        return (data, time, height)
-    depth = u._MaxDepth(data, height, limit=limit)
+        return (field, time, height)
+    depth = u._MaxDepth(field, height, limit=limit)
     return (depth, time)
 
 def noise_variance(data, threshold=0.2, limit=1000, binsize=300, inTime=True,
@@ -190,7 +172,7 @@ def noise_variance(data, threshold=0.2, limit=1000, binsize=300, inTime=True,
     Parameters
     ----------
     value: float
-        the stdev value to seek in the dataset, recommend around .5 to .7
+        the variance value to seek in the dataset, recommend around .2 to .5
     data: 3-D numpy array
         the type returned from a slice request on an hdf5, with keys for 
         'bs', 'time' and 'height'.
@@ -202,20 +184,19 @@ def noise_variance(data, threshold=0.2, limit=1000, binsize=300, inTime=True,
         return '110Noise Variance'
     if not threshold:
         raise ValueError, 'You must specify a threshold value'
-    time = data['time']
-    'bla bla not preserving namespace bla bla bla...'
-    height = data['height']
+    t = data.time
+    height = data.height
     if inTime:
-        data, time = timestd(data['bs'], time, binsize)
+        field, t = timestd(data['bs'], t, binsize)
     else:
-        data, time = stdev2d(data['bs'], time, binsize)
+        field, t = stdev2d(data['bs'], t, binsize)
     # catch that we computed standard deviation, but we are talking variance
-    data = data ** 2
+    field = field ** 2
     if returnfield:
-        return (data, time, height)
-    depth = u._ThresholdGT(data, height, threshold, limit=limit)
+        return (field, t, height)
+    depth = u._ThresholdGT(field, height, threshold, limit=limit)
     'and return a tuple'
-    return (depth, time)
+    return (depth, t)
 
 def idealized(data, binsize=300, returnfield=False, inTime=True, savebin=False,
               continuous=False, guessmean=False, guessheight=False, vertbin=5,
