@@ -20,6 +20,7 @@ def import_sources():
         srcf = os.environ['THESIS_SOURCES']
         sys.path.append(srcf)
         import_name = os.path.split(srcf)[1][:-3]
+        print srcf, sys.path
         srcs = __import__(import_name)
         return srcs
     else:
