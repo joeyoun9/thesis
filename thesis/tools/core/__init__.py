@@ -18,9 +18,10 @@ def import_sources():
     if 'THESIS_SOURCES' in os.environ.keys():
         # Ok, grab the source file
         srcf = os.environ['THESIS_SOURCES']
-        sys.path.append(srcf)
+        srcd = os.path.split(srcf)[0]
+        sys.path.append(srcd)
         import_name = os.path.split(srcf)[1][:-3]
-        print srcf, sys.path
+
         srcs = __import__(import_name)
         return srcs
     else:
