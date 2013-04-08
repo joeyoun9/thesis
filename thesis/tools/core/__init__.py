@@ -23,7 +23,7 @@ def import_sources():
         sys.path.append(srcd)
         import_name = os.path.split(srcf)[1][:-3]
 
-        srcs = importlib.import_module(import_name)
+        srcs = __import__(import_name, globals(), locals())
         return srcs
     else:
         print 'No local sources environment found (THESIS_SOURCES)'
