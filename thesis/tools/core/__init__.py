@@ -16,6 +16,7 @@ def import_sources():
     The imported file should have access to the thesis library, but all of it's objects
     will be in srcs, as per standard python imports. 
     '''
+    l.warning('This does not appear to work for reasons I cannot define. ')
     if 'THESIS_SOURCES' in os.environ.keys():
         # Ok, grab the source file
         srcf = os.environ['THESIS_SOURCES']

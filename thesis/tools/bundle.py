@@ -27,10 +27,12 @@ from . import *
 # the sources library was implemented
 # in a non-standard way for various reasons
 # #import thesis.analysis.sources as srcs
-from core import import_sources
-srcs = import_sources()
-s = srcs
-sources = srcs
+try:
+    import thesissources as srcs
+    s = srcs
+    sources = srcs
+except:
+    l.warning('You have no installed sources package, that might cause problems. "srcs" namespace not available')
 import matplotlib.pyplot as plt
 from core.pytables import h5
 import figure as TFigure
