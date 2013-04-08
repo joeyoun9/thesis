@@ -5,7 +5,6 @@ of the package. These contents will likely be ported to Muto very quickly.
 __all__ = ['objects', 'pytables']
 
 import os, sys
-import importlib
 
 def import_sources():
     '''
