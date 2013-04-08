@@ -13,16 +13,19 @@ def import_sources():
     system path, importing it and calling it srcs. 
     
     The imported file should have access to the thesis library, but all of it's objects
-    will be in srcs, as per standar python imports. 
+    will be in srcs, as per standard python imports. 
     '''
     if 'THESIS_SOURCES' in os.environ.keys():
         # Ok, grab the source file
         srcf = os.environ['THESIS_SOURCES']
         srcd = os.path.split(srcf)[0]
-        sys.path.append(srcd)
+        if srcd not in sys.path:
+            sys.path.append(srcd)
         import_name = os.path.split(srcf)[1][:-3]
 
         srcs = __import__(import_name, globals(), locals())
         return srcs
     else:
         print 'No local sources environment found (THESIS_SOURCES)'
+def isr():
+    return import_sources()

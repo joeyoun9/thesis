@@ -5,7 +5,6 @@ import calendar, time
 from datetime import timedelta, datetime
 import numpy as np
 import logging
-import sources as srcs
 import os
 
 __all__ = ['s2t',
@@ -326,12 +325,12 @@ def comp2time(*timetup):
 
 def saveF(ext='png'):
     pass
-    import matplotlib.pyplot as plt
-    # yeah, so __file__ means *this* file, not what called it.
-    f = os.path.split(__file__)[-1][:-3]
-    fname = srcs.dropbox + '/paper_figures/' + f + ext
-    logging.debug('Saving file as ' + fname)
-    plt.savefig(fname)
+    # import matplotlib.pyplot as plt
+    # # yeah, so __file__ means *this* file, not what called it.
+    # f = os.path.split(__file__)[-1][:-3]
+    # fname = srcs.dropbox + '/paper_figures/' + f + ext
+    # logging.debug('Saving file as ' + fname)
+    # plt.savefig(fname)
 
 
 
