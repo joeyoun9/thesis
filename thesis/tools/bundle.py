@@ -27,6 +27,7 @@ from . import *
 # the sources library was implemented
 # in a non-standard way for various reasons
 # #import thesis.analysis.sources as srcs
+print srcs
 from core import import_sources
 srcs = import_sources()
 s = srcs
