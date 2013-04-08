@@ -5,6 +5,7 @@ of the package. These contents will likely be ported to Muto very quickly.
 __all__ = ['objects', 'pytables']
 
 import os, sys
+import logging as l
 
 def import_sources():
     '''
@@ -22,7 +23,7 @@ def import_sources():
         if srcd not in sys.path:
             sys.path.append(srcd)
         import_name = os.path.split(srcf)[1][:-3]
-
+        l.debug('importing: ' + import_name)
         srcs = __import__(import_name, globals(), locals())
         return srcs
     else:
