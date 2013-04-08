@@ -5,6 +5,7 @@ of the package. These contents will likely be ported to Muto very quickly.
 __all__ = ['objects', 'pytables']
 
 import os, sys
+import importlib
 
 def import_sources():
     '''
@@ -22,7 +23,7 @@ def import_sources():
         sys.path.append(srcd)
         import_name = os.path.split(srcf)[1][:-3]
 
-        srcs = __import__(import_name)
+        srcs = importlib.import_module(import_name)
         return srcs
     else:
         print 'No local sources environment found (THESIS_SOURCES)'
