@@ -35,12 +35,16 @@ def read(files, save):
 			# drat.
 			print txt.split('\n')[1]
 			continue
-		if 'cpin' in fname:
-			z, p, t, td, rh, r, wb, tv, tht, thte, thtw, ws, wd, u, v, vflg, gamma, stab, N, rich, thtdef, cpin = np.loadtxt(f, skiprows=4, unpack=True)
-			# r is mixing ratio
-		else:
-			z, p, t, td, rh, r, wb, tv, tht, thte, thtw, ws, wd, u, v, vflg, gamma, stab, N, rich = np.loadtxt(f, skiprows=4, unpack=True)
-			# r is mixing ratio
+		try:
+			if 'cpin' in fname:
+				z, p, t, td, rh, r, wb, tv, tht, thte, thtw, ws, wd, u, v, vflg, gamma, stab, N, rich, thtdef, cpin = np.loadtxt(f, skiprows=4, unpack=True)
+				# r is mixing ratio
+			else:
+				z, p, t, td, rh, r, wb, tv, tht, thte, thtw, ws, wd, u, v, vflg, gamma, stab, N, rich = np.loadtxt(f, skiprows=4, unpack=True)
+				# r is mixing ratio
+		except:
+			l.warning('This file could not be read')
+			continue
 
 		# and append this data! I will trust the time seconds, instead of recomputing the time
 		# but, before that, we have to make them all the same size - size long
