@@ -22,7 +22,7 @@ def read(files, save):
 	# now read the files!
 	for f in sorted(files):
 		fname = f.split('/')[-1]
-		if 'smth' not in fname: continue
+		# if 'smth' not in fname and NCAR not in fname: continue
 		l.info('reading ' + fname)
 		# launch time comes from line 2 of the file, the last element
 		df = open(f, 'r')
