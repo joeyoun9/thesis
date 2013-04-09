@@ -4,6 +4,7 @@ read horel pcaps-cpin formatted soundings, and compress them into a single hdf5 
 import numpy as np
 from thesis.tools.core.pytables import *
 from thesis.tools import s2t
+import logging as l
 
 def read(files, save):
 	"""
@@ -21,8 +22,8 @@ def read(files, save):
 	# now read the files!
 	for f in sorted(files):
 		fname = f.split('/')[-1]
-		if 'smth' not in fname and 'NCAR' not in fname: continue
-		print 'reading', fname
+		if 'smth' not in fname: continue
+		l.info('reading ' + fname)
 		# launch time comes from line 2 of the file, the last element
 		df = open(f, 'r')
 		txt = df.read(2000).split('\n')  # way more than we need
