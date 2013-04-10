@@ -7,6 +7,7 @@ Some of this is actually PCAPS specific, but, that will be dealt with later.
 from thesis.tools.core.objects import core_object as co
 import numpy as np
 from thesis.tools import *
+import logging as l
 
 class Filter(co):
     '''
@@ -185,6 +186,21 @@ class Filter(co):
             else:
                 # 'mean2d is meant to be much faster than timebin'
                 self.bs, self.time = mean2d(self.bs, self.time, binsize)
+        return self
+
+    def mask(self, threshold= -7.6, maskvalue= -8.):
+        '''
+        Hide all the values above the first point where the threshold is exceeded(low)
+        '''
+        def dropat(bs, t=threshold, lm=maskvalue):
+            k = np.arange(len(bs))[bs <= t]
+            try:
+                bs[k[0]:] = lm
+            except:
+                l.info('Failed to mask')
+            return bs
+
+        self.bs = np.array(map(dropat, self.bs))
         return self
 
 
