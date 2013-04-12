@@ -8,8 +8,8 @@ The module is simply imported, no methods exist
 import logging as l
 
 from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
-rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'Arial'],
-              'weight': ['lighter', 'normal']})
+# rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'Arial'],
+#              'weight': ['lighter', 'normal']})
 rc('text', usetex=True)
 # rc('axes', labelweight='light')
 rc('xtick', direction='out')
