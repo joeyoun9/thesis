@@ -18,6 +18,7 @@ rc('font', family='serif', weight=['lighter', 'normal'])
 rc('xtick', direction='out')
 rc('ytick', direction='out')
 rc('axes', linewidth=1)
+rc('lines', markeredgewidth=1)
 # set outer border to be thin. - or not (JSY 21Mar2013)
 
 def bottomcolorbar(data=None, label=None):
