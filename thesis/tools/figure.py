@@ -10,7 +10,9 @@ import logging as l
 from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
 # rc('font', **{'family':'sans-serif', 'sans-serif':['Helvetica', 'Arial'],
 #              'weight': ['lighter', 'normal']})
+
 rc('text', usetex=True)
+rc('font', family='serif', weight='normal')
 # rc('axes', labelweight='light')
 rc('xtick', direction='out')
 rc('ytick', direction='out')
