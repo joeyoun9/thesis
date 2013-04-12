@@ -15,8 +15,8 @@ from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
 rc('text', usetex=True)
 rc('font', family='serif', weight=['lighter', 'normal'])
 # rc('axes', labelweight='light')
-rc('xtick', direction='out', linewidth=1)
-rc('ytick', direction='out', linewidth=1)
+rc('xtick', direction='out', width=1)
+rc('ytick', direction='out', width=1)
 rc('axes', linewidth=1)
 # set outer border to be thin. - or not (JSY 21Mar2013)
 
