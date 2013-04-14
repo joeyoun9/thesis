@@ -23,7 +23,7 @@ def _MaxDepth(data, z, limit=1000):
             return z[x == np.nanmax(x)][0]
         except:
             return 0
-    return np.array(map(maxp, data))
+    return np.array(map(maxp, data)) + 70
 
 def _LocalMaxDepths(data, z, window, hits=4, limit=False, minmax=None):
     '''
@@ -54,7 +54,7 @@ def _LocalMaxDepths(data, z, window, hits=4, limit=False, minmax=None):
             if hitcount == hits:
                 break
         return dict
-    return np.array(map(__scanprof, data))
+    return np.array(map(__scanprof, data)) + 70
 
 def _ThresholdLT(data, z, threshold, limit=False):
     '''
@@ -71,7 +71,7 @@ def _ThresholdLT(data, z, threshold, limit=False):
         except:
             return 0
 
-    return np.array(map(lambda x: th(x, z, threshold), data))
+    return np.array(map(lambda x: th(x, z, threshold), data)) + 70
 
 def _ThresholdGT(data, z, threshold, limit=False):
     '''
@@ -88,7 +88,7 @@ def _ThresholdGT(data, z, threshold, limit=False):
         except:
             return 0
 
-    return np.array(map(lambda x: th(x, z, threshold), data))
+    return np.array(map(lambda x: th(x, z, threshold), data)) + 70
 
 def _ComputeFieldMeans(data, binsize, inTime=True, continuous=False, vertbin=20,
                        power=False):
