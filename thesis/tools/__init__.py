@@ -24,7 +24,7 @@ __all__ = ['s2t',
            'comp2time',
            ]
 
-def s2t(string, time_format):
+def s2t(string, time_format='%Y%m%d%H'):
     '''
     Convert a textual string time representation to a unix epoch time using the standard time format string
     provided. Identical to
@@ -44,6 +44,7 @@ def s2t(string, time_format):
     Specify UTC in the string, and %Z in the format to ensure the data is properly 
     interpreted as UTC/GMT
     '''
+
     return calendar.timegm(time.strptime(string, time_format))
 
 def m2t(t):
