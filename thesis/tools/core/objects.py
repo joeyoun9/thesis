@@ -28,7 +28,7 @@ class CoreObject(object):
     '''
     def __init__(self):
         # nothing to do here at this time
-        self.time = np.array([])
+        self.time = array([])
         self.data = []
         self.indices = []
         # data is a list which must be appended to, showing the names of all data
