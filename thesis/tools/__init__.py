@@ -333,6 +333,35 @@ def saveF(ext='png'):
     # plt.savefig(fname)
 
 
+# stole this kindly from http://www.swharden.com/blog/2008-11-17-linear-data-smoothing-in-python/
+def smoothListGaussian(vals, degree=5):
+
+    window = degree * 2 - 1
+
+    weight = np.array([1.0] * window)
+
+    weightGauss = []
+
+    for i in range(window):
+
+        i = i - degree + 1
+
+        frac = i / float(window)
+
+        gauss = 1 / (np.exp((4 * (frac)) ** 2))
+
+        weightGauss.append(gauss)
+
+    weight = np.array(weightGauss) * weight
+
+    smoothed = [0.0] * (len(vals) - window)
+
+    for i in range(len(smoothed)):
+
+        smoothed[i] = sum(np.array(vals[i:i + window]) * weight) / sum(weight)
+
+    return smoothed
+
 
 
 

@@ -20,7 +20,7 @@ import os
 # import the whole of numpy, it will be used everywhere.
 import numpy as np
 from scipy.io.netcdf import netcdf_file as nc
-import os, sys
+import os, sys, time
 from pylab import *
 from scipy import *
 from . import *

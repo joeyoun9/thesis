@@ -12,6 +12,8 @@ This is not meant to be included in the bundle, it is an internal element.
 import copy
 from numpy import savez
 import logging as l
+from pytables import h5
+from numpy import array
 
 class CoreObject(object):
     ''' 
@@ -26,7 +28,11 @@ class CoreObject(object):
     '''
     def __init__(self):
         # nothing to do here at this time
-        pass
+        self.time = np.array([])
+        self.data = []
+        self.indices = []
+        # data is a list which must be appended to, showing the names of all data
+        # values which will be saved. Savez will not do this
 
     def __getitem__(self, key):
         try:
@@ -56,6 +62,29 @@ class CoreObject(object):
         
         '''
         savez(filename, **self.__dict__)
+    def hdf(self, filename):
+        '''
+        Save this object as an HDF object using this project's HDF library
+        to file filename
+        '''
+        doc = h5(filename)
+        variables = {}
+        indices = {}
+        try:
+            keylen = self.time.shape[0]
+        except:
+            l.warning('To save as HDF, this must be a time-oriented dataset. CoreObject.time not found')
+            return False
+        # loop through elements, and save all data elements
+        for key in self.data:
+            variables[key] = self[key].shape
+        for key in self.indices:
+            indices[key] = self[key].shape
+        doc.create(indices=indices, **variables)
+        # Actually, forget it
+
+
+
 
 # for backwards compatibility.
 core_object = CoreObject
