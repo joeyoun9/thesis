@@ -22,6 +22,7 @@ __all__ = ['s2t',
            'timebin',
            'timestd',
            'comp2time',
+           'gauss_smooth'
            ]
 
 def s2t(string, time_format='%Y%m%d%H'):
@@ -334,7 +335,7 @@ def saveF(ext='png'):
 
 
 # stole this kindly from http://www.swharden.com/blog/2008-11-17-linear-data-smoothing-in-python/
-def smoothListGaussian(vals, degree=5):
+def gauss_smooth(vals, degree=5):
 
     window = degree * 2 - 1
 
