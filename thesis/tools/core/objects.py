@@ -12,7 +12,7 @@ This is not meant to be included in the bundle, it is an internal element.
 import copy
 from numpy import savez
 import logging as l
-from pytables import h5
+##from pytables import h5
 from numpy import array
 
 class CoreObject(object):
@@ -62,6 +62,7 @@ class CoreObject(object):
         
         '''
         savez(filename, **self.__dict__)
+        '''
     def hdf(self, filename):
         '''
         Save this object as an HDF object using this project's HDF library
@@ -82,7 +83,7 @@ class CoreObject(object):
             indices[key] = self[key].shape
         doc.create(indices=indices, **variables)
         # Actually, forget it
-
+   '''
 
 
 
