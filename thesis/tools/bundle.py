@@ -32,7 +32,7 @@ try:
     s = srcs
     sources = srcs
 except:
-    l.warning('You have no installed sources package, that might cause problems. "srcs" namespace not available')
+    logging.warning('You have no installed sources package, that might cause problems. "srcs" namespace not available')
 import matplotlib.pyplot as plt
 from core.pytables import h5
 import figure as TFigure
