@@ -355,7 +355,7 @@ def gauss_smooth(vals, degree=5):
 
     weight = np.array(weightGauss) * weight
 
-    smoothed = [0.0] * (len(vals) - window)
+    smoothed = np.zeros(len(vals) - window)
 
     for i in range(len(smoothed)):
 
