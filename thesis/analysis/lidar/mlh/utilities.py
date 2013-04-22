@@ -30,9 +30,11 @@ def _LocalMaxDepths(data, z, window, hits=4, limit=False, minmax=None):
     Compute all local max's of a field up to hits number of hits or range
     '''
     if limit:
-        data = data[:, 7:limit / 10]
+        data = data[:, 5:limit / 10]
+        z = z[5:limit / 10]
     else:
-        data = data[:, 7:]
+        data = data[:, 5:]
+        z = z[5:]
     dw = window / 2
     '''
     I haven't found a nice way to simply map this one up yet.
@@ -54,7 +56,7 @@ def _LocalMaxDepths(data, z, window, hits=4, limit=False, minmax=None):
             if hitcount == hits:
                 break
         return dict
-    return np.array(map(__scanprof, data)) + 70
+    return np.array(map(__scanprof, data))
 
 def _ThresholdLT(data, z, threshold, limit=False):
     '''
