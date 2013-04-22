@@ -103,6 +103,12 @@ class h5(object):
 		return True
 
 
+	def listNodes(self):
+		if not self.doc or not self.doc.isopen:
+			self.doc = h5openr(self.filename)
+		nodes = self.doc.listNodes()
+		self.close()
+		return nodes
 
 
 	def slice(self, variables, begin=False, end=False, duration=False,

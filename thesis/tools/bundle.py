@@ -24,6 +24,7 @@ import os, sys, time
 from pylab import *
 from scipy import *
 from . import *
+from mymap import *
 # the sources library was implemented
 # in a non-standard way for various reasons
 # #import thesis.analysis.sources as srcs
