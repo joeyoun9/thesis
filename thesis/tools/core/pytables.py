@@ -103,10 +103,10 @@ class h5(object):
 		return True
 
 
-	def listNodes(self):
+	def listNodes(self, group='/'):
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
-		nodes = self.doc.listNodes()
+		nodes = self.doc.listNodes(group)
 		self.close()
 		return nodes
 
