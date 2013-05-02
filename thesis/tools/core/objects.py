@@ -130,8 +130,8 @@ class CoreObject(object):
                 # this happens when we are not working with a proper data item.
                 try:
                     if val.T.shape[0] == search.shape[0]:
-                    # slice this guy
-                    new[key] = val[search].T
+                        # slice this guy
+                        new[key] = val[search].T
                 except:
                     continue
         return new
