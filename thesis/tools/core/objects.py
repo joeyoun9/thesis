@@ -43,7 +43,7 @@ class CoreObject(object):
                 self[key] = val.copy()
         # data is a list which must be appended to, showing the names of all data
         # values which will be saved. Savez will not do this
-        return self
+        return None
 
     def __getitem__(self, key):
         try:
