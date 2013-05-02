@@ -10,7 +10,7 @@ This is not meant to be included in the bundle, it is an internal element.
 
 '''
 import copy
-from numpy import savez
+from numpy import savez, load
 import logging as l
 # #from pytables import h5
 from numpy import array
@@ -26,14 +26,24 @@ class CoreObject(object):
     Note that there is a catch for all situations here, and therefore this 
     is unlikely to fail. Hopefully this does not cause any undesired operation.
     '''
-    def __init__(self):
+    def __init__(self, fname=None, dataset=None):
         # nothing to do here at this time
         self.time = array([])
-        self.data = []
-        self.indices = []
-
+        self.data = []  # really no use for this one...
+        self.indices = []  # could be used, but usually isnt...
+        if fname:
+            # file can be a name or handle, just pass it to np.load. This should
+            # be able to re-read anything created by the savez function! Yay!
+            f = load(fname)
+            for key, val in f.iteritems():
+                self[key] = val
+        if dataset:
+            # then load the contents of this. It must be a dict
+            for key, val in dataset.iteritems():
+                self[key] = val.copy()
         # data is a list which must be appended to, showing the names of all data
         # values which will be saved. Savez will not do this
+        return self
 
     def __getitem__(self, key):
         try:
@@ -45,7 +55,7 @@ class CoreObject(object):
             return None
     def __setitem__(self, key, value):
         object.__setattr__(self, key, value)
-
+        return None
     def copy(self):
         '''
         Return a duplicate of this object. Deep copies are mandated because of
