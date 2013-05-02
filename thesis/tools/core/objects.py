@@ -128,7 +128,12 @@ class CoreObject(object):
                     new[key] = val[search]
             except:
                 # this happens when we are not working with a proper data item.
-                continue
+                try:
+                    if val.T.shape[0] == search.shape[0]:
+                    # slice this guy
+                    new[key] = val[search].T
+                except:
+                    continue
         return new
 
 
