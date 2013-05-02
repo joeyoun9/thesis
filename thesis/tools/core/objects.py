@@ -90,7 +90,7 @@ class CoreObject(object):
         self._max = len(self.time)
         return self
     def next(self):
-        if self._current > self._max:
+        if self._current >= self._max:
             raise StopIteration
         else:
             # create a new CoreObject, to return
