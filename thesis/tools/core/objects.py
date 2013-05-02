@@ -114,6 +114,23 @@ class CoreObject(object):
                     new[key] = value[self._current]
             self._current += 1
             return new
+    def slice(self, limits, variable='time'):
+        '''
+        Return a core object sliced along the variable identified. 
+        Currently this variable must be the first index of said field.
+        '''
+        new = CoreObject()
+        search = (self[variable] >= limits[0]) & (self[variable] <= limits[-1])
+        for key, val in self.__dict__.iteritems():
+            try:
+                if val.shape[0] == search.shape[0]:
+                    # slice this guy
+                    new[key] = val[search]
+            except:
+                # this happens when we are not working with a proper data item.
+                continue
+        return new
+
 
 
 
