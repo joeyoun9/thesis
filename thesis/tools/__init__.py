@@ -6,7 +6,7 @@ from datetime import timedelta, datetime
 import numpy as np
 import logging
 import os
-
+from scipy.ndimage.filters import minimum_filter, maximum_filter
 __all__ = ['s2t',
            'm2t',
            'strz',
@@ -22,7 +22,8 @@ __all__ = ['s2t',
            'timebin',
            'timestd',
            'comp2time',
-           'gauss_smooth'
+           'gauss_smooth',
+           'extrema',
            ]
 
 def s2t(string, time_format='%Y%m%d%H'):
@@ -363,7 +364,18 @@ def gauss_smooth(vals, degree=5):
 
     return smoothed
 
-
+def extrema(mat, mode='wrap', window=10):
+    """find the indices of local extrema (min and max)
+    in the input array.
+    
+        THIS FREAKING EXISTS?! YOU IDIOT. LEARN AVAILABLE RESOURCES!!
+    """
+    mn = minimum_filter(mat, size=window, mode=mode)
+    mx = maximum_filter(mat, size=window, mode=mode)
+    # (mat == mx) true if pixel is equal to the local max
+    # (mat == mn) true if pixel is equal to the local in
+    # Return the indices of the maxima, minima
+    return np.nonzero(mat == mn), np.nonzero(mat == mx)
 
 
 

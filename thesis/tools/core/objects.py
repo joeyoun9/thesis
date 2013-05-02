@@ -31,6 +31,7 @@ class CoreObject(object):
         self.time = array([])
         self.data = []
         self.indices = []
+
         # data is a list which must be appended to, showing the names of all data
         # values which will be saved. Savez will not do this
 
@@ -83,7 +84,26 @@ class CoreObject(object):
             indices[key] = self[key].shape
         doc.create(indices=indices, **variables)
         # Actually, forget it
-   '''
+    '''
+    def __iter__(self):
+        self._current = 0
+        self._max = len(self.time)
+    def next(self):
+        if self._current > self._max:
+            raise StopIteration
+        else:
+            # create a new CoreObject, to return
+            new = CoreObject()
+            for key, value in self.__dict__:
+                try:
+                    sz = value.shape[0]
+                except:
+                    continue
+                if sz == self.time.shape[0]:
+                    new[key] = value[self._current]
+            self._current += 1
+            return new
+
 
 
 
