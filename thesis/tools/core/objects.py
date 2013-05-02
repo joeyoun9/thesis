@@ -95,7 +95,7 @@ class CoreObject(object):
         else:
             # create a new CoreObject, to return
             new = CoreObject()
-            for key, value in self.__dict__:
+            for key, value in self.__dict__.iteritems():
                 try:
                     sz = value.shape[0]
                 except:
