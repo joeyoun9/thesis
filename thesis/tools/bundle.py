@@ -36,6 +36,7 @@ except:
     logging.warning('You have no installed sources package, that might cause problems. "srcs" namespace not available')
 import matplotlib.pyplot as plt
 from core.pytables import h5
+from core.objects import CoreObject as co
 import figure as TFigure
 from figure import *
 from sounding import *
