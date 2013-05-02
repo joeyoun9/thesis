@@ -9,13 +9,14 @@ import logging as l
 
 from matplotlib import rc, rcParams, font_manager as fm, pyplot as plt
 rc('font', **{'sans-serif':['Helvetica', 'Arial'],
-              'weight': ['lighter', 'normal']})
+              'serif'  : ['cm', 'Computer Modern Roman', 'Times', ' Palatino', ' New Century Schoolbook', ' Bookman'],
+              'weight': 300})
 # This makes the sans-serif font be helvetica (at least for PDFs)
 # but serif is the default font, as defined below. Just to the depths with that
 # bitstream vera sans.
 
 rc('text', usetex=True)
-rc('font', family='serif', weight=200)
+rc('font', family='serif')
 # rc('axes', labelweight='light')
 rc('xtick', direction='out')
 rc('ytick', direction='out')
