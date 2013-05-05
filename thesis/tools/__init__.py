@@ -46,6 +46,7 @@ def s2t(string, time_format='%Y%m%d%H'):
     Specify UTC in the string, and %Z in the format to ensure the data is properly 
     interpreted as UTC/GMT
     '''
+    string = str(string)  # we now accept ints!!
 
     return calendar.timegm(time.strptime(string, time_format))
 

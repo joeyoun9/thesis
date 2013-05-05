@@ -46,6 +46,10 @@ class CoreObject(object):
         return None
 
     def __getitem__(self, key):
+        '''
+        Pass a variable via bracket notation
+        #FIXME - allow [:] (slices) to provide info
+        '''
         try:
             return object.__getattribute__(self, key)
         except:
