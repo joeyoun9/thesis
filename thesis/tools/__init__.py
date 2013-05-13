@@ -2,12 +2,14 @@
 Tools for checking times and whatnot
 """
 import calendar, time
+from core.objects import CoreObject
 from datetime import timedelta, datetime
 import numpy as np
 import logging
 import os
 from scipy.ndimage.filters import minimum_filter, maximum_filter
 __all__ = ['s2t',
+           's2tt',
            'm2t',
            'strz',
            'mean2d',
@@ -49,6 +51,19 @@ def s2t(string, time_format='%Y%m%d%H'):
     string = str(string)  # we now accept ints!!
 
     return calendar.timegm(time.strptime(string, time_format))
+
+class s2tt(CoreObject):
+    '''
+    create a timetuple with some nice features
+    
+    TODO    
+    '''
+
+    def __init__(self, string1, string2, time_format):
+        pass
+
+
+
 
 def m2t(t):
     """

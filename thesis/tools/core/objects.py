@@ -127,17 +127,28 @@ class CoreObject(object):
         search = (self[variable] >= limits[0]) & (self[variable] <= limits[-1])
         for key, val in self.__dict__.iteritems():
             try:
-                if val.shape[0] == search.shape[0]:
-                    # slice this guy
-                    new[key] = val[search]
+                shp = val.shape
             except:
-                # this happens when we are not working with a proper data item.
-                try:
-                    if val.T.shape[0] == search.shape[0]:
-                        # slice this guy
-                        new[key] = val[search].T
-                except:
-                    continue
+                # no shape!
+                continue
+
+            if shp[0] == search.shape[0]:
+                # slice this guy
+                new[key] = val[search]
+
+            # this happens when we are not working with a proper data item.
+            elif shp[1] == search.shape[0]:
+                # slice this guy
+                new[key] = val[:, search]
+            else:
+                # it has a shape, but it is not of a time dimension in dim 1 or 2
+                # this is probably an index, and we should keep it
+
+                new[key] = val
+            # FIXME ths does not compensate for a non-time index of the same shape
+            # as the time key... dunno how to solve that right now
+
+
         return new
 
 
