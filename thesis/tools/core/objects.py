@@ -137,7 +137,7 @@ class CoreObject(object):
                 new[key] = val[search]
 
             # this happens when we are not working with a proper data item.
-            elif shp[1] == search.shape[0]:
+            elif len(shp) > 1 and shp[1] == search.shape[0]:
                 # slice this guy
                 new[key] = val[:, search]
             else:
