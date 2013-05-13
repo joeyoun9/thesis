@@ -131,8 +131,9 @@ class CoreObject(object):
             except:
                 # no shape!
                 continue
-
-            if shp[0] == search.shape[0]:
+            if len(shp) == 0 or search.shape[0] not in shp:
+                new[key] = val
+            elif shp[0] == search.shape[0]:
                 # slice this guy
                 new[key] = val[search]
 
@@ -141,7 +142,7 @@ class CoreObject(object):
                 # slice this guy
                 new[key] = val[:, search]
             else:
-                # it has a shape, but it is not of a time dimension in dim 1 or 2
+                # it has a shape, but it is not of a 'var' dimension in dim 1 or 2
                 # this is probably an index, and we should keep it
 
                 new[key] = val
