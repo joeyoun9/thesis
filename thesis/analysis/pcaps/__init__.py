@@ -43,6 +43,8 @@ def iop(num, buffer=False):
         out[1] = out[1] + 86400 * buffer
         return out
 
+
+
 def shade_iops(color='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
     '''
     for a plot where time is the x axis, add shaded bars where IOPs are occuring.
@@ -63,8 +65,10 @@ def shade_iops(color='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0
                  color, alpha=alpha, ec=color, zorder=zorder)
         if text:
             pad = (lims[1] - lims[0]) * .015
-            ax.text(np.mean(d), lims[1] - pad, str(i), ha='center', va='top')
+            ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
     return True
+
+
 
 # make a simple dict available for other events
 events = {
