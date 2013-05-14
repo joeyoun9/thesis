@@ -42,6 +42,29 @@ def iop(num, buffer=False):
         out[1] = out[1] + 86400 * buffer
         return out
 
+def shade_iops(color='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
+    '''
+    for a plot where time is the x axis, add shaded bars where IOPs are occuring.
+    This is meant to be used with xlim and ylim defined, it will not make those decisions
+    '''
+    if not plot and not ax:
+        l.warning('IOP shading not done, no plt or ax specified')
+        return False
+    if plt:
+        ax = plt.gca()
+    # add a plot showing IOPs
+    i = 0
+    lims = ax.get_ylim()
+
+    for d in iop('all'):
+        i += 1
+        ax.fill([d[0], d[0], d[1], d[1]], [lims[0], lims[1], lims[1], lims[0]],
+                 color, alpha=alpha, ec=color, zorder=zorder)
+        if text:
+            pad = (lims[1] - lims[0]) * .015
+            ax.text(np.mean(d), lims[1] - pad, str(i), ha='center', va='top')
+    return True
+
 # make a simple dict available for other events
 events = {
     'pcaps':iop(0),
