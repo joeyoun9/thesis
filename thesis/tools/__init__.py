@@ -8,6 +8,7 @@ import numpy as np
 import logging
 import os
 from scipy.ndimage.filters import minimum_filter, maximum_filter
+from scipy.stats import nanmean as scipynanmean
 __all__ = ['s2t',
            's2tt',
            'm2t',
@@ -26,6 +27,7 @@ __all__ = ['s2t',
            'comp2time',
            'gauss_smooth',
            'extrema',
+           'scipynanmean',
            ]
 
 def s2t(string, time_format='%Y%m%d%H'):
@@ -119,7 +121,7 @@ def mean1d(dat, binsize):
             break
     return out
 
-def runmean(field, nbins=30, ax=0):
+def runmean(field, nbins=30, ax=0, nanmean=True):
     '''
     Compute a running mean along the axis specified, evaluating over the
     distance 'nbins' 2D datasets only.
@@ -130,6 +132,10 @@ def runmean(field, nbins=30, ax=0):
     i = 0
     ln = len(field)
     newdata = np.zeros(field.shape)
+    if nanmean:
+        meanfunc = scipynanmean
+    else:
+        meanfunc = np.mean
     while i < len(field):
         'I am assuming that int/int = int'
         i0 = i - nbins / 2
@@ -140,7 +146,7 @@ def runmean(field, nbins=30, ax=0):
             i1 = ln
 
         clump = field[i0:i1]
-        newdata[i] = np.mean(clump, axis=0)
+        newdata[i] = meanfunc(clump, axis=0)
         i += 1
     field = newdata
     del newdata
