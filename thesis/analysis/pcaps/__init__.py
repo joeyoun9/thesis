@@ -5,6 +5,7 @@ The pcaps directory provides access to temporal objects pf specificed events.
 all = ['summarize']
 
 from thesis.tools import s2t
+import logging as l
 
 def iop(num, buffer=False):
     '''
@@ -47,7 +48,7 @@ def shade_iops(color='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0
     for a plot where time is the x axis, add shaded bars where IOPs are occuring.
     This is meant to be used with xlim and ylim defined, it will not make those decisions
     '''
-    if not plot and not ax:
+    if not plt and not ax:
         l.warning('IOP shading not done, no plt or ax specified')
         return False
     if plt:
