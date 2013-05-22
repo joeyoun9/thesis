@@ -104,12 +104,23 @@ class h5(object):
 
 
 	def listNodes(self, group='/', close=False):
+		'''
+		return each array node in the table, along with the time/key table.
+		'''
 		if not self.doc or not self.doc.isopen:
 			self.doc = h5openr(self.filename)
 		nodes = self.doc.listNodes(group)
 		if close:
 			self.close()
 		return nodes
+
+	def describe(self):
+		'''
+		print the simple pytables textual HDF description
+		'''
+		self.doc = h5openr(self.filename)
+		print self.doc
+		self.close()
 
 
 	def slice(self, variables, begin=False, end=False, duration=False,
