@@ -40,6 +40,7 @@ from core.objects import CoreObject as co
 import figure as TFigure
 from figure import *
 from sounding import *
+from metcalcs import *
 import cleanfig
 from cleanfig import *
 
