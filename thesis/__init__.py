@@ -5,7 +5,7 @@ field projects I am using for my thesis.
 Joe Young, June 2012
 
 '''
-all = ['compress','tools','pcaps']
+all = ['compress','tools','analysis']
 
 
 #FIXME - this will be reset every time it is re-imported
