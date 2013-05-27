@@ -133,7 +133,8 @@ class Filter(co):
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
-        self.virgastats = ret[:i] # good luck using this..
+        if details:
+            self.virgastats = ret[:i] # good luck using this..
         return self
 
     def CAP(self, exclude=False, threshold= -7.6):
