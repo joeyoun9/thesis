@@ -109,22 +109,31 @@ class Filter(co):
         self.len = i
         return self
 
-    def virga(self, exclude=True):
+    def virga(self, exclude=True,details=False):
         '''
         Virga: greater than 100m of rain-like extinction without being present at the surface
         
-        
+        if details are requested, then it should return a dit of the limits of the virga...
         '''
         i = 0
+        if details:
+            ret = np.zeros(self.time.shape[0],2)
         for p in xrange(self.len):
-            if max(self.bs[p]) < -5:
+            if max(self.bs[p,[3:7]]) < -5. and max(self.bs[p]) > -5.:
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
                 i += 1
+                if details:
+                    # determine the height extent of the virga...
+                    heights = self.height[self.bs[p]>-5.]
+                    
+                    ret[i] =[heights[1],heights[-2]] # 
+                
             # if not, then continue
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
+        self.virgastats = ret[:i] # good luck using this..
         return self
 
     def CAP(self, exclude=False, threshold= -7.6):
