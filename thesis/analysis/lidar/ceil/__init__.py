@@ -193,7 +193,7 @@ class Filter(co):
         
         Prefereably not dangerously recursively...
         '''
-        return Filter(co(self).copy().slice(tt))
+        return Filter(co(dataset=self).slice(tt))
 
     def mask(self, threshold= -7.6, maskvalue= -8.):
         '''
