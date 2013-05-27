@@ -122,8 +122,9 @@ class Filter(co):
             if max(self.bs[p,3:7]) < -5. and max(self.bs[p]) > -5.:
                 
                 # determine vertial extent
-                heights = self.height[self.bs[p]>-5.]
-                if len(heights)<10:continue
+                heights = self.height[self.bs[p]>-5.5]
+                if len(heights)<10:
+                    continue
                 if heights[-2]-heights[1]<150:
                     continue
                 self.bs[i] = self.bs[p]
