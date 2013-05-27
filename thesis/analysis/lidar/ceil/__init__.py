@@ -67,13 +67,13 @@ class Filter(co):
         maxs = np.amax(self.bs, axis=1)
         for p in xrange(self.len):
             if exclude:
-                if maxs[p] < -5.7:
+                if maxs[p] < -5.3:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
             else:
                 # this data is being included, to the exclusion of all others
-                if maxs[p] > -5.7:
+                if maxs[p] > -5.3:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
@@ -120,13 +120,15 @@ class Filter(co):
             ret = np.zeros(self.time.shape[0],2)
         for p in xrange(self.len):
             if max(self.bs[p,3:7]) < -5. and max(self.bs[p]) > -5.:
+                
+                # determine vertial extent
+                heights = self.height[self.bs[p]>-5.]
+                if heights[-2]-heights[1]<150:
+                    continue
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
                 i += 1
                 if details:
-                    # determine the height extent of the virga...
-                    heights = self.height[self.bs[p]>-5.]
-                    
                     ret[i] =[heights[1],heights[-2]] # 
                 
             # if not, then continue
