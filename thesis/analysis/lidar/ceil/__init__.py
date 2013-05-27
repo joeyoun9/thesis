@@ -119,7 +119,7 @@ class Filter(co):
         if details:
             ret = np.zeros(self.time.shape[0],2)
         for p in xrange(self.len):
-            if max(self.bs[p,[3:7]]) < -5. and max(self.bs[p]) > -5.:
+            if max(self.bs[p,3:7]) < -5. and max(self.bs[p]) > -5.:
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
                 i += 1
