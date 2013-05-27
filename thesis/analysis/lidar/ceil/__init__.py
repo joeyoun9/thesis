@@ -140,7 +140,10 @@ class Filter(co):
         # if there is a CAP the value of 'high' should first occur lower than 'low'
         c = 0
         for i in xrange(self.len):
-            start_high = keyarray[highs[i]][0]
+            start_high = keyarray[highs[i]]
+            if len(start_high) < 1:
+                continue
+            start_high = start_high[0]
             start_low = keyarray[lows[i]][0]
             if not exclude and start_high < start_low:
                 self.bs[c] = self.bs[i]
