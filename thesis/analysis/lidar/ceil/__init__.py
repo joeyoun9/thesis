@@ -190,8 +190,10 @@ class Filter(co):
     def slice(self,tt):
         '''
         Replicates the slice mechanism of the CoreObject, but returns a Filter object. 
+        
+        Prefereably not dangerously recursively...
         '''
-        return Filter(self.slice(tt))
+        return Filter(co(self).copy().slice(tt))
 
     def mask(self, threshold= -7.6, maskvalue= -8.):
         '''
