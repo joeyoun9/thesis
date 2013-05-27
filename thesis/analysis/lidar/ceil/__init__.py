@@ -187,6 +187,11 @@ class Filter(co):
                 # 'mean2d is meant to be much faster than timebin'
                 self.bs, self.time = mean2d(self.bs, self.time, binsize)
         return self
+    def slice(self,tt):
+        '''
+        Replicates the slice mechanism of the CoreObject, but returns a Filter object. 
+        '''
+        return Filter(self.slice(tt))
 
     def mask(self, threshold= -7.6, maskvalue= -8.):
         '''
