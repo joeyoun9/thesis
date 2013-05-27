@@ -43,7 +43,13 @@ class CoreObject(object):
                 self[key] = val.copy()
         if duplicate:
             for key,val in duplicate.__dict__.iteritems():
-                self[key]=val.copy()
+                try:
+                    self[key]=val.copy()
+                except KeyboardInterrupt, SystemExit:
+                    exit()
+                except:
+                    # for when you cannot copy
+                    self[key]=val
         # data is a list which must be appended to, showing the names of all data
         # values which will be saved. Savez will not do this
         return None
