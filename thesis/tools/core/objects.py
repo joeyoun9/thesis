@@ -26,7 +26,7 @@ class CoreObject(object):
     Note that there is a catch for all situations here, and therefore this 
     is unlikely to fail. Hopefully this does not cause any undesired operation.
     '''
-    def __init__(self, fname=None, dataset=None):
+    def __init__(self, fname=None, dataset=None, duplicate=None):
         # nothing to do here at this time
         self.time = array([])
         self.data = []  # really no use for this one...
@@ -41,6 +41,9 @@ class CoreObject(object):
             # then load the contents of this. It must be a dict
             for key, val in dataset.iteritems():
                 self[key] = val.copy()
+        if duplicate:
+            for key,val in duplicate.__dict__:
+                self[key]=val.copy()
         # data is a list which must be appended to, showing the names of all data
         # values which will be saved. Savez will not do this
         return None
