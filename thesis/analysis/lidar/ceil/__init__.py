@@ -125,6 +125,7 @@ class Filter(co):
             h= self.height[10:350]
             if max(b[:3]) < -5. and max(b)>-5.:
                 heights = h[b>-5.5] # all places where BS is strong...
+                print heights.shape
                 if len(heights)<10:
                     return False
                 elif heights[-2]-heights[2] < 150:
