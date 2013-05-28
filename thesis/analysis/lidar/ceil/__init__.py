@@ -139,6 +139,7 @@ class Filter(co):
         self.virgaheights=np.zeros((self.time.shape[0],2))
         for p in xrange(self.len):
             vrg = __virgaQ(p)
+            print vrg
             if vrg and not exclude:
 
                 heights = self.height[self.bs[p]>-5.5]
