@@ -141,7 +141,7 @@ class Filter(co):
             
             if vrg and not exclude:
 
-                heights = self.height[10:self.bs[p,10:]>-5.5]
+                heights = self.height[10:,self.bs[p,10:]>-5.5]
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
                 self.virgaheights[i] =[heights[1],heights[-2]] # 
