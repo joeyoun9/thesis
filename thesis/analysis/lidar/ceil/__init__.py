@@ -133,7 +133,7 @@ class Filter(co):
         
         i = 0
        
-        self.virgaheights=np.zeros(self.time.shape[0],2)
+        self.virgaheights=np.zeros((self.time.shape[0],2))
         for p in xrange(self.len):
             
             if __virgaQ(self.bs[p],self.height) and not exclude:
