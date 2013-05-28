@@ -82,7 +82,10 @@ class Filter(co):
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
+        if not exclude:
+            self.cloudheights=self.cloudheights[:i]
         return self
+        
 
     def precip(self, exclude=True):
         '''
@@ -111,36 +114,47 @@ class Filter(co):
         self.len = i
         return self
 
-    def virga(self, exclude=True,details=False):
+    def virga(self, exclude=True):
         '''
         Virga: greater than 100m of rain-like extinction without being present at the surface
         
         if details are requested, then it should return a dit of the limits of the virga...
         '''
-        i = 0
-        if details:
-            ret = np.zeros(self.time.shape[0],2)
-        for p in xrange(self.len):
-            if max(self.bs[p,3:7]) < -5. and max(self.bs[p]) > -5.:
-                
-                # determine vertial extent
-                heights = self.height[self.bs[p]>-5.5]
+        def __virgaQ(bs,height):
+            if max(bs[3:7] < -5. and max(bs)>-5.:
+                heights = height[bs>-5.5]
                 if len(heights)<10:
-                    continue
-                if heights[-2]-heights[1]<150:
-                    continue
+                    return False
+                elif heights[-2]-heights[2] < 150:
+                    reuturn False
+                return True
+            else:
+                return False
+        
+        i = 0
+       
+        self.virgaheights=np.zeros(self.time.shape[0],2)
+        for p in xrange(self.len):
+            
+            if __virgaQ(self.bs[p],self.height) and not exclude:
+
+                heights = self.height[self.bs[p]>-5.5]
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
-                i += 1
-                if details:
-                    ret[i] =[heights[1],heights[-2]] # 
+                self.virgaheights[i] =[heights[1],heights[-2]] # 
+                
+            elif not __virgaQ(selg.bs[p],self.height) and exclude:
+                self.bs[i]=self.bs[p]
+                self.time[i]=self.time[p]
+            i += 1
+                
                 
             # if not, then continue
         self.bs = self.bs[:i]
         self.time = self.time[:i]
         self.len = i
-        if details:
-            self.virgaheights = ret[:i] # good luck using this..
+        if not exclude:
+            self.virgaheights = self.virgaheights[:i] # good luck using this..
         return self
 
     def CAP(self, exclude=False, threshold= -7.6):
