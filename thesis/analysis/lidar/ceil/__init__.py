@@ -65,6 +65,7 @@ class Filter(co):
         '''
         i = 0
         maxs = np.amax(self.bs, axis=1)
+        self.cloudheights=np.zeros(self.time.shape)
         for p in xrange(self.len):
             if exclude:
                 if maxs[p] < -5.3:
@@ -76,6 +77,7 @@ class Filter(co):
                 if maxs[p] > -5.3:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
+                    self.cloudheights=self.height[self.bs[p]==maxs[p]][0]
                     i += 1
         self.bs = self.bs[:i]
         self.time = self.time[:i]
@@ -138,7 +140,7 @@ class Filter(co):
         self.time = self.time[:i]
         self.len = i
         if details:
-            self.virgastats = ret[:i] # good luck using this..
+            self.virgaheights = ret[:i] # good luck using this..
         return self
 
     def CAP(self, exclude=False, threshold= -7.6):
