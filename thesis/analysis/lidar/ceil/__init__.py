@@ -121,11 +121,10 @@ class Filter(co):
         if details are requested, then it should return a dit of the limits of the virga...
         '''
         def __virgaQ(p):
-            b= self.bs[p][10:350]
-            h= self.height[10:350]
+            b= self.bs[p][10:400]
+            h= self.height[10:400]
             if max(b[:3]) < -5. and max(b)>-5.:
                 heights = h[b>-5.5] # all places where BS is strong...
-                print heights.shape
                 if len(heights)<10:
                     return False
                 elif heights[-2]-heights[2] < 150:
@@ -139,18 +138,18 @@ class Filter(co):
         self.virgaheights=np.zeros((self.time.shape[0],2))
         for p in xrange(self.len):
             vrg = __virgaQ(p)
-            print vrg
+            
             if vrg and not exclude:
 
-                heights = self.height[self.bs[p]>-5.5]
+                heights = self.height[10:self.bs[p,10:]>-5.5]
                 self.bs[i] = self.bs[p]
                 self.time[i] = self.time[p]
                 self.virgaheights[i] =[heights[1],heights[-2]] # 
-                
+                i+=1
             elif not vrg and exclude:
                 self.bs[i]=self.bs[p]
                 self.time[i]=self.time[p]
-            i += 1
+                i += 1
                 
                 
             # if not, then continue
