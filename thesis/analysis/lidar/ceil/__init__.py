@@ -77,7 +77,7 @@ class Filter(co):
                 if maxs[p] > -5.3:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
-                    self.cloudheights=self.height[self.bs[p]==maxs[p]][0]
+                    self.cloudheights[i]=self.height[self.bs[p]==maxs[p]][0]
                     i += 1
         self.bs = self.bs[:i]
         self.time = self.time[:i]
