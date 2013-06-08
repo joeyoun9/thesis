@@ -97,15 +97,15 @@ class Filter(co):
         '''
         i = 0
         # the mean of 50 - 150m backscatter should be > -5?
-        means = np.mean(self.bs[:, 5:15], axis=1)
+        means = np.mean(self.bs[:, 5:30], axis=1)
         for p in xrange(self.len):
             if exclude:
-                if  means[p] < -5.5:
+                if  means[p] < -5.7:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
             else:
-                if  means[p] >= -5.5:
+                if  means[p] >= -5.7:
                     self.bs[i] = self.bs[p]
                     self.time[i] = self.time[p]
                     i += 1
