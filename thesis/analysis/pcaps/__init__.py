@@ -6,6 +6,9 @@ all = ['summarize']
 
 from thesis.tools import s2t
 import logging as l
+from thesis.tools.core import CoreObject
+from thesis.tools.bundle import srcs
+import numpy as np
 
 def iop(num, buffer=False):
     '''
@@ -67,6 +70,25 @@ def shade_iops(color='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0
             pad = (lims[1] - lims[0]) * .015
             ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
     return True
+
+def cap_times(threshold=4.04):
+    '''
+    Where deficit.deficit > 4.04 for more than 3 soundings, go (+- 6 hours)
+    '''
+    deficit = CoreObject(srcs.pcaps.proc.heatdeficit).slice(iop(0))
+
+    # identify all points below the threshold
+    points = deficit.deficit < threshold
+    keys = np.arange(len(points))[points]
+    # compute the gradient of these keys
+    kd = np.diff(keys)
+    # whatever values of keys correspond to points where kd >= 3, are golden!
+    startkeys = keys[kd >= 3]
+    kds = kd[kd >= 3]  # we will want this to print the end keys
+    for skey in startkeys:
+        # loop throught starting time keys
+        ekey = keys[keys > skey][0]
+        yield (deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.)
 
 
 
