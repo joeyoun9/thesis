@@ -4,12 +4,12 @@ The pcaps directory provides access to temporal objects pf specificed events.
 '''
 __all__ = [
            'iop',
-           'shade_iops'
-           'cap_times'
-           'events'
-           'aerosol_periods'
-           'virga_periods'
-           'light_aerosol_periods'
+           'shade_iops',
+           'cap_times',
+           'events',
+           'aerosol_periods',
+           'virga_periods',
+           'light_aerosol_periods',
            ]
 
 from thesis.tools import s2t
