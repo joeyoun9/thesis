@@ -87,6 +87,7 @@ def cap_times(threshold=4.04):
 
     # identify all points below the threshold
     points = deficit.deficit < threshold
+    points[0] = True  # this corrects if the series starts above the threshold
     keys = np.arange(len(points))[points]
     # compute the gradient of these keys
     kd = np.diff(keys)
