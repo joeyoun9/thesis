@@ -97,9 +97,47 @@ def cap_times(threshold=4.04):
     for skey in startkeys:
         # loop throught starting time keys
         ekey = keys[keys > skey][0]
-        yield (deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.)
+        yield [deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.] 
+        # yeilding a list so I can modify it later
 
+def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
+    '''
+    for a plot where time is the x axis, add shaded bars where IOPs are occuring.
+    This is meant to be used with xlim and ylim defined, it will not make those decisions
+    '''
+    if not plt and not ax:
+        l.warning('IOP shading not done, no plt or ax specified')
+        return False
+    if plt:
+        ax = plt.gca()
+    # add a plot showing IOPs
+    i = 0
+    lims = ax.get_ylim()
+    buff=6*3600 # for now
+    for d in cap_times(threshold):
+        i += 1
+        d[0]=d[0]-buff
+        d[1]=d[1]-buff
+        ax.fill([d[0], d[0], d[1], d[1]], [lims[0], lims[1], lims[1], lims[0]],
+                 color, alpha=alpha, ec=color, zorder=zorder)
+        if text:
+            pad = (lims[1] - lims[0]) * .015
+            ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
+    return True
 
+def pcaps_timeticks():
+    '''
+    this will print properly formatted timeticks for the entire PCAPS period
+    on a figure about the long length of a page. 
+    '''
+    locations = [
+                 s2t(2010120100),
+                 s2t(2010121500),
+                 s2t(2010123100),
+                 s2t(2011011500),
+                 s2t(2011020700)]
+    for loc in locations:
+        pass
 
 # make a simple dict available for other events
 events = {
