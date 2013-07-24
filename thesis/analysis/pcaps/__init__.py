@@ -117,7 +117,7 @@ def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, t
     buff=6*3600 # for now
     for d in cap_times(threshold):
         i += 1
-        d[0]=d[0]-buff
+        d[0]=d[0]+buff
         d[1]=d[1]-buff
         ax.fill([d[0], d[0], d[1], d[1]], [lims[0], lims[1], lims[1], lims[0]],
                  color, alpha=alpha, ec=color, zorder=zorder)
