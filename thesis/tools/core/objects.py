@@ -125,7 +125,10 @@ class CoreObject(object):
                     continue
                 if sz == self.time.shape[0]:
                     new[key] = value[self._current]
+            # pass a handy bit of info to the user.
+            new.iterkey = self._current
             self._current += 1
+            
             return new
     def slice(self, limits, variable='time'):
         '''
