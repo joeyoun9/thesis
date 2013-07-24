@@ -6,6 +6,7 @@ __all__ = [
            'iop',
            'shade_iops',
            'cap_times',
+           'shade_caps',
            'events',
            'aerosol_periods',
            'virga_periods',
