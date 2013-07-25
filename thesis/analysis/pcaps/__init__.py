@@ -6,6 +6,7 @@ __all__ = [
            'iop',
            'shade_iops',
            'cap_times',
+           'pm_times',
            'shade_caps',
            'events',
            'aerosol_periods',
@@ -99,6 +100,27 @@ def cap_times(threshold=4.04):
         # loop throught starting time keys
         ekey = keys[keys > skey][0]
         yield [deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.] 
+        # yeilding a list so I can modify it later
+
+def pm_times(threshold=20):
+    '''
+    Where PM10 > 20, return these times
+    '''
+    pm = CoreObject(srcs.pcaps.daq.pm10co).slice(iop(0))
+
+    # identify all points below the threshold
+    points = pm.pm10 < threshold
+    points[0] = True  # this corrects if the series starts above the threshold
+    keys = np.arange(len(points))[points]
+    # compute the gradient of these keys
+    kd = np.diff(keys)
+    # whatever values of keys correspond to points where kd >= 3, are golden!
+    startkeys = keys[kd >= 3]
+    kds = kd[kd >= 3]  # we will want this to print the end keys
+    for skey in startkeys:
+        # loop throught starting time keys
+        ekey = keys[keys > skey][0]
+        yield [pm.time[skey], pm.time[ekey]] 
         # yeilding a list so I can modify it later
 
 def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
