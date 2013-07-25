@@ -17,7 +17,7 @@ __all__ = [
 from thesis.tools import s2t
 import logging as l
 from thesis.tools.core.objects import CoreObject
-from thesis.tools.bundle import srcs
+from thesis.tools.bundle import srcs,runmean
 import numpy as np
 
 def iop(num, buffer=False):
@@ -102,14 +102,14 @@ def cap_times(threshold=4.04):
         yield [deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.] 
         # yeilding a list so I can modify it later
 
-def pm_times(threshold=20):
+def pm_times(threshold=20,smooth=1):
     '''
     Where PM10 > 20, return these times
     '''
     pm = CoreObject(srcs.pcaps.daq.pm10co).slice(iop(0))
 
     # identify all points below the threshold
-    points = pm.pm10 < threshold
+    points = runmean(pm.pm10,smooth) < threshold
     points[0] = True  # this corrects if the series starts above the threshold
     keys = np.arange(len(points))[points]
     # compute the gradient of these keys
