@@ -8,6 +8,7 @@ __all__ = [
            'cap_times',
            'pm_times',
            'shade_caps',
+           'pcaps_timeticks',
            'events',
            'aerosol_periods',
            'virga_periods',
