@@ -18,7 +18,9 @@ from thesis.tools import s2t
 import logging as l
 from thesis.tools.core.objects import CoreObject
 from thesis.tools.bundle import srcs,runmean
+import time, datetime
 import numpy as np
+import cleanfig as cf
 
 def iop(num, buffer=False):
     '''
@@ -148,20 +150,37 @@ def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, t
             ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
     return True
 
-def pcaps_timeticks():
+def pcaps_timeticks(plt):
     '''
     this will print properly formatted timeticks for the entire PCAPS period
     on a figure about the long length of a page. 
+    
+    s2t assumes utc...
     '''
     locations = [
                  s2t(2010120100),
                  s2t(2010121500),
                  s2t(2010123100),
                  s2t(2011011500),
+                 s2t(2011020100),
                  s2t(2011020700)]
+    labels = ['']*6
+    i=0
     for loc in locations:
-        pass
-
+        labels[i]=datetime.fromtimestamp(loc).strftime("%d %b %Y")
+        
+        i+=1
+    ax = plt.gca()
+    ax.set_xticks(locations)
+    ax.set_xticklabels(labels)
+    # minor ticks, one per day!
+    minorT = []
+    i = locations[0]
+    while i <= locations[-1]:
+        minorT+=[i]
+        i+=86400
+    ax.set_xticks(minorT,minor=True)
+    
 # make a simple dict available for other events
 events = {
     'pcaps':(s2t(2010120112),s2t(2011020712)),
