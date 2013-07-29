@@ -19,7 +19,8 @@ from thesis.tools import s2t
 import logging as l
 from thesis.tools.core.objects import CoreObject
 from thesis.tools.bundle import srcs,runmean
-import time, datetime
+import time
+from datetime import datetime
 import numpy as np
 import cleanfig as cf
 
