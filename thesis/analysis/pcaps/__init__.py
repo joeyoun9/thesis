@@ -160,13 +160,13 @@ def pcaps_timeticks(plt):
     s2t assumes utc...
     '''
     locations = [
-                 s2t(2010120100),
-                 s2t(2010121500),
-                 s2t(2010123100),
-                 s2t(2011011500),
-                 s2t(2011020100),
-                 s2t(2011020700)]
-    labels = ['']*6
+                 s2t(2010120112),
+                 s2t(2010121512),
+                 s2t(2010123112),
+                 s2t(2011011512),
+                 #s2t(2011020112),
+                 s2t(2011020712)]
+    labels = ['']*5
     i=0
     for loc in locations:
         labels[i]=datetime.fromtimestamp(loc).strftime("%d %b %Y")
