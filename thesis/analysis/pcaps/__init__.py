@@ -152,7 +152,7 @@ def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, t
             ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
     return True
 
-def pcaps_timeticks(plt):
+def pcaps_timeticks(plt,notext=False):
     '''
     this will print properly formatted timeticks for the entire PCAPS period
     on a figure about the long length of a page. 
@@ -168,10 +168,13 @@ def pcaps_timeticks(plt):
                  s2t(2011020712)]
     labels = ['']*5
     i=0
-    for loc in locations:
-        labels[i]=datetime.fromtimestamp(loc).strftime("%d %b %Y")
-        
-        i+=1
+    if not notext:
+        for loc in locations:
+            labels[i]=datetime.fromtimestamp(loc).strftime("%d %b %Y")
+            
+            i+=1
+        # label the axis
+        plt.xlabel('Date (ticks at 12 UTC)')
     ax = plt.gca()
     ax.set_xticks(locations)
     ax.set_xticklabels(labels)
