@@ -18,7 +18,7 @@ __all__ = [
 from thesis.tools import s2t
 import logging as l
 from thesis.tools.core.objects import CoreObject
-from thesis.tools.bundle import srcs,runmean
+from thesis.tools.bundle import srcs, runmean
 import time
 from datetime import datetime
 import numpy as np
@@ -92,7 +92,7 @@ def cap_times(threshold=4.04):
     deficit = CoreObject(srcs.pcaps.proc.heatdeficit).slice(iop(0))
 
     # identify all points below the threshold
-    points = deficit.deficit < threshold
+    points = deficit.deficit <= threshold
     points[0] = True  # this corrects if the series starts above the threshold
     keys = np.arange(len(points))[points]
     # compute the gradient of these keys
@@ -103,17 +103,17 @@ def cap_times(threshold=4.04):
     for skey in startkeys:
         # loop throught starting time keys
         ekey = keys[keys > skey][0]
-        yield [deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.] 
+        yield [deficit.time[skey] - 3600 * 6., deficit.time[ekey] + 3600 * 6.]
         # yeilding a list so I can modify it later
 
-def pm_times(threshold=20,smooth=1):
+def pm_times(threshold=20, smooth=24):
     '''
     Where PM10 > 20, return these times
     '''
     pm = CoreObject(srcs.pcaps.daq.pm10co).slice(iop(0))
 
     # identify all points below the threshold
-    points = runmean(pm.pm10,smooth) < threshold
+    points = runmean(pm.pm10, smooth) < threshold
     points[0] = True  # this corrects if the series starts above the threshold
     keys = np.arange(len(points))[points]
     # compute the gradient of these keys
@@ -124,10 +124,10 @@ def pm_times(threshold=20,smooth=1):
     for skey in startkeys:
         # loop throught starting time keys
         ekey = keys[keys > skey][0]
-        yield [pm.time[skey], pm.time[ekey]] 
+        yield [pm.time[skey], pm.time[ekey]]
         # yeilding a list so I can modify it later
 
-def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
+def shade_caps(threshold=4.04, color='#FFCC00', ec='#FFCC00', plt=None, ax=None, text=True, alpha=.3, zorder=0):
     '''
     for a plot where time is the x axis, add shaded bars where IOPs are occuring.
     This is meant to be used with xlim and ylim defined, it will not make those decisions
@@ -140,11 +140,11 @@ def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, t
     # add a plot showing IOPs
     i = 0
     lims = ax.get_ylim()
-    buff=6*3600 # for now
+    buff = 6 * 3600  # for now
     for d in cap_times(threshold):
         i += 1
-        d[0]=d[0]+buff
-        d[1]=d[1]-buff
+        d[0] = d[0] + buff
+        d[1] = d[1] - buff
         ax.fill([d[0], d[0], d[1], d[1]], [lims[0], lims[1], lims[1], lims[0]],
                  color, alpha=alpha, ec=color, zorder=zorder)
         if text:
@@ -152,7 +152,7 @@ def shade_caps(threshold=4.04,color='#FFCC00',ec='#FFCC00', plt=None, ax=None, t
             ax.text(sum(d) / 2., lims[1] - pad, str(i), ha='center', va='top')
     return True
 
-def pcaps_timeticks(plt,notext=False):
+def pcaps_timeticks(plt, notext=False):
     '''
     this will print properly formatted timeticks for the entire PCAPS period
     on a figure about the long length of a page. 
@@ -164,15 +164,15 @@ def pcaps_timeticks(plt,notext=False):
                  s2t(2010121512),
                  s2t(2010123112),
                  s2t(2011011512),
-                 #s2t(2011020112),
+                 # s2t(2011020112),
                  s2t(2011020712)]
-    labels = ['']*5
-    i=0
+    labels = [''] * 5
+    i = 0
     if not notext:
         for loc in locations:
-            labels[i]=datetime.fromtimestamp(loc).strftime("%d %b %Y")
-            
-            i+=1
+            labels[i] = datetime.fromtimestamp(loc).strftime("%d %b %Y")
+
+            i += 1
         # label the axis
         plt.xlabel('Date (ticks at 12 UTC)')
     ax = plt.gca()
@@ -182,13 +182,13 @@ def pcaps_timeticks(plt,notext=False):
     minorT = []
     i = locations[0]
     while i <= locations[-1]:
-        minorT+=[i]
-        i+=86400
-    ax.set_xticks(minorT,minor=True)
-    
+        minorT += [i]
+        i += 86400
+    ax.set_xticks(minorT, minor=True)
+
 # make a simple dict available for other events
 events = {
-    'pcaps':(s2t(2010120112),s2t(2011020712)),
+    'pcaps':(s2t(2010120112), s2t(2011020712)),
     'target1':(s2t('201012040000UTC', '%Y%m%d%H%M%Z'), s2t('201012051200UTC', '%Y%m%d%H%M%Z')),
     'target2':(s2t('201101050430UTC', '%Y%m%d%H%M%Z'), s2t('201101050800UTC', '%Y%m%d%H%M%Z')),  # WAVES!!!
     'target3':(s2t('201012020000UTC', '%Y%m%d%H%M%Z'), s2t('201012041200UTC', '%Y%m%d%H%M%Z')),  # wave breakup
