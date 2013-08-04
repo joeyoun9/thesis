@@ -174,7 +174,7 @@ def pcaps_timeticks(plt, notext=False):
 
             i += 1
         # label the axis
-        plt.xlabel('Date (ticks at 12 UTC)')
+        plt.xlabel('Date')
     ax = plt.gca()
     ax.set_xticks(locations)
     ax.set_xticklabels(labels)
